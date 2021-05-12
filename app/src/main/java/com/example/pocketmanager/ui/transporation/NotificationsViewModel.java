@@ -1,4 +1,4 @@
-package com.example.pocketmanager.ui.notifications;
+package com.example.pocketmanager.ui.transporation;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

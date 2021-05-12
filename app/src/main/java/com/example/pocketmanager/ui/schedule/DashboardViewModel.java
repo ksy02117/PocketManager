@@ -1,4 +1,4 @@
-package com.example.pocketmanager.ui.dashboard;
+package com.example.pocketmanager.ui.schedule;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

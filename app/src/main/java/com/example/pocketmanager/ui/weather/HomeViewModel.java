@@ -1,4 +1,4 @@
-package com.example.pocketmanager.ui.home;
+package com.example.pocketmanager.ui.weather;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
