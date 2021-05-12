@@ -4,10 +4,6 @@ plugins {
     id 'com.android.application'
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('apikeys.properties').newDataInputStream())
-def MapKey = properties.getProperty('MAP_KEY')
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
