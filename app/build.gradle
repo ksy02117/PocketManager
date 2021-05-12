@@ -1,6 +1,12 @@
+import org.gradle.internal.typeconversion.MapKey
+
 plugins {
     id 'com.android.application'
 }
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('apikeys.properties').newDataInputStream())
+def MapKey = properties.getProperty('MAP_KEY')
 
 android {
     compileSdkVersion 30
@@ -45,4 +51,7 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation 'com.android.volley:volley:1.1.1'
+    
 }

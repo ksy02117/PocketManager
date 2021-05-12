@@ -6,4 +6,6 @@ public class Events {
     String eventName;
     String description;
 
+    String Location;
+
 }
