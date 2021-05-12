@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_schedule"
+        android:enabled="true"
+        android:icon="@drawable/calender"
+        android:title="일정"/>
+
+    <item
+        android:id="@+id/menu_weather"
+        android:enabled="true"
+        android:icon="@drawable/partly_cloud"
+        android:title="날씨"/>
+
+    <item
+        android:id="@+id/menu_transportation"
+        android:enabled="true"
+        android:icon="@drawable/transportation"
+        android:title="교통"/>
+</menu>
