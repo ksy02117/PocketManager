@@ -11,8 +11,6 @@ public class WeatherData implements Serializable {
     public static ArrayList<WeatherData> currentLocationWeatherData = new ArrayList<>(48);
     public static ArrayList<WeatherData> eventBasedWeatherData = new ArrayList<>(20);
 
-    //test1
-
     private long dt;
     private int year;
     private int month;
