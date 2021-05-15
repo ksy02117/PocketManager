@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.network.AirPollutionReceiver;
 import com.example.pocketmanager.network.WeatherReceiver;
@@ -48,6 +50,7 @@ public class WeatherFragment extends Fragment {
 
         getWeather(35, 127);
 
+
         return view;
     }
 
@@ -71,4 +74,5 @@ public class WeatherFragment extends Fragment {
         weather_recycler.setAdapter(adapter);
         rain_recycler.setAdapter(adapter);
     }
+
 }

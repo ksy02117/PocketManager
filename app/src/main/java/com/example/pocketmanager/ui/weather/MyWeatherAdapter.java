@@ -37,10 +37,6 @@ public class MyWeatherAdapter extends RecyclerView.Adapter<MyWeatherAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.weatherImage.setImageResource(R.drawable.sun);
-        /*
-        pm2_5
-        pm10;
-         */
         holder.timeView.setText(list.get(position).getHour() + "시");
         holder.tempView.setText(list.get(position).getTemp() + "C");
 
