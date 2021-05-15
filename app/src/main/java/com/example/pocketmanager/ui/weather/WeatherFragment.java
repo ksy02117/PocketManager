@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.network.AirPollutionReceiver;
 import com.example.pocketmanager.network.WeatherReceiver;
@@ -20,11 +18,15 @@ import com.example.pocketmanager.storage.WeatherData;
 
 public class WeatherFragment extends Fragment {
     private LinearLayoutManager mLayoutManager;
-    private RecyclerView recyclerView;
+    private RecyclerView weather_recycler, rain_recycler;
     private MyWeatherAdapter adapter;
     View view;
 
-    public WeatherFragment() {
+    public WeatherFragment() {}
+
+    public static WeatherFragment newInstance() {
+        WeatherFragment weatherFragment = new WeatherFragment();
+        return weatherFragment;
     }
 
     @Nullable
@@ -32,19 +34,19 @@ public class WeatherFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tenki, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.weather_by_time_list);
+        weather_recycler = (RecyclerView) view.findViewById(R.id.weather_by_time_list);
+        rain_recycler = (RecyclerView) view.findViewById(R.id.rain_by_time_list);
 
-        recyclerView.setHasFixedSize(true);
-        //adapter = new MyWeatherAdapter(getActivity(), itemList);
+        weather_recycler.setHasFixedSize(true);
+        rain_recycler.setHasFixedSize(true);
+
+        weather_recycler.setLayoutManager(mLayoutManager);
 
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
-        recyclerView.setLayoutManager(mLayoutManager);
-
-        //recyclerView.setAdapter(adapter);
+        rain_recycler.setLayoutManager((mLayoutManager));
 
         getWeather(35, 127);
-
 
         return view;
     }
@@ -66,6 +68,7 @@ public class WeatherFragment extends Fragment {
 
     public void display() {
         adapter = new MyWeatherAdapter(getActivity(), WeatherData.currentLocationWeatherData);
-        recyclerView.setAdapter(adapter);
+        weather_recycler.setAdapter(adapter);
+        rain_recycler.setAdapter(adapter);
     }
 }
