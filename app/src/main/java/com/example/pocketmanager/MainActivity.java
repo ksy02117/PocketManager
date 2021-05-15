@@ -1,32 +1,22 @@
 package com.example.pocketmanager;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.pocketmanager.network.AirPollutionReceiver;
+import com.example.pocketmanager.network.WeatherReceiver;
+import com.example.pocketmanager.storage.WeatherData;
 import com.example.pocketmanager.ui.schedule.ScheduleFragment;
 import com.example.pocketmanager.ui.transporation.TransportationFragment;
 import com.example.pocketmanager.ui.weather.WeatherFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -67,9 +57,16 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.bottomNavigationView);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        //Fragments
         menu1Fragment = new ScheduleFragment();
         menu2Fragment = new TransportationFragment();
         menu3Fragment = new WeatherFragment();
+
+        //Network Receivers
+        WeatherReceiver.getInstance(this);
+        AirPollutionReceiver.getInstance(this);
+
+
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
 

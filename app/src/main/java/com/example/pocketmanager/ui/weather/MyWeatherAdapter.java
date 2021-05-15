@@ -11,14 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
+import com.example.pocketmanager.storage.WeatherData;
 
 import java.util.ArrayList;
 
 public class MyWeatherAdapter extends RecyclerView.Adapter<MyWeatherAdapter.ViewHolder> {
-    private ArrayList<WeatherItemData> list;
+    private ArrayList<WeatherData> list;
     private Context context;
 
-    public MyWeatherAdapter(Context context, ArrayList<WeatherItemData> list) {
+    public MyWeatherAdapter(Context context, ArrayList<WeatherData> list) {
         this.list = list;
         this.context = context;
     }
@@ -36,8 +37,13 @@ public class MyWeatherAdapter extends RecyclerView.Adapter<MyWeatherAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.weatherImage.setImageResource(R.drawable.sun);
-        holder.timeview.setText(list.get(position).time + "시");
-        holder.tempview.setText(list.get(position).temp);
+        /*
+        pm2_5
+        pm10;
+         */
+        holder.timeView.setText(list.get(position).getHour() + "시");
+        holder.tempView.setText(list.get(position).getTemp() + "C");
+
     }
 
     @Override
@@ -47,14 +53,14 @@ public class MyWeatherAdapter extends RecyclerView.Adapter<MyWeatherAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView weatherImage;
-        public TextView timeview;
-        public TextView tempview;
+        public TextView timeView;
+        public TextView tempView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             weatherImage = itemView.findViewById((R.id.item_icon));
-            timeview = itemView.findViewById(R.id.item_time);
-            tempview = itemView.findViewById(R.id.item_temp);
+            timeView = itemView.findViewById(R.id.item_time);
+            tempView = itemView.findViewById(R.id.item_temp);
         }
     }
 }

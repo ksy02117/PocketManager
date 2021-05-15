@@ -1,10 +1,16 @@
 package com.example.pocketmanager.storage;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
 public class WeatherData implements Serializable {
+
+    public static ArrayList<WeatherData> currentLocationWeatherData = new ArrayList<>(48);
+    public static ArrayList<WeatherData> eventBasedWeatherData = new ArrayList<>(20);
+
     private long dt;
     private int year;
     private int month;
@@ -20,9 +26,10 @@ public class WeatherData implements Serializable {
 
     private String weather;
     private String description;
+    private String icon;
     private float wind_speed;
-    private float rain_3h;
-    private float snow_3h;
+    private float rain_1h;
+    private float snow_1h;
 
     //초미세먼지
     private float pm2_5;
@@ -34,6 +41,23 @@ public class WeatherData implements Serializable {
     private float latitude;
     private float longitude;
 
+
+
+
+    public static void initCurrentLocationWeatherData() {
+        long currentDt = Calendar.getInstance().getTimeInMillis() / 1000;
+        long startDt = currentDt / 3600 * 3600;
+        long dDt = 3600;
+
+        if (currentLocationWeatherData.isEmpty())
+            for (int i = 0; i < 48; i++)
+                currentLocationWeatherData.add(new WeatherData());
+
+        for (int i = 0; i < 48; i++)
+            currentLocationWeatherData.get(i).setDt(startDt + dDt*i);
+    }
+
+
     public long getDt() { return dt; }
     public void setDt(long dt) {
         this.dt = dt;
@@ -43,12 +67,12 @@ public class WeatherData implements Serializable {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
         cal.setTimeInMillis(dt * 1000L);
 
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int min = cal.get(Calendar.MINUTE);
-        int sec = cal.get(Calendar.SECOND);
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH) + 1;
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        min = cal.get(Calendar.MINUTE);
+        sec = cal.get(Calendar.SECOND);
     }
 
     public int getYear() { return year; }
@@ -67,41 +91,37 @@ public class WeatherData implements Serializable {
     public void setFeels_like(float feels_like) { this.feels_like = feels_like; }
 
     public float getHumidity() { return humidity; }
-    public void setHumidity(float humidity) {
-        this.humidity = humidity;
-    }
+    public void setHumidity(float humidity) { this.humidity = humidity; }
 
 
 
-    public String getWeather() {
-        return weather;
-    }
-    public void setWeather(String weather) {
-        this.weather = weather;
-    }
+    public String getWeather() { return weather; }
+    public void setWeather(String weather) { this.weather = weather; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
+    public String getIcon() { return icon; }
+
+    public void setIcon(String icon) { this.icon = icon; }
+
     public float getWind_speed() {
         return wind_speed;
     }
-    public void setWind_speed(float wind_speed) {
-        this.wind_speed = wind_speed;
+    public void setWind_speed(float wind_speed) { this.wind_speed = wind_speed; }
+
+    public float getRain_1h() {
+        return rain_1h;
+    }
+    public void setRain_1h(float rain_1h) {
+        this.rain_1h = rain_1h;
     }
 
-    public float getRain_3h() {
-        return rain_3h;
+    public float getSnow_1h() {
+        return snow_1h;
     }
-    public void setRain_3h(float rain_3h) {
-        this.rain_3h = rain_3h;
-    }
-
-    public float getSnow_3h() {
-        return snow_3h;
-    }
-    public void setSnow_3h(float snow_3h) {
-        this.snow_3h = snow_3h;
+    public void setSnow_1h(float snow_1h) {
+        this.snow_1h = snow_1h;
     }
 
 
