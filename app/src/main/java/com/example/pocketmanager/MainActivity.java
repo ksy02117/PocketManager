@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -14,12 +15,14 @@ import com.example.pocketmanager.network.WeatherReceiver;
 import com.example.pocketmanager.storage.WeatherData;
 import com.example.pocketmanager.ui.schedule.ScheduleFragment;
 import com.example.pocketmanager.ui.transporation.TransportationFragment;
+import com.example.pocketmanager.ui.transporation.getShortestPathTask;
 import com.example.pocketmanager.ui.weather.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private TextView curDate;
@@ -96,6 +99,19 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
 
         curDate = (TextView)findViewById(R.id.current_date);
+    //fortest - yoojin
+        String resultText = "";
+        try {
+            resultText = new getShortestPathTask().execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("shortestPath", resultText);
+
+
     }
 
     public void setDate(TextView view) {
