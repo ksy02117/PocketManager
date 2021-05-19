@@ -1,16 +1,22 @@
 package com.example.pocketmanager.ui.weather;
 
+import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +27,8 @@ import com.example.pocketmanager.network.WeatherReceiver;
 import com.example.pocketmanager.storage.WeatherData;
 
 public class WeatherFragment extends Fragment {
+    private ProgressBar mProgressBar;
+    private ScrollView mScrollView;
     private LinearLayoutManager mLayoutManager;
     private RecyclerView weather_recycler, rain_recycler;
     private MyWeatherAdapter adapter;
@@ -38,6 +46,9 @@ public class WeatherFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tenki, container, false);
 
+        mScrollView = (ScrollView) view.findViewById(R.id.weather_layout);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+
         weather_recycler = (RecyclerView) view.findViewById(R.id.weather_by_time_list);
         rain_recycler = (RecyclerView) view.findViewById(R.id.rain_by_time_list);
 
@@ -52,10 +63,13 @@ public class WeatherFragment extends Fragment {
 
         getWeather(35, 127);
 
+
         return view;
     }
 
     public void getWeather(float latitude, float longitude) {
+        mScrollView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         WeatherData.initCurrentLocationWeatherData();
 
@@ -67,7 +81,10 @@ public class WeatherFragment extends Fragment {
         AirPollutionReceiver.getInstance().getCurrentLocationAirPollution(latitude, longitude,
                 (success) -> {
                     display();
+                    mProgressBar.setVisibility(View.GONE);
+                    mScrollView.setVisibility(View.VISIBLE);
                 });
+
     }
 
     public void display() {
