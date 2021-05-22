@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/calendar_grid"
-    android:numColumns="7">
+    android:numColumns="7"
+    android:scrollbars="none">
 
 </GridView>

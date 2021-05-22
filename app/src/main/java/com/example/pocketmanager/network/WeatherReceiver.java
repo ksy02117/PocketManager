@@ -8,24 +8,28 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.pocketmanager.BuildConfig;
 import com.example.pocketmanager.storage.WeatherData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class WeatherReceiver extends OpenWeatherMapReceiver {
+import java.util.LinkedList;
+
+public class WeatherReceiver {
     private static WeatherReceiver instance = null;
     protected RequestQueue requestQueue;
     protected static Context ctx;
 
     private final String prefixURL = "https://api.openweathermap.org/data/2.5/onecall?";
+    private final String API_KEY = BuildConfig.WEATHER_KEY;
 
 
     private WeatherReceiver(Context context) {
         ctx = context;
         requestQueue = Volley.newRequestQueue(context.getApplicationContext());
-        //other stuf if you need
+        //other stuff if you need
 
     }
 
@@ -44,7 +48,7 @@ public class WeatherReceiver extends OpenWeatherMapReceiver {
         return instance;
     }
 
-    public void getCurrentLocationWeather(float latitude, float longitude, final OpenWeatherMapListener listener) {
+    public void getWeather(double latitude, double longitude, final APIListener<LinkedList<WeatherData>> listener) {
 
         //"https://api.openweathermap.org/data/2.5/forecast?q=seoul&lang=kr&appid=b3a048704c9b2c9c25bd3d24b571d042"
         StringBuilder builder = new StringBuilder(prefixURL);
@@ -53,58 +57,53 @@ public class WeatherReceiver extends OpenWeatherMapReceiver {
         builder.append("&units=metric");
         builder.append("&exclude=minutely,daily");
         builder.append("&appid=" + API_KEY);
-        String weatherURL = builder.toString();
+        String url = builder.toString();
 
 
         // Request a string response from the provided URL.
-        JsonObjectRequest weatherRequest = new JsonObjectRequest(Request.Method.GET, weatherURL, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
                         // Display
                         try {
-                            JSONArray jsonWeatherArray = response.getJSONArray("hourly");
+                            JSONArray jsonArray = response.getJSONArray("hourly");
+                            LinkedList<WeatherData> result = new LinkedList<>();
 
-                            float latitude = (float) response.getDouble("lat");
-                            float longitude = (float) response.getDouble("lon");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject obj = jsonArray.getJSONObject(i);
+                                WeatherData data = new WeatherData();
 
-                            for (int i = 0, j = 0; i < jsonWeatherArray.length() && j < WeatherData.currentLocationWeatherData.size(); i++) {
-                                JSONObject obj = jsonWeatherArray.getJSONObject(i);
-                                WeatherData data = WeatherData.currentLocationWeatherData.get(j);
+                                data.setDt(obj.getLong("dt"));
 
-                                if (obj.getLong("dt") == data.getDt()) {
-                                    //main
-                                    data.setTemp((float) obj.getDouble("temp"));
-                                    data.setFeels_like((float) obj.getDouble("feels_like"));
-                                    data.setHumidity((float) obj.getDouble("humidity"));
+                                //main
+                                data.setTemp((float) obj.getDouble("temp"));
+                                data.setFeels_like((float) obj.getDouble("feels_like"));
+                                data.setHumidity((float) obj.getDouble("humidity"));
 
-                                    //weather
-                                    data.setWeather(obj.getJSONArray("weather").getJSONObject(0).getString("main"));
-                                    data.setDescription(obj.getJSONArray("weather").getJSONObject(0).getString("description"));
-                                    data.setIcon(obj.getJSONArray("weather").getJSONObject(0).getString("icon"));
-                                    data.setWind_speed((float) obj.getDouble("wind_speed"));
+                                //weather
+                                data.setWeather(obj.getJSONArray("weather").getJSONObject(0).getString("main"));
+                                data.setDescription(obj.getJSONArray("weather").getJSONObject(0).getString("description"));
+                                data.setIcon(obj.getJSONArray("weather").getJSONObject(0).getString("icon"));
+                                data.setWind_speed((float) obj.getDouble("wind_speed"));
 
-                                    if (obj.has("rain"))
-                                        data.setRain_1h((float) obj.getJSONObject("rain").getDouble("1h"));
-                                    else
-                                        data.setRain_1h(0);
-                                    if (obj.has("snow"))
-                                        data.setSnow_1h((float) obj.getJSONObject("snow").getDouble("1h"));
-                                    else
-                                        data.setSnow_1h(0);
-
-                                    data.setLatitude(latitude);
-                                    data.setLongitude(longitude);
-                                    j++;
-                                }
+                                if (obj.has("rain"))
+                                    data.setRain_1h((float) obj.getJSONObject("rain").getDouble("1h"));
+                                else
+                                    data.setRain_1h(0);
+                                if (obj.has("snow"))
+                                    data.setSnow_1h((float) obj.getJSONObject("snow").getDouble("1h"));
+                                else
+                                    data.setSnow_1h(0);
+                                result.add(data);
                             }
 
-                            listener.postRequest(true);
+                            listener.getResult(result);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            listener.postRequest(false);
+                            listener.getResult(null);
                         }
 
                     }
@@ -113,10 +112,10 @@ public class WeatherReceiver extends OpenWeatherMapReceiver {
             public void onErrorResponse(VolleyError error) {
                 // Error
                 error.printStackTrace();
-                listener.postRequest(false);
+                listener.getResult(null);
             }
         });
-        requestQueue.add(weatherRequest);
+        requestQueue.add(request);
 
     }
 }

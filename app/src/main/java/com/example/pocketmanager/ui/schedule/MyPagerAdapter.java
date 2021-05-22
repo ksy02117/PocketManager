@@ -4,7 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
@@ -23,36 +26,31 @@ public class MyPagerAdapter extends PagerAdapter {
     private GridView mGridView;
     private CalendarAdapter adapter;
     private ArrayList<CalData> arrData;
-    private Context mContext = null;
+    private Context mContext;
     private View mView;
-    private int thisMonth, thisYear;
+    private int thisMonth, thisYear, thisWeek;
 
     public MyPagerAdapter(Context context) {
         super();
         mContext = context ;
         mCal = Calendar.getInstance(); // Calendar 객체 생성
 
+        thisWeek = mCal.get(Calendar.WEEK_OF_YEAR);
         thisMonth = mCal.get(Calendar.MONTH);
         thisYear = mCal.get(Calendar.YEAR);
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        int realPos = position - (Integer.MAX_VALUE / 2);
+        int realPos = position - 500;
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.calendar_grid, container, false);
 
-        if (thisMonth + realPos <= 0) {
-            thisMonth = 12 - realPos;
-            thisYear--;
-        }
-        else if (thisMonth + realPos >= 13) {
-            thisMonth = 1 - realPos;
-            thisYear++;
-        }
+        mCal.set(Calendar.YEAR, thisYear);
+        mCal.set(Calendar.MONTH, thisMonth + realPos);
 
-        setCalendarDate(thisMonth + realPos + 1);
+        setCalendarDate();
         ((ViewPager) container).addView(mGridView);
 
         return mGridView;
@@ -65,7 +63,7 @@ public class MyPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return Integer.MAX_VALUE;
+        return 1000;
     }
 
     @Override
@@ -73,7 +71,27 @@ public class MyPagerAdapter extends PagerAdapter {
         return (view == object);
     }
 
-    public void setCalendarDate(int month){
+    private void setCalendarDate(){
+        arrData = new ArrayList<>();
+
+        mCal.set(Calendar.DAY_OF_MONTH, 1);
+        int startday = mCal.get(Calendar.DAY_OF_WEEK);
+
+        // move calendar backwards to the beginning of the week
+        mCal.add(Calendar.DAY_OF_MONTH, -startday + 1);
+
+        for (int i = 0; i < 42; i++) {
+            arrData.add(new CalData(mCal.getTime()));
+            mCal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        adapter = new CalendarAdapter(mView.getContext(), arrData);
+        mGridView = (GridView) mView.findViewById(R.id.calendar_grid);
+        mGridView.setId(thisYear);
+        mGridView.setAdapter(adapter);
+    }
+    /*
+    private void setCalendarDate(int month){
         arrData = new ArrayList<>();
         mCal.set(Calendar.MONTH, month - 1); // 요일은 +1해야 되기때문에 달력에 요일을 세팅할때에는 -1 해준다.
 
@@ -92,6 +110,17 @@ public class MyPagerAdapter extends PagerAdapter {
 
         adapter = new CalendarAdapter(mView.getContext(), arrData);
         mGridView = (GridView) mView.findViewById(R.id.calendar_grid);
+        mGridView.setId(thisYear);
         mGridView.setAdapter(adapter);
+
+
+        mGridView.setOnItemClickListener((parent, view, position, id) -> {
+            int mId = parent.getId();
+            Toast.makeText(mContext.getApplicationContext(), "" + mId, Toast.LENGTH_SHORT).show();
+        });
+
+
     }
+
+     */
 }

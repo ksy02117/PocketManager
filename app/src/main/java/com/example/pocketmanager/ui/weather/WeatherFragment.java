@@ -1,22 +1,17 @@
 package com.example.pocketmanager.ui.weather;
 
-import android.app.ProgressDialog;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.network.AirPollutionReceiver;
 import com.example.pocketmanager.network.WeatherReceiver;
+import com.example.pocketmanager.storage.LocationData;
 import com.example.pocketmanager.storage.WeatherData;
 
 public class WeatherFragment extends Fragment {
@@ -61,25 +57,131 @@ public class WeatherFragment extends Fragment {
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
         rain_recycler.setLayoutManager((mLayoutManager));
 
-        getWeather(35, 127);
+        getCurrentLocationWeather();
 
 
         return view;
     }
 
+    /*
     public void getWeather(float latitude, float longitude) {
-        mScrollView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
 
+
+        GeoCodingReceiver.getCurrentAddress();
         WeatherData.initCurrentLocationWeatherData();
 
-        WeatherReceiver.getInstance().getCurrentLocationWeather(latitude, longitude,
-                (success) -> {
+
+        WeatherReceiver.getInstance().getWeather(latitude, longitude,
+                (result) -> {
+                    int i = 0, j = 0;
+                    while (i < WeatherData.currentLocationWeatherData.size() && j < result.size()) {
+                        WeatherData output = WeatherData.currentLocationWeatherData.get(i);
+                        WeatherData input  = result.get(j);
+                        if (output.getDt() == input.getDt()) {
+                            //main
+                            output.setTemp(input.getTemp());
+                            output.setFeels_like(input.getFeels_like());
+                            output.setHumidity(input.getHumidity());
+
+                            //weather
+                            output.setWeather(input.getWeather());
+                            output.setDescription(input.getDescription());
+                            output.setIcon(input.getIcon());
+                            output.setWind_speed(input.getWind_speed());
+
+                            output.setRain_1h(input.getRain_1h());
+                            output.setSnow_1h(input.getSnow_1h());
+                            i++;
+                            j++;
+                        }
+                        else if (output.getDt() < input.getDt())
+                            i++;
+                        else
+                            j++;
+                    }
                     display();
                 });
 
-        AirPollutionReceiver.getInstance().getCurrentLocationAirPollution(latitude, longitude,
-                (success) -> {
+        AirPollutionReceiver.getInstance().getAirPollution(latitude, longitude,
+                (result) -> {
+                    int i = 0, j = 0;
+                    while (i < WeatherData.currentLocationWeatherData.size() && j < result.size()) {
+                        WeatherData output = WeatherData.currentLocationWeatherData.get(i);
+                        WeatherData input  = result.get(j);
+                        if (output.getDt() == input.getDt()) {
+                            output.setPm2_5(input.getPm2_5());
+                            output.setPm10(input.getPm10());
+                            i++;
+                            j++;
+                        }
+                        else if (output.getDt() < input.getDt())
+                            i++;
+                        else
+                            j++;
+                    }
+                    display();
+                });
+    }
+     */
+    public void getCurrentLocationWeather() {
+        mScrollView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        LocationData.setCurrentLocation();
+        WeatherData.initCurrentLocationWeatherData();
+        Double latitude = LocationData.getCurrentLocation().getLatitude();
+        Double longitude = LocationData.getCurrentLocation().getLongitude();
+
+
+
+        WeatherReceiver.getInstance().getWeather(latitude, longitude,
+                (result) -> {
+                    int i = 0, j = 0;
+                    while (i < WeatherData.currentLocationWeatherData.size() && j < result.size()) {
+                        WeatherData output = WeatherData.currentLocationWeatherData.get(i);
+                        WeatherData input  = result.get(j);
+                        if (output.getDt() == input.getDt()) {
+                            //main
+                            output.setTemp(input.getTemp());
+                            output.setFeels_like(input.getFeels_like());
+                            output.setHumidity(input.getHumidity());
+
+                            //weather
+                            output.setWeather(input.getWeather());
+                            output.setDescription(input.getDescription());
+                            output.setIcon(input.getIcon());
+                            output.setWind_speed(input.getWind_speed());
+
+                            output.setRain_1h(input.getRain_1h());
+                            output.setSnow_1h(input.getSnow_1h());
+                            i++;
+                            j++;
+                        }
+                        else if (output.getDt() < input.getDt())
+                            i++;
+                        else
+                            j++;
+                    }
+                    display();
+                });
+
+        AirPollutionReceiver.getInstance().getAirPollution(latitude, longitude,
+                (result) -> {
+                    int i = 0, j = 0;
+                    while (i < WeatherData.currentLocationWeatherData.size() && j < result.size()) {
+                        WeatherData output = WeatherData.currentLocationWeatherData.get(i);
+                        WeatherData input  = result.get(j);
+                        if (output.getDt() == input.getDt()) {
+                            output.setPm2_5(input.getPm2_5());
+                            output.setPm10(input.getPm10());
+                            i++;
+                            j++;
+                        }
+                        else if (output.getDt() < input.getDt())
+                            i++;
+                        else
+                            j++;
+                    }
                     display();
                     mProgressBar.setVisibility(View.GONE);
                     mScrollView.setVisibility(View.VISIBLE);

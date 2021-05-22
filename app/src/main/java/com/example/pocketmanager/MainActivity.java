@@ -10,8 +10,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.pocketmanager.network.AirPollutionReceiver;
+import com.example.pocketmanager.network.GeoCodingReceiver;
 import com.example.pocketmanager.network.WeatherReceiver;
-import com.example.pocketmanager.storage.WeatherData;
 import com.example.pocketmanager.ui.schedule.ScheduleFragment;
 import com.example.pocketmanager.ui.transporation.TransportationFragment;
 import com.example.pocketmanager.ui.weather.WeatherSelection;
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
         //Network Receivers
         WeatherReceiver.getInstance(this);
         AirPollutionReceiver.getInstance(this);
-
-
+        GeoCodingReceiver.getInstance(this);
+        GeoCodingReceiver.getCurrentAddress();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
         fragmentManager.beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
