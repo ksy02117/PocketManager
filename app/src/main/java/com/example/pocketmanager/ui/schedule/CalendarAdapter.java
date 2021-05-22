@@ -2,6 +2,7 @@ package com.example.pocketmanager.ui.schedule;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ public class CalendarAdapter extends BaseAdapter
     private ArrayList<CalData> arrData;
     private LayoutInflater inflater;
 
-    public CalendarAdapter(Context c, ArrayList arr) {
+    public CalendarAdapter(Context c, ArrayList<CalData> arr) {
         this.context = c;
         this.arrData = arr;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -41,6 +42,7 @@ public class CalendarAdapter extends BaseAdapter
         TextView ViewText = (TextView)convertView.findViewById(R.id.ViewText);
         ImageView ViewImage = (ImageView) convertView.findViewById(R.id.highlight);
         Date tmpDate = arrData.get(position).getDate();
+
         Calendar tmpCal = Calendar.getInstance();
         int thisMonth = arrData.get(7).getDate().getMonth();
         int thisYear = tmpCal.get(Calendar.YEAR);
@@ -65,11 +67,9 @@ public class CalendarAdapter extends BaseAdapter
             ViewText.setTextColor(Color.BLACK);
 
         if (tmpDate.getDate() == today && tmpDate.getMonth() == tmpCal.get(Calendar.MONTH) &&
-                tmpDate.getYear() == thisYear)
+                tmpDate.getYear() + 1900 == thisYear)
             ViewImage.setVisibility(View.VISIBLE);
 
         return convertView;
     }
-
-
 }

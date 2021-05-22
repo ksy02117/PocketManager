@@ -8,18 +8,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.pocketmanager.BuildConfig;
 import com.example.pocketmanager.storage.WeatherData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AirPollutionReceiver extends OpenWeatherMapReceiver{
+import java.util.LinkedList;
+
+public class AirPollutionReceiver {
     private static AirPollutionReceiver instance = null;
     protected RequestQueue requestQueue;
     protected static Context ctx;
 
     private final String prefixURL = "https://api.openweathermap.org/data/2.5/air_pollution/forecast?";
+    private final String API_KEY = BuildConfig.WEATHER_KEY;
 
     private AirPollutionReceiver(Context context) {
         ctx = context;
@@ -43,41 +47,41 @@ public class AirPollutionReceiver extends OpenWeatherMapReceiver{
         return instance;
     }
 
-    public void getCurrentLocationAirPollution(float latitude, float longitude, final OpenWeatherMapListener listener) {
+    public void getAirPollution(double latitude, double longitude, final APIListener<LinkedList<WeatherData>> listener) {
 
         //https://api.openweathermap.org/data/2.5/air_pollution/history?lat=57&lon=127&appid=b3a048704c9b2c9c25bd3d24b571d042
-
-
         StringBuilder builder = new StringBuilder(prefixURL);
         builder.append(String.format("lat=%f&lon=%f", latitude, longitude));
-        builder.append("&appid=b3a048704c9b2c9c25bd3d24b571d042");
-        String airPollutionURL = builder.toString();
+        builder.append("&appid=" + API_KEY);
+        String url = builder.toString();
 
         // Request a string response from the provided URL.
-        JsonObjectRequest airPollutionRequest = new JsonObjectRequest(Request.Method.GET, airPollutionURL, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
                         // Display
                         try {
-                            JSONArray jsonAirPollutionArray = response.getJSONArray("list");
+                            JSONArray jsonArray = response.getJSONArray("list");
+                            LinkedList<WeatherData> result = new LinkedList<WeatherData>();
 
-                            for (int i = 0, j = 0; i < jsonAirPollutionArray.length() && j < WeatherData.currentLocationWeatherData.size(); i++) {
-                                JSONObject obj = jsonAirPollutionArray.getJSONObject(i);
-                                WeatherData data = WeatherData.currentLocationWeatherData.get(j);
-                                if (obj.getLong("dt") == data.getDt()) {
-                                    data.setPm2_5((float) obj.getJSONObject("components").getDouble("pm2_5"));
-                                    data.setPm10((float) obj.getJSONObject("components").getDouble("pm10"));
-                                    j++;
-                                }
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject obj = jsonArray.getJSONObject(i);
+                                WeatherData data = new WeatherData();
+
+                                data.setDt(obj.getLong("dt"));
+                                data.setPm2_5((float) obj.getJSONObject("components").getDouble("pm2_5"));
+                                data.setPm10((float) obj.getJSONObject("components").getDouble("pm10"));
+
+                                result.add(data);
                             }
 
-                            listener.postRequest(true);
+                            listener.getResult(result);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            listener.postRequest(false);
+                            listener.getResult(null);
                         }
 
                     }
@@ -86,9 +90,9 @@ public class AirPollutionReceiver extends OpenWeatherMapReceiver{
             public void onErrorResponse(VolleyError error) {
                 // Error
                 error.printStackTrace();
-                listener.postRequest(false);
+                listener.getResult(null);
             }
         });
-        requestQueue.add(airPollutionRequest);
+        requestQueue.add(request);
     }
 }
