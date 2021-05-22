@@ -19,12 +19,19 @@ import com.example.pocketmanager.network.WeatherReceiver;
 import com.example.pocketmanager.ui.home.HomeFragment;
 import com.example.pocketmanager.ui.schedule.ScheduleFragment;
 import com.example.pocketmanager.ui.map.MapFragment;
+import com.example.pocketmanager.ui.timetable.Lecture;
+import com.example.pocketmanager.ui.timetable.TimetableManager;
+import com.example.pocketmanager.ui.transporation.IncommingTrain;
+import com.example.pocketmanager.ui.transporation.PathInfoManager;
 import com.example.pocketmanager.ui.weather.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private TextView curDate;
@@ -121,6 +128,36 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.main_frame,menu4Fragment).commit();
 
         curDate = (TextView)findViewById(R.id.current_date);
+
+        // test (유진)-----------------------
+
+        PathInfoManager p = new PathInfoManager();
+
+        p.setDestination("37.548918, 127.075117");
+        p.setOrigin("37.546988, 127.105476");
+        p.setSubwayName("광나루(장신대)");
+        TimetableManager time = new TimetableManager();
+        time.setEverytimeID("jjiny3773");
+        time.setEverytimePassword("rudgh0607");
+        try {
+            p.getShortestPathInfo();
+            ArrayList<IncommingTrain> t = p.getIncomingTrainInfo();
+            for (IncommingTrain a : t){
+                a.log();
+            }
+            ArrayList<Lecture> lectures = time.getTimetable();
+            for (Lecture l : lectures) l.log();
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        //----------------------------
     }
 
     public void setDate(TextView view) {

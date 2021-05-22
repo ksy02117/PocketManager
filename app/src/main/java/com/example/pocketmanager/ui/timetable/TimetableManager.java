@@ -25,17 +25,18 @@ public class TimetableManager {
     }
 
     // setters
-    void setEverytimeID(String everytimeID) {
+    public void setEverytimeID(String everytimeID) {
         this.everytimeID = everytimeID;
     }
 
-    void setEverytimePassword(String everytimePassword) {
+    public void setEverytimePassword(String everytimePassword) {
         this.everytimePassword = everytimePassword;
     }
 
     public ArrayList<Lecture> getTimetable() throws IOException, ExecutionException, InterruptedException {
         // 시간표 정보를 담은 HTML을 불러옴
-        String temp = new EverytimeCrawlingTask().execute().get();
+        String[] params = {everytimeID, everytimePassword};
+        String temp = new EverytimeCrawlingTask().execute(params).get();
         Document timetableHTML = Jsoup.parse(temp);
 
         // 얻은 HTML에서 name, professor, time, place태그를 가진 라인을 각각 Elements에 저장

@@ -20,8 +20,8 @@ public class EverytimeCrawlingTask extends AsyncTask<String, Void, String> {
      * https://seungsulee.tistory.com/24
      */
     // 로그인 정보
-    private String everytimeID = "jjiny3773";
-    private String everytimePassword = "rudgh0607";
+    private String everytimeID = "";
+    private String everytimePassword = "";
 
     // 로그인 쿠키
     private Map<String, String> loginCookie;
@@ -40,6 +40,8 @@ public class EverytimeCrawlingTask extends AsyncTask<String, Void, String> {
 
     // 에브리타임에서 시간표 가져오기
     protected String doInBackground(String... strings) {
+        everytimeID = strings[0];
+        everytimePassword = strings[1];
         String result = "";
         try {
             everytimeLogin();
