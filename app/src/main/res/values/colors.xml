@@ -7,4 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="summer">#44eebd82</color>
+    <color name="fall">#44d8d27e</color>
+    <color name="winter">#44a1c1da</color>
+    <color name="spring">#448da64b</color>
+
+    <color name="today">#78B4FF</color>
+    <color name="greyed_out">#B5B5B5</color>
+
+    <color name="pink3">#ffc8de</color>
+    <color name="pink">#fa96b4</color>
+    <color name="pink2">#d27896</color>
+
+
 </resources>
