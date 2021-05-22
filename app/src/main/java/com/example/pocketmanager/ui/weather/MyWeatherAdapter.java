@@ -1,6 +1,9 @@
 package com.example.pocketmanager.ui.weather;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +39,13 @@ public class MyWeatherAdapter extends RecyclerView.Adapter<MyWeatherAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.weatherImage.setImageResource(R.drawable.sun);
+        holder.weatherImage.setImageDrawable(getDrawableIcon(list.get(position).getIcon()));
+        /*
+        pm2_5
+        pm10;
+         */
         holder.timeView.setText(list.get(position).getHour() + "시");
-        holder.tempView.setText(list.get(position).getTemp() + "C");
+        holder.tempView.setText(list.get(position).getTemp() + "°");
 
     }
 
@@ -58,5 +65,15 @@ public class MyWeatherAdapter extends RecyclerView.Adapter<MyWeatherAdapter.View
             timeView = itemView.findViewById(R.id.item_time);
             tempView = itemView.findViewById(R.id.item_temp);
         }
+    }
+
+    public Drawable getDrawableIcon(String icon) {
+        Resources resources = context.getResources();
+        int resourceId;
+        String mIcon = icon.replace('n', 'd');
+
+        resourceId = resources.getIdentifier("w_" + mIcon, "drawable", context.getPackageName());
+
+        return resources.getDrawable(resourceId);
     }
 }

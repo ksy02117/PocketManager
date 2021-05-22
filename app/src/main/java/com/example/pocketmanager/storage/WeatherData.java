@@ -2,6 +2,9 @@ package com.example.pocketmanager.storage;
 
 import com.example.pocketmanager.network.GeoCodingReceiver;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,7 +41,7 @@ public class WeatherData implements Serializable {
         long currentDt = Calendar.getInstance().getTimeInMillis() / 1000;
         long startDt = currentDt / 3600 * 3600;
         long dDt = 3600;
-        LocationData location = GeoCodingReceiver.getCurrentAddress();
+        //LocationData location = GeoCodingReceiver.getCurrentAddress();
 
         if (currentLocationWeatherData.isEmpty())
             for (int i = 0; i < 48; i++)
@@ -46,7 +49,7 @@ public class WeatherData implements Serializable {
 
         for (int i = 0; i < 48; i++) {
             currentLocationWeatherData.get(i).setDt(startDt + dDt * i);
-            currentLocationWeatherData.get(i).setLocation(LocationData.getCurrentLocation());
+//            currentLocationWeatherData.get(i).setLocation(LocationData.getCurrentLocation());
         }
 
     }
@@ -108,10 +111,10 @@ public class WeatherData implements Serializable {
     public void setPm10(float pm10) { this.pm10 = pm10; }
 
 
-
+/*
     public double getLatitude() { return location.getLatitude(); }
     public double getLongitude() { return location.getLongitude(); }
     public void setLocation(LocationData location) { this.location = location; }
     public void setLocation(double latitude, double longitude) { location.setLocation(latitude, longitude); }
-
+*/
 }

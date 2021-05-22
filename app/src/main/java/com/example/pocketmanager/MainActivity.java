@@ -99,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
         AirPollutionReceiver.getInstance(this);
         GeoCodingReceiver.getInstance(this);
 
-
-
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
         fragmentManager.beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
 

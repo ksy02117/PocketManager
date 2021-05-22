@@ -23,8 +23,6 @@ public class LocationData {
         savedLocation.remove(location);
     }
 
-
-
     public double getLatitude() { return adr.getLatitude(); }
     public double getLongitude() { return adr.getLongitude(); }
     public String getAddress() {
