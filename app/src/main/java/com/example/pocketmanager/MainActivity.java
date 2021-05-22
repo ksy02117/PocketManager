@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }*/
-        TimetableManager t = new TimetableManager("jjiny3773","rudgh0607");
+        TimetableManager t = new TimetableManager("","");
         try {
             ArrayList<Lecture> lectures = t.getTimetable();
             for (Lecture l : lectures) l.log();
