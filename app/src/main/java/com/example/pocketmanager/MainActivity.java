@@ -16,8 +16,9 @@ import android.widget.Toast;
 import com.example.pocketmanager.network.AirPollutionReceiver;
 import com.example.pocketmanager.network.GeoCodingReceiver;
 import com.example.pocketmanager.network.WeatherReceiver;
+import com.example.pocketmanager.ui.home.HomeFragment;
 import com.example.pocketmanager.ui.schedule.ScheduleFragment;
-import com.example.pocketmanager.ui.transporation.TransportationFragment;
+import com.example.pocketmanager.ui.map.MapFragment;
 import com.example.pocketmanager.ui.weather.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -31,12 +32,26 @@ public class MainActivity extends AppCompatActivity {
     private Fragment menu1Fragment;
     private Fragment menu2Fragment;
     private Fragment menu3Fragment;
+    private Fragment menu4Fragment;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
+                        case R.id.menu_home:
+                            if (menu4Fragment == null) {
+                                menu4Fragment = new HomeFragment();
+                                fragmentManager.beginTransaction().add(R.id.main_frame, menu4Fragment).commit();
+                            }
+                            else fragmentManager.beginTransaction().show(menu4Fragment).commit();
+
+                            if(menu1Fragment != null) fragmentManager.beginTransaction().hide(menu1Fragment).commit();
+                            if(menu2Fragment != null) fragmentManager.beginTransaction().hide(menu2Fragment).commit();
+                            if(menu3Fragment != null) fragmentManager.beginTransaction().hide(menu3Fragment).commit();
+                            setMainText(curDate, "홈");
+
+                            return true;
                         case R.id.menu_schedule:
                             if (menu1Fragment == null) {
                                 menu1Fragment = new ScheduleFragment();
@@ -46,19 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
                             if(menu2Fragment != null) fragmentManager.beginTransaction().hide(menu2Fragment).commit();
                             if(menu3Fragment != null) fragmentManager.beginTransaction().hide(menu3Fragment).commit();
+                            if(menu4Fragment != null) fragmentManager.beginTransaction().hide(menu4Fragment).commit();
                             setMainText(curDate, "일정");
-
-                            return true;
-                        case R.id.menu_transportation:
-                            if (menu2Fragment == null) {
-                                menu2Fragment = new TransportationFragment();
-                                fragmentManager.beginTransaction().add(R.id.main_frame, menu2Fragment).commit();
-                            }
-                            else fragmentManager.beginTransaction().show(menu2Fragment).commit();
-
-                            if(menu1Fragment != null) fragmentManager.beginTransaction().hide(menu1Fragment).commit();
-                            if(menu3Fragment != null) fragmentManager.beginTransaction().hide(menu3Fragment).commit();
-                            setMainText(curDate, "교통");
 
                             return true;
                         case R.id.menu_weather:
@@ -70,7 +74,21 @@ public class MainActivity extends AppCompatActivity {
 
                             if(menu1Fragment != null) fragmentManager.beginTransaction().hide(menu1Fragment).commit();
                             if(menu2Fragment != null) fragmentManager.beginTransaction().hide(menu2Fragment).commit();
+                            if(menu4Fragment != null) fragmentManager.beginTransaction().hide(menu4Fragment).commit();
                             setMainText(curDate, "날씨");
+
+                            return true;
+                        case R.id.menu_map:
+                            if (menu2Fragment == null) {
+                                menu2Fragment = new MapFragment();
+                                fragmentManager.beginTransaction().add(R.id.main_frame, menu2Fragment).commit();
+                            }
+                            else fragmentManager.beginTransaction().show(menu2Fragment).commit();
+
+                            if(menu1Fragment != null) fragmentManager.beginTransaction().hide(menu1Fragment).commit();
+                            if(menu3Fragment != null) fragmentManager.beginTransaction().hide(menu3Fragment).commit();
+                            if(menu4Fragment != null) fragmentManager.beginTransaction().hide(menu4Fragment).commit();
+                            setMainText(curDate, "지도");
 
                             return true;
                     }
@@ -92,15 +110,15 @@ public class MainActivity extends AppCompatActivity {
 
         //Fragments
         fragmentManager = getSupportFragmentManager();
-        menu1Fragment = new ScheduleFragment();
+        menu4Fragment = new HomeFragment();
 
         //Network Receivers
         WeatherReceiver.getInstance(this);
         AirPollutionReceiver.getInstance(this);
         GeoCodingReceiver.getInstance(this);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
-        fragmentManager.beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,menu4Fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.main_frame,menu4Fragment).commit();
 
         curDate = (TextView)findViewById(R.id.current_date);
     }
