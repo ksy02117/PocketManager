@@ -131,10 +131,23 @@ public class WeatherFragment extends Fragment {
 
         LocationData.setCurrentLocation();
         WeatherData.initCurrentLocationWeatherData();
-        Double latitude = LocationData.getCurrentLocation().getLatitude();
-        Double longitude = LocationData.getCurrentLocation().getLongitude();
 
-
+        boolean done = false;
+        Double latitude = 0.0;
+        Double longitude = 0.0;
+        while (!done) {
+            try {
+                latitude = LocationData.getCurrentLocation().getLatitude();
+                longitude = LocationData.getCurrentLocation().getLongitude();
+                done = true;
+            } catch (Exception e) {
+                try {
+                    this.wait(1000);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+            }
+        }
 
         WeatherReceiver.getInstance().getWeather(latitude, longitude,
                 (result) -> {

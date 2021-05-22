@@ -2,12 +2,16 @@ package com.example.pocketmanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pocketmanager.network.AirPollutionReceiver;
 import com.example.pocketmanager.network.GeoCodingReceiver;
@@ -82,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.bottomNavigationView);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                1);
+
         //Fragments
         fragmentManager = getSupportFragmentManager();
         menu1Fragment = new ScheduleFragment();
@@ -90,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
         WeatherReceiver.getInstance(this);
         AirPollutionReceiver.getInstance(this);
         GeoCodingReceiver.getInstance(this);
-        GeoCodingReceiver.getCurrentAddress();
 
 
 
@@ -105,6 +112,30 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd");
         String date = formatter.format(today);
         view.setText(date);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    GeoCodingReceiver.getCurrentAddress();
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     public void setMainText(TextView view, String str) {
