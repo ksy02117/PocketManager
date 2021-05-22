@@ -1,5 +1,6 @@
 package com.example.pocketmanager.ui.transporation;
 
+
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -45,7 +46,7 @@ public class ApiCallTask extends AsyncTask<String, Void, String> {
         catch (IOException e){
             e.printStackTrace();
         }
-        Log.d("shortestPath", strings[0]);
+
         return result;
     }
 }

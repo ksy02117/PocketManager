@@ -12,14 +12,15 @@ import android.widget.TextView;
 
 import com.example.pocketmanager.network.AirPollutionReceiver;
 import com.example.pocketmanager.network.WeatherReceiver;
-import com.example.pocketmanager.storage.WeatherData;
 import com.example.pocketmanager.ui.schedule.ScheduleFragment;
+import com.example.pocketmanager.ui.transporation.IncommingTrain;
+import com.example.pocketmanager.ui.transporation.PathInfoManager;
 import com.example.pocketmanager.ui.transporation.TransportationFragment;
-import com.example.pocketmanager.ui.transporation.getShortestPathTask;
 import com.example.pocketmanager.ui.weather.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
@@ -99,18 +100,31 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
 
         curDate = (TextView)findViewById(R.id.current_date);
-    //fortest - yoojin
-        String resultText = "";
+    //test-----------------------------------------------------------------
+        PathInfoManager p = new PathInfoManager();
+        p.setDestination("37.548918, 127.075117");
+        p.setOrigin("37.546988, 127.105476");
+        p.setSubwayName("광나루(장신대)");
+        ArrayList<IncommingTrain> a;
         try {
-            resultText = new getShortestPathTask().execute().get();
+            a = p.getIncomingTrainInfo();
+            for (IncommingTrain i : a){
+                i.log();
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        Log.d("shortestPath", resultText);
-
+        try {
+            p.getShortestPathInfo();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    //---------------------------------------------------------------------
 
     }
 
