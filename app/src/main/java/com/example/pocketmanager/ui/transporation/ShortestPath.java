@@ -2,9 +2,10 @@ package com.example.pocketmanager.ui.transporation;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ShortestPath {
+public class ShortestPath implements Serializable {
     // 시각
     private String timeZone;
     private String departureTime;

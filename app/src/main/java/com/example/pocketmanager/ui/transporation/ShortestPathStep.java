@@ -2,7 +2,9 @@ package com.example.pocketmanager.ui.transporation;
 
 import android.util.Log;
 
-public class ShortestPathStep { // 최단경로를 이루는 단계
+import java.io.Serializable;
+
+public class ShortestPathStep implements Serializable { // 최단경로를 이루는 단계
     // 거리
     private String distance;
     private String distanceValue;

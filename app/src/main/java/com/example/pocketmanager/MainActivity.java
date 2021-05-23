@@ -7,8 +7,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,14 +28,18 @@ import com.example.pocketmanager.ui.timetable.Lecture;
 import com.example.pocketmanager.ui.timetable.TimetableManager;
 import com.example.pocketmanager.ui.transporation.IncommingTrain;
 import com.example.pocketmanager.ui.transporation.PathInfoManager;
+import com.example.pocketmanager.ui.transporation.ShortestPath;
 import com.example.pocketmanager.ui.weather.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment menu2Fragment;
     private Fragment menu3Fragment;
     private Fragment menu4Fragment;
+    ShortestPath s;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -91,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
                                 fragmentManager.beginTransaction().add(R.id.main_frame, menu2Fragment).commit();
                             }
                             else fragmentManager.beginTransaction().show(menu2Fragment).commit();
+                            // MapFragment에 ShortestPath 객체 전달
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("Obj", s);
+                            menu2Fragment.setArguments(bundle);
 
                             if(menu1Fragment != null) fragmentManager.beginTransaction().hide(menu1Fragment).commit();
                             if(menu3Fragment != null) fragmentManager.beginTransaction().hide(menu3Fragment).commit();
@@ -137,16 +151,20 @@ public class MainActivity extends AppCompatActivity {
         p.setOrigin("37.546988, 127.105476");
         p.setSubwayName("광나루(장신대)");
         TimetableManager time = new TimetableManager();
-        time.setEverytimeID("jjiny3773");
-        time.setEverytimePassword("rudgh0607");
+        time.setEverytimeID("");
+        time.setEverytimePassword("");
+
         try {
-            p.getShortestPathInfo();
+            s = p.getShortestPathInfo();
             ArrayList<IncommingTrain> t = p.getIncomingTrainInfo();
             for (IncommingTrain a : t){
                 a.log();
             }
             ArrayList<Lecture> lectures = time.getTimetable();
             for (Lecture l : lectures) l.log();
+
+
+
 
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -156,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+        //getHashKey();
 
         //----------------------------
     }
@@ -194,4 +214,27 @@ public class MainActivity extends AppCompatActivity {
     public void setMainText(TextView view, String str) {
         view.setText(str);
     }
+
+    /*private void getHashKey(){
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo == null)
+            Log.e("KeyHash", "KeyHash:null");
+
+        for (Signature signature : packageInfo.signatures) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            } catch (NoSuchAlgorithmException e) {
+                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
+            }
+        }
+    }*/
+
+
 }
