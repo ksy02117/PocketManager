@@ -7,13 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,22 +19,16 @@ import com.example.pocketmanager.network.WeatherReceiver;
 import com.example.pocketmanager.ui.home.HomeFragment;
 import com.example.pocketmanager.ui.schedule.ScheduleFragment;
 import com.example.pocketmanager.ui.map.MapFragment;
-import com.example.pocketmanager.ui.timetable.Lecture;
-import com.example.pocketmanager.ui.timetable.TimetableManager;
-import com.example.pocketmanager.ui.transporation.IncommingTrain;
+import com.example.pocketmanager.ui.transporation.IncomingTrain;
 import com.example.pocketmanager.ui.transporation.PathInfoManager;
 import com.example.pocketmanager.ui.transporation.ShortestPath;
 import com.example.pocketmanager.ui.weather.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -149,19 +138,15 @@ public class MainActivity extends AppCompatActivity {
 
         p.setDestination("37.548918, 127.075117");
         p.setOrigin("37.546988, 127.105476");
-        p.setSubwayName("광나루(장신대)");
-        TimetableManager time = new TimetableManager();
-        time.setEverytimeID("");
-        time.setEverytimePassword("");
+        //p.setSubwayName("광나루(장신대)");
+
 
         try {
             s = p.getShortestPathInfo();
-            ArrayList<IncommingTrain> t = p.getIncomingTrainInfo();
-            for (IncommingTrain a : t){
+            ArrayList<IncomingTrain> t = p.getIncomingTrainInfo();
+            for (IncomingTrain a : t){
                 a.log();
             }
-            ArrayList<Lecture> lectures = time.getTimetable();
-            for (Lecture l : lectures) l.log();
 
 
 
@@ -169,8 +154,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
 
