@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.weather.WeatherData;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 
@@ -46,6 +48,7 @@ public class MyDailyAdapter extends RecyclerView.Adapter<MyDailyAdapter.ViewHold
         String currentDate = w.getMonth() + "월 " + w.getDay() + "일";
         holder.currentDay.setText(currentDate);
         holder.currentWeather.setText(w.getWeather());
+        holder.currentPop.setText(w.getPop() + "%");
        // holder.maxTemp.setText(w.get);
         //holder.minTemp.setText(w.getWeather());
 
@@ -60,6 +63,7 @@ public class MyDailyAdapter extends RecyclerView.Adapter<MyDailyAdapter.ViewHold
         public ImageView weatherImage;
         public TextView currentDay;
         public TextView currentWeather;
+        public TextView currentPop;
         public TextView maxTemp, minTemp;
 
         public ViewHolder(View itemView) {
@@ -67,6 +71,7 @@ public class MyDailyAdapter extends RecyclerView.Adapter<MyDailyAdapter.ViewHold
             weatherImage = itemView.findViewById((R.id.daily_icon));
             currentDay = itemView.findViewById(R.id.daily_day);
             currentWeather = itemView.findViewById(R.id.daily_weather);
+            currentPop = itemView.findViewById(R.id.daily_pop);
             maxTemp = itemView.findViewById(R.id.daily_max);
             minTemp = itemView.findViewById(R.id.daily_min);
         }
