@@ -94,6 +94,7 @@ public class HistoricalWeatherReceiver {
                                 data.setWeather(obj.getJSONArray("weather").getJSONObject(0).getString("main"));
                                 data.setIcon(obj.getJSONArray("weather").getJSONObject(0).getString("icon"));
                                 data.setWind_speed((float) obj.getDouble("wind_speed"));
+                                data.setPop((float) obj.getDouble("pop"));
 
                                 if (obj.has("rain"))
                                     data.setRain((float) obj.getJSONObject("rain").getDouble("1h"));

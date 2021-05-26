@@ -9,7 +9,7 @@ import java.util.List;
 
 public class WeatherData implements Serializable {
 
-    public static ArrayList<WeatherData> dailyWeatherData = new ArrayList<>(8);
+    public static ArrayList<DailyWeatherData> dailyWeatherData = new ArrayList<>(8);
     public static ArrayList<WeatherData> hourlyWeatherData = new ArrayList<>(48);
     public static boolean todayWeatherReady;
     public static boolean tomorrowWeatherReady;
@@ -104,7 +104,7 @@ public class WeatherData implements Serializable {
     public static List<WeatherData> getTomorrowWeather() {
         return hourlyWeatherData.subList(24, 48);
     }
-    public static List<WeatherData> getDailyWeather() {
+    public static List<DailyWeatherData> getDailyWeather() {
         return dailyWeatherData;
     }
 

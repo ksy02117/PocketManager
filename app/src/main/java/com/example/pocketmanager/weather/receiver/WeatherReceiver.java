@@ -1,8 +1,8 @@
 package com.example.pocketmanager.weather.receiver;
 
-
 import com.example.pocketmanager.schedule.LocationData;
 import com.example.pocketmanager.general.Time;
+import com.example.pocketmanager.weather.DailyWeatherData;
 import com.example.pocketmanager.weather.WeatherData;
 
 public class WeatherReceiver implements Runnable {
@@ -35,7 +35,7 @@ public class WeatherReceiver implements Runnable {
 
         if (WeatherData.dailyWeatherData.isEmpty())
             for (int i = 0; i < 8; i++)
-                WeatherData.dailyWeatherData.add(new WeatherData());
+                WeatherData.dailyWeatherData.add(new DailyWeatherData());
     }
     public void receiveWeatherData() {
         todayWeatherReady = false;
@@ -81,6 +81,7 @@ public class WeatherReceiver implements Runnable {
                         output.setIcon(input.getIcon());
                         output.setWind_speed(input.getWind_speed());
 
+                        output.setPop(input.getPop());
                         output.setRain(input.getRain());
                         output.setSnow(input.getSnow());
                     }
@@ -107,6 +108,7 @@ public class WeatherReceiver implements Runnable {
                         output.setIcon(input.getIcon());
                         output.setWind_speed(input.getWind_speed());
 
+                        output.setPop(input.getPop());
                         output.setRain(input.getRain());
                         output.setSnow(input.getSnow());
                     }
@@ -117,24 +119,19 @@ public class WeatherReceiver implements Runnable {
         DailyWeatherReceiver.getInstance().getDailyWeather(
                 (result) -> {
                     for (int i = 0; i < result.size(); i++) {
-                        WeatherData output = WeatherData.dailyWeatherData.get(i);
-                        WeatherData input  = result.get(i);
+                        DailyWeatherData output = WeatherData.dailyWeatherData.get(i);
+                        DailyWeatherData input  = result.get(i);
 
                         output.setDt(input.getDt());
 
                         //main
-                        output.setTemp(input.getTemp());
-                        output.setFeels_like(input.getFeels_like());
-                        output.setHumidity(input.getHumidity());
+                        output.setMax_temp(input.getMax_temp());
+                        output.setMin_temp(input.getMin_temp());
 
                         //weather
                         output.setWeather(input.getWeather());
                         output.setIcon(input.getIcon());
-                        output.setWind_speed(input.getWind_speed());
-
-                        //
-                        output.setRain(input.getRain());
-                        output.setSnow(input.getSnow());
+                        output.setPop(input.getPop());
                     }
                     dailyWeatherReady = true;
                 });

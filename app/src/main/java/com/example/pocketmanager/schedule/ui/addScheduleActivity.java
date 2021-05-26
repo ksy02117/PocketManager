@@ -112,11 +112,11 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         startMinute = startPicker.getCurrentMinute();
         endHour = endPicker.getCurrentHour();
         endMinute = endPicker.getCurrentMinute();
-        tmpCal.set(Integer.parseInt(arrStart[0]), Integer.parseInt(arrStart[1]), Integer.parseInt(arrStart[2]),
+        tmpCal.set(Integer.parseInt(arrStart[0]), Integer.parseInt(arrStart[1]) - 1, Integer.parseInt(arrStart[2]),
                 startHour, startMinute);
         long startDt = tmpCal.getTimeInMillis();
 
-        tmpCal.set(Integer.parseInt(arrEnd[0]), Integer.parseInt(arrEnd[1]), Integer.parseInt(arrEnd[2]),
+        tmpCal.set(Integer.parseInt(arrEnd[0]), Integer.parseInt(arrEnd[1]) - 1, Integer.parseInt(arrEnd[2]),
                 endHour, endMinute);
         long endDt = tmpCal.getTimeInMillis();
 

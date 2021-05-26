@@ -79,10 +79,6 @@ public class WeatherFragment extends Fragment {
             weatherAdapter = new MyWeatherAdapter(getActivity(), WeatherData.getTomorrowWeather());
             rainAdapter = new MyRainVolumeAdapter(getActivity(), WeatherData.getTomorrowWeather());
         }
-        else {
-            weatherAdapter = new MyWeatherAdapter(getActivity(), WeatherData.getDailyWeather());
-            rainAdapter = new MyRainVolumeAdapter(getActivity(), WeatherData.getDailyWeather());
-        }
 
         weather_recycler.setAdapter(weatherAdapter);
         rain_recycler.setAdapter(rainAdapter);
