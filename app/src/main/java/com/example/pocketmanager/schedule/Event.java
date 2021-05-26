@@ -49,45 +49,76 @@ public class Event {
         //이벤트가 끝나지 않았거나 시작하지 않은 경우
         if (dt < endTime.getDt()) {
             ListIterator<Event> it = upcomingEvents.listIterator();
-            Event event_node;
+            Event event_node = null;
+
             while (it.hasNext()) {
                 event_node = it.next();
                 if (event_node.startTime.getDt() < endTime.getDt())
                     break;
             }
-            if (it.hasPrevious())
-                it.previous();
+
+            //no event
+            if (event_node == null){
+                it.add(new_event);
+                return true;
+            }
+
+            //맨끝에 저장되어야 할 경우
+            if (!it.hasNext() && event_node.endTime.getDt() < startTime.getDt()) {
+                it.add(new_event);
+                return true;
+            }
+
+            it.previous();
+            //맨 앞인 경우
             if (!it.hasPrevious()) {
                 it.add(new_event);
                 return true;
             }
+            //가운데인 경우
             event_node = it.previous();
             if (event_node.endTime.getDt() < startTime.getDt()) {
                 it.add(new_event);
                 return true;
             }
+            //자리가 없는 경우
             return false;
 
         }
         else {
             ListIterator<Event> it = pastEvents.listIterator();
-            Event event_node;
+            Event event_node = null;
+
             while (it.hasNext()) {
                 event_node = it.next();
                 if (event_node.endTime.getDt() > startTime.getDt())
                     break;
             }
-            if (it.hasPrevious())
-                it.previous();
+
+            //no event
+            if (event_node == null) {
+                it.add(new_event);
+                return true;
+            }
+            //last node
+            if (!it.hasNext() && event_node.startTime.getDt() > endTime.getDt()) {
+                it.add(new_event);
+                return true;
+            }
+
+            it.previous();
+            //first node
             if (!it.hasPrevious()) {
                 it.add(new_event);
                 return true;
             }
+            //rest node
             event_node = it.previous();
             if (event_node.startTime.getDt() < endTime.getDt()) {
                 it.add(new_event);
                 return true;
             }
+            //no possible location
             return false;
         }
     }
