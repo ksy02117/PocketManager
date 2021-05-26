@@ -27,6 +27,7 @@ public class WeatherData implements Serializable {
     private String weather;
     private String icon;
     private float wind_speed;
+    private float pop;
     private float rain;
     private float snow;
 
@@ -80,6 +81,8 @@ public class WeatherData implements Serializable {
     public float getWind_speed() { return wind_speed; }
     public void setWind_speed(float wind_speed) { this.wind_speed = wind_speed; }
 
+    public float getPop() { return pop; }
+    public void setPop(float pop) { this.pop = pop; }
     public float getRain() { return rain; }
     public void setRain(float rain_1h) { this.rain = rain_1h; }
     public float getSnow() { return snow; }
