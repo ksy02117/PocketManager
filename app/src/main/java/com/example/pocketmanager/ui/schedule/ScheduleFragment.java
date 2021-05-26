@@ -97,7 +97,10 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 currentIndex = position;
 
                 mCalendar = Calendar.getInstance();
-                mCalendar.add(Calendar.MONTH, rPos);
+                if (tabLayout.getSelectedTabPosition() == 0)
+                    mCalendar.add(Calendar.MONTH, rPos);
+                else
+                    mCalendar.add(Calendar.WEEK_OF_YEAR, rPos);
 
                 curDate.setText(mCalendar.get(Calendar.YEAR) + "년 " + (mCalendar.get(Calendar.MONTH) + 1) + "월");
             }

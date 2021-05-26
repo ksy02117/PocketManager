@@ -41,8 +41,8 @@ public class DailyWeatherFragment extends Fragment {
 
         dailyRecycler.setHasFixedSize(true);
 
-        //mLayoutManager = new LinearLayoutManager(this.getContext());
-        //mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+        mLayoutManager = new LinearLayoutManager(this.getContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL); // 기본값이 VERTICAL
         dailyRecycler.setLayoutManager(mLayoutManager);
 
         dailyAdapter = new MyDailyAdapter(getActivity(), WeatherData.getDailyWeather());

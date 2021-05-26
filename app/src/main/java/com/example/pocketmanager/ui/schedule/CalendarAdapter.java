@@ -86,7 +86,10 @@ public class CalendarAdapter extends BaseAdapter
 
         LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.rlItemViewCalendar);
 
+
         for (Event e : eventArrayList) {
+            Log.d("task start!", "-------------");
+            Log.d("" + e.getEventName(), "" + e.getStartTime());
             addSchedule(ll, e);
         }
 
