@@ -95,11 +95,11 @@ public class HistoricalWeatherReceiver {
                                 data.setWind_speed((float) obj.getDouble("wind_speed"));
 
                                 if (obj.has("rain"))
-                                    data.setRain((float) obj.getDouble("rain"));
+                                    data.setRain((float) obj.getJSONObject("rain").getDouble("1h"));
                                 else
                                     data.setRain(0);
                                 if (obj.has("snow"))
-                                    data.setSnow((float) obj.getDouble("snow"));
+                                    data.setSnow((float) obj.getJSONObject("snow").getDouble("1h"));
                                 else
                                     data.setSnow(0);
                                 result.add(data);

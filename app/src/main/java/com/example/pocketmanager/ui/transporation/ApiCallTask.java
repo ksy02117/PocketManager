@@ -39,6 +39,10 @@ public class ApiCallTask extends AsyncTask<String, Void, String> {
 
                 reader.close();
             }
+            else{
+                int x = conn.getResponseCode();
+                x = x;
+            }
         } // 예외처리
         catch (MalformedURLException e) {
             e.printStackTrace();
