@@ -44,7 +44,7 @@ public class MyWeatherAdapter extends RecyclerView.Adapter<MyWeatherAdapter.View
         pm10;
          */
         holder.timeView.setText(list.get(position).getHour() + "시");
-        holder.tempView.setText(list.get(position).getTemp() + "°");
+        holder.tempView.setText(Math.round(list.get(position).getTemp()) + "°");
 
     }
 

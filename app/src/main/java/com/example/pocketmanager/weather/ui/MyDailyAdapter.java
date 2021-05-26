@@ -47,14 +47,15 @@ public class MyDailyAdapter extends RecyclerView.Adapter<MyDailyAdapter.ViewHold
         holder.weatherImage.setImageDrawable(getDrawableIcon(w.getIcon()));
 
         String currentDate = w.getMonth() + "월 " + w.getDay() + "일";
+        float pop = w.getPop();
         holder.currentDay.setText(currentDate);
         holder.currentWeather.setText(w.getWeather());
-        holder.maxTemp.setText(w.getMax_temp() + "℃");
-        holder.minTemp.setText(w.getMin_temp() + "℃");
-        holder.currentPop.setText(w.getPop() + "%");
-       // holder.maxTemp.setText(w.get);
-        //holder.minTemp.setText(w.getWeather());
-
+        holder.maxTemp.setText(Math.round(w.getMax_temp()) + "℃");
+        holder.minTemp.setText(Math.round(w.getMin_temp()) + "℃");
+        if (pop == 0)
+            holder.currentPop.setVisibility(View.GONE);
+        else
+            holder.currentPop.setText(w.getPop() + "%");
     }
 
     @Override

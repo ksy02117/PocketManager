@@ -117,10 +117,10 @@ public class WeatherFragment extends Fragment {
 
         locationName.setText(LocationData.getCurrentLocation().getAddress());
 
-        curTemp.setText(String.format("%s℃", curData.getTemp()));
-        maxTemp.setText(curData.getMax_temp() + "°");
-        minTemp.setText(curData.getMin_temp() + "°");
-        feelsLike.setText(String.format("체감 %s°", curData.getFeels_like()));
+        curTemp.setText(String.format("%s℃", Math.round(curData.getTemp())));
+        maxTemp.setText(Math.round(curData.getMax_temp()) + "°");
+        minTemp.setText(Math.round(curData.getMin_temp()) + "°");
+        feelsLike.setText(String.format("체감 %s°", Math.round(curData.getFeels_like())));
 
         curWeatherImage.setImageResource(resourceId);
         curWeather.setText(curData.getWeather());

@@ -16,7 +16,7 @@ public class DailyWeatherData {
 
     public int getYear() { return time.getYear(); }
     public int getMonth() { return time.getMonth(); }
-    public int getDay() { return time.getMin(); }
+    public int getDay() { return time.getDay(); }
     public int getHour() { return time.getHour(); }
     public int getMin() { return time.getMin(); }
     public int getSec() { return time.getSec(); }
