@@ -1,9 +1,12 @@
 package com.example.pocketmanager.schedule;
 
+import com.example.pocketmanager.general.LocationData;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.weather.WeatherData;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -13,6 +16,8 @@ public class Event {
     public static LinkedList<Event> pastEvents = new LinkedList<>();
     //시간순서대로 나열
     public static LinkedList<Event> upcomingEvents = new LinkedList<>();
+
+    public static HashMap<Date, LinkedList<Event>> Events;
 
     private Time startTime;
     private Time endTime;

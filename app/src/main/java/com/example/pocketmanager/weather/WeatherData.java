@@ -9,7 +9,7 @@ import java.util.List;
 
 public class WeatherData implements Serializable {
 
-    public static ArrayList<WeatherData> dailyWeatherData = new ArrayList<>(8);
+    public static ArrayList<DailyWeatherData> dailyWeatherData = new ArrayList<>(8);
     public static ArrayList<WeatherData> hourlyWeatherData = new ArrayList<>(48);
     public static boolean todayWeatherReady;
     public static boolean tomorrowWeatherReady;
@@ -37,7 +37,6 @@ public class WeatherData implements Serializable {
     private float pm10;
 
 
-
     public long getDt() { return time.getDt(); }
     public void setDt(long dt) { time.setDt(dt); }
 
@@ -52,6 +51,20 @@ public class WeatherData implements Serializable {
     public void setTemp(float temp) { this.temp = temp; }
     public float getFeels_like() { return feels_like; }
     public void setFeels_like(float feels_like) { this.feels_like = feels_like; }
+    public float getMax_temp() {
+        for (int i = 0; i < dailyWeatherData.size(); i++) {
+            if (time.getDt() / 86400 == dailyWeatherData.get(i).getDt() / 86400)
+                return dailyWeatherData.get(i).getMax_temp();
+        }
+        return 0.0f;
+    }
+    public float getMin_temp() {
+        for (int i = 0; i < dailyWeatherData.size(); i++) {
+            if (time.getDt() / 86400 == dailyWeatherData.get(i).getDt() / 86400)
+                return dailyWeatherData.get(i).getMin_temp();
+        }
+        return 0.0f;
+    }
 
     public float getHumidity() { return humidity; }
     public void setHumidity(float humidity) { this.humidity = humidity; }
@@ -98,13 +111,16 @@ public class WeatherData implements Serializable {
         int index = (int) (Time.getCurrentDt() / 3600 - Time.getCurrentDt() / 3600 / 24 * 24);
         return hourlyWeatherData.get(index);
     }
+    public static WeatherData getNextCurrentWeather() {
+        return hourlyWeatherData.get(26);
+    }
     public static List<WeatherData> getTodayWeather() {
         return hourlyWeatherData.subList(0, 24);
     }
     public static List<WeatherData> getTomorrowWeather() {
         return hourlyWeatherData.subList(24, 48);
     }
-    public static List<WeatherData> getDailyWeather() {
+    public static List<DailyWeatherData> getDailyWeather() {
         return dailyWeatherData;
     }
 

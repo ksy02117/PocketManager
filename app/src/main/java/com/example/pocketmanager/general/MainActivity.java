@@ -7,17 +7,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.schedule.LocationData;
 import com.example.pocketmanager.weather.receiver.AirPollutionReceiver;
 import com.example.pocketmanager.map.GeoCodingReceiver;
 import com.example.pocketmanager.weather.receiver.DailyWeatherReceiver;
@@ -33,8 +28,6 @@ import com.example.pocketmanager.transportation.ShortestPath;
 import com.example.pocketmanager.weather.ui.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

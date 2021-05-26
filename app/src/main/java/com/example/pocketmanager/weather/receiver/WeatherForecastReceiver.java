@@ -10,7 +10,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pocketmanager.BuildConfig;
 import com.example.pocketmanager.general.APIListener;
-import com.example.pocketmanager.schedule.LocationData;
+import com.example.pocketmanager.general.LocationData;
 import com.example.pocketmanager.weather.WeatherData;
 
 import org.json.JSONArray;
@@ -90,6 +90,7 @@ public class WeatherForecastReceiver {
                                 data.setWeather(obj.getJSONArray("weather").getJSONObject(0).getString("main"));
                                 data.setIcon(obj.getJSONArray("weather").getJSONObject(0).getString("icon"));
                                 data.setWind_speed((float) obj.getDouble("wind_speed"));
+                                data.setPop((float) obj.getDouble("pop"));
 
                                 if (obj.has("rain"))
                                     data.setRain((float) obj.getJSONObject("rain").getDouble("1h"));

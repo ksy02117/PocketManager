@@ -10,7 +10,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pocketmanager.BuildConfig;
 import com.example.pocketmanager.general.APIListener;
-import com.example.pocketmanager.schedule.LocationData;
+import com.example.pocketmanager.general.LocationData;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.weather.WeatherData;
 

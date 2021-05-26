@@ -11,7 +11,7 @@ import android.location.Location;
 import androidx.core.app.ActivityCompat;
 
 import com.example.pocketmanager.general.APIListener;
-import com.example.pocketmanager.schedule.LocationData;
+import com.example.pocketmanager.general.LocationData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,7 +31,7 @@ public class GeoCodingReceiver {
 
     public static synchronized <Acticity> Geocoder getInstance(Activity context) {
         if (instance == null)
-            instance = new Geocoder((Context) context, Locale.US);
+            instance = new Geocoder((Context) context, Locale.KOREA);
         act = context;
         ctx = (Context) context;
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(ctx);

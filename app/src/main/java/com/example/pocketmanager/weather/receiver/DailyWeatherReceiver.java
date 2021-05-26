@@ -10,8 +10,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.pocketmanager.BuildConfig;
 import com.example.pocketmanager.general.APIListener;
-import com.example.pocketmanager.schedule.LocationData;
-import com.example.pocketmanager.weather.WeatherData;
+import com.example.pocketmanager.general.LocationData;
+import com.example.pocketmanager.weather.DailyWeatherData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +49,7 @@ public class DailyWeatherReceiver {
         return instance;
     }
 
-    public void getDailyWeather(final APIListener<LinkedList<WeatherData>> listener) {
+    public void getDailyWeather(final APIListener<LinkedList<DailyWeatherData>> listener) {
 
         Double latitude = LocationData.getCurrentLocation().getLatitude();
         Double longitude = LocationData.getCurrentLocation().getLongitude();
@@ -74,32 +74,23 @@ public class DailyWeatherReceiver {
                         // Display
                         try {
                             JSONArray jsonArray = response.getJSONArray("daily");
-                            LinkedList<WeatherData> result = new LinkedList<>();
+                            LinkedList<DailyWeatherData> result = new LinkedList<>();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
-                                WeatherData data = new WeatherData();
+                                DailyWeatherData data = new DailyWeatherData();
 
                                 data.setDt(obj.getLong("dt"));
 
                                 //main
-                                data.setTemp((float) obj.getJSONObject("temp").getDouble("day"));
-                                data.setFeels_like((float) obj.getJSONObject("feels_like").getDouble("day"));
-                                data.setHumidity((float) obj.getDouble("humidity"));
+                                data.setMax_temp((float) obj.getJSONObject("temp").getDouble("max"));
+                                data.setMin_temp((float) obj.getJSONObject("temp").getDouble("min"));
 
                                 //weather
                                 data.setWeather(obj.getJSONArray("weather").getJSONObject(0).getString("main"));
                                 data.setIcon(obj.getJSONArray("weather").getJSONObject(0).getString("icon"));
-                                data.setWind_speed((float) obj.getDouble("wind_speed"));
+                                data.setPop((float) obj.getDouble("pop"));
 
-                                if (obj.has("rain"))
-                                    data.setRain((float) obj.getDouble("rain"));
-                                else
-                                    data.setRain(0);
-                                if (obj.has("snow"))
-                                    data.setSnow((float) obj.getDouble("snow"));
-                                else
-                                    data.setSnow(0);
                                 result.add(data);
                             }
 
