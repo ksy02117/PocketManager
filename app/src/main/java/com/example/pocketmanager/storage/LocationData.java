@@ -10,7 +10,10 @@ import java.util.Locale;
 public class LocationData {
 
     public static LinkedList<LocationData> savedLocation = new LinkedList<>();
+
     private static LocationData currentLocation = new LocationData();
+    private static volatile boolean gpsReady;
+
     private Address adr = new Address(Locale.US);
     private String description;
 
@@ -47,13 +50,24 @@ public class LocationData {
     public void setDescription(String description) { this.description = description; }
 
 
-    public static void setCurrentLocation() {
-        GeoCodingReceiver.getCurrentAddress();
+    public static void receiveCurrentLocation() {
+        receiveCurrentLocation(null);
     }
-    public static void setCurrentLocation(double latitude, double longitude) {
-        currentLocation.setLocation(latitude, longitude);
+    public static void receiveCurrentLocation(Runnable t) {
+        gpsReady = false;
+        GeoCodingReceiver.getCurrentAddress(
+                (result)->{
+                    currentLocation.setLocation(result.get(0), result.get(1));
+                    gpsReady = true;
+                    if (t != null) {
+                        synchronized (t) {
+                            t.notify();
+                        }
+                    }
+                });
     }
     public static LocationData getCurrentLocation() {
         return currentLocation;
     }
+    public static boolean isGpsReady() { return gpsReady; }
 }

@@ -18,29 +18,29 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class AirPollutionReceiver {
-    private static AirPollutionReceiver instance = null;
+public class DailyWeatherReceiver {
+    private static DailyWeatherReceiver instance = null;
     protected RequestQueue requestQueue;
     protected static Context ctx;
 
-    private final String prefixURL = "https://api.openweathermap.org/data/2.5/air_pollution/forecast?";
+    private final String prefixURL = "https://api.openweathermap.org/data/2.5/onecall?";
     private final String API_KEY = BuildConfig.WEATHER_KEY;
 
-    private AirPollutionReceiver(Context context) {
+
+    private DailyWeatherReceiver(Context context) {
         ctx = context;
         requestQueue = Volley.newRequestQueue(context.getApplicationContext());
-        //other stuf if you need
-
     }
 
-    public static synchronized AirPollutionReceiver getInstance(Context context) {
+
+    public static synchronized DailyWeatherReceiver getInstance(Context context) {
         if (instance == null)
-            instance = new AirPollutionReceiver(context);
+            instance = new DailyWeatherReceiver(context);
         return instance;
     }
 
     //this is so you don't need to pass context each time
-    public static synchronized AirPollutionReceiver getInstance() {
+    public static synchronized DailyWeatherReceiver getInstance() {
         if (null == instance) {
             throw new IllegalStateException(DailyWeatherReceiver.class.getSimpleName() +
                     " is not initialized, call getInstance(...) first");
@@ -48,16 +48,21 @@ public class AirPollutionReceiver {
         return instance;
     }
 
-    public void getAirPollution(final APIListener<LinkedList<WeatherData>> listener) {
+    public void getDailyWeather(final APIListener<LinkedList<WeatherData>> listener) {
 
         Double latitude = LocationData.getCurrentLocation().getLatitude();
         Double longitude = LocationData.getCurrentLocation().getLongitude();
 
-        //https://api.openweathermap.org/data/2.5/air_pollution/forecast?lat=57&lon=127&appid=b3a048704c9b2c9c25bd3d24b571d042
+
+        //"https://api.openweathermap.org/data/2.5/onecall?q=seoul&lang=kr&units=metric&exclude=current,minutely,hourly&appid=b3a048704c9b2c9c25bd3d24b571d042"
         StringBuilder builder = new StringBuilder(prefixURL);
-        builder.append("lat=" + latitude + "&lon=" +  longitude);
+        builder.append("lat=" + latitude + "&lon=" + longitude);
+        builder.append("&lang=kr");
+        builder.append("&units=metric");
+        builder.append("&exclude=current,minutely,hourly");
         builder.append("&appid=" + API_KEY);
         String url = builder.toString();
+
 
         // Request a string response from the provided URL.
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -67,17 +72,33 @@ public class AirPollutionReceiver {
 
                         // Display
                         try {
-                            JSONArray jsonArray = response.getJSONArray("list");
-                            LinkedList<WeatherData> result = new LinkedList<WeatherData>();
+                            JSONArray jsonArray = response.getJSONArray("daily");
+                            LinkedList<WeatherData> result = new LinkedList<>();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject obj = jsonArray.getJSONObject(i);
                                 WeatherData data = new WeatherData();
 
                                 data.setDt(obj.getLong("dt"));
-                                data.setPm2_5((float) obj.getJSONObject("components").getDouble("pm2_5"));
-                                data.setPm10((float) obj.getJSONObject("components").getDouble("pm10"));
 
+                                //main
+                                data.setTemp((float) obj.getJSONObject("temp").getDouble("day"));
+                                data.setFeels_like((float) obj.getJSONObject("feels_like").getDouble("day"));
+                                data.setHumidity((float) obj.getDouble("humidity"));
+
+                                //weather
+                                data.setWeather(obj.getJSONArray("weather").getJSONObject(0).getString("main"));
+                                data.setIcon(obj.getJSONArray("weather").getJSONObject(0).getString("icon"));
+                                data.setWind_speed((float) obj.getDouble("wind_speed"));
+
+                                if (obj.has("rain"))
+                                    data.setRain((float) obj.getDouble("rain"));
+                                else
+                                    data.setRain(0);
+                                if (obj.has("snow"))
+                                    data.setSnow((float) obj.getDouble("snow"));
+                                else
+                                    data.setSnow(0);
                                 result.add(data);
                             }
 
@@ -98,5 +119,6 @@ public class AirPollutionReceiver {
             }
         });
         requestQueue.add(request);
+
     }
 }

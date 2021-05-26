@@ -16,6 +16,7 @@ public class Event {
     private Time endTime;
     String eventName;
     String description;
+    boolean outdoor;
     int priority;
 
     LocationData location = new LocationData();
@@ -29,21 +30,22 @@ public class Event {
 
 
 
-    private Event(String name, Time startTime, Time endTime, LocationData location, String description, int priority) {
+    private Event(String name, Time startTime, Time endTime, LocationData location, String description, boolean outdoor, int priority) {
         this.eventName = new String(name);
         this.startTime = startTime;
         this.endTime = endTime;
         this.location = location;
         this.description = new String(description);
+        this.outdoor = outdoor;
         this.priority = priority;
     }
 
-    public static boolean addEvent(String name, Time startTime, Time endTime, LocationData location, String description, int priority){
-        Calendar cal = Calendar.getInstance();
-        Event new_event = new Event(name, startTime, endTime, location, description, priority);
+    public static boolean addEvent(String name, Time startTime, Time endTime, LocationData location, String description, boolean outdoor, int priority){
+        long dt = Time.getCurrentDt();
+        Event new_event = new Event(name, startTime, endTime, location, description, outdoor, priority);
 
         //이벤트가 끝나지 않았거나 시작하지 않은 경우
-        if (cal.getTimeInMillis() / 1000 < endTime.getDt()) {
+        if (dt < endTime.getDt()) {
             ListIterator<Event> it = upcomingEvents.listIterator();
             Event event_node;
             while (it.hasNext()) {
@@ -85,15 +87,29 @@ public class Event {
             return false;
         }
     }
-    public static boolean addEvent(String name, Time startTime, Time endTime, LocationData location, String description) {
-        return addEvent(name, startTime, endTime, location, description, PRIORITY_MEDIUM);
+    public static boolean addEvent(String name, Time startTime, Time endTime, LocationData location, String description, boolean outdoor) {
+        return addEvent(name, startTime, endTime, location, description, outdoor, PRIORITY_MEDIUM);
     }
-    public static boolean addEvent(String name, Time startTime, Time endTime, LocationData location, int priority) {
-        return addEvent(name, startTime, endTime, location, "", priority);
+    public static boolean addEvent(String name, Time startTime, Time endTime, LocationData location, boolean outdoor, int priority) {
+        return addEvent(name, startTime, endTime, location, "", outdoor, priority);
     }
-    public static boolean addEvent(String name, Time startTime, Time endTime, LocationData location) {
-        return addEvent(name, startTime, endTime, location, "", PRIORITY_MEDIUM);
+    public static boolean addEvent(String name, Time startTime, Time endTime, LocationData location, boolean outdoor) {
+        return addEvent(name, startTime, endTime, location, "", outdoor, PRIORITY_MEDIUM);
     }
+    public static boolean addEvent(String name, Time startTime, Time endTime, String description, int priority) {
+        return addEvent(name, startTime, endTime, null, description, false, priority);
+    }
+    public static boolean addEvent(String name, Time startTime, Time endTime, String description) {
+        return addEvent(name, startTime, endTime, null, description, false, PRIORITY_MEDIUM);
+    }
+    public static boolean addEvent(String name, Time startTime, Time endTime, int priority) {
+        return addEvent(name, startTime, endTime, null, "", false, priority);
+    }
+    public static boolean addEvent(String name, Time startTime, Time endTime) {
+        return addEvent(name, startTime, endTime, null, "", false, PRIORITY_MEDIUM);
+    }
+
+
 
     public static boolean removeEvent(Event event) {
         if (upcomingEvents.remove(event))

@@ -1,121 +1,169 @@
 package com.example.pocketmanager.network;
 
-import android.content.Context;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.pocketmanager.BuildConfig;
+import com.example.pocketmanager.storage.LocationData;
+import com.example.pocketmanager.storage.Time;
 import com.example.pocketmanager.storage.WeatherData;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+public class WeatherReceiver implements Runnable {
+    private static WeatherReceiver instance = new WeatherReceiver();
 
-import java.util.LinkedList;
+    private static boolean todayWeatherReady;
+    private static boolean tomorrowWeatherReady;
+    private static boolean dailyWeatherReady;
+    private static boolean airPollutionReady;
 
-public class WeatherReceiver {
-    private static WeatherReceiver instance = null;
-    protected RequestQueue requestQueue;
-    protected static Context ctx;
-
-    private final String prefixURL = "https://api.openweathermap.org/data/2.5/onecall?";
-    private final String API_KEY = BuildConfig.WEATHER_KEY;
-
-
-    private WeatherReceiver(Context context) {
-        ctx = context;
-        requestQueue = Volley.newRequestQueue(context.getApplicationContext());
-        //other stuff if you need
-
+    @Override
+    public void run() {
+        receiveWeatherData();
     }
 
-    public static synchronized WeatherReceiver getInstance(Context context) {
-        if (instance == null)
-            instance = new WeatherReceiver(context);
+    public static WeatherReceiver getInstance() {
         return instance;
     }
 
-    //this is so you don't need to pass context each time
-    public static synchronized WeatherReceiver getInstance() {
-        if (null == instance) {
-            throw new IllegalStateException(WeatherReceiver.class.getSimpleName() +
-                    " is not initialized, call getInstance(...) first");
+    public static void initCurrentLocationWeatherData() {
+        long startDt = Time.getCurrentDt() / 86400 * 86400;
+        long dt = 3600;
+
+        if (WeatherData.hourlyWeatherData.isEmpty()) {
+            for (int i = 0; i < 48; i++)
+                WeatherData.hourlyWeatherData.add(new WeatherData());
         }
-        return instance;
+        for (int i = 0; i < 48; i++)
+            WeatherData.hourlyWeatherData.get(i).setDt(startDt + i * dt);
+
+        if (WeatherData.dailyWeatherData.isEmpty())
+            for (int i = 0; i < 8; i++)
+                WeatherData.dailyWeatherData.add(new WeatherData());
     }
+    public void receiveWeatherData() {
+        todayWeatherReady = false;
+        tomorrowWeatherReady = false;
+        dailyWeatherReady = false;
+        airPollutionReady = false;
 
-    public void getWeather(double latitude, double longitude, final APIListener<LinkedList<WeatherData>> listener) {
+        initCurrentLocationWeatherData();
 
-        //"https://api.openweathermap.org/data/2.5/forecast?q=seoul&lang=kr&appid=b3a048704c9b2c9c25bd3d24b571d042"
-        StringBuilder builder = new StringBuilder(prefixURL);
-        builder.append("lat=" + latitude + "&lon=" + longitude);
-        builder.append("&lang=kr");
-        builder.append("&units=metric");
-        builder.append("&exclude=minutely,daily");
-        builder.append("&appid=" + API_KEY);
-        String url = builder.toString();
-
-
-        // Request a string response from the provided URL.
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        // Display
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("hourly");
-                            LinkedList<WeatherData> result = new LinkedList<>();
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject obj = jsonArray.getJSONObject(i);
-                                WeatherData data = new WeatherData();
-
-                                data.setDt(obj.getLong("dt"));
-
-                                //main
-                                data.setTemp((float) obj.getDouble("temp"));
-                                data.setFeels_like((float) obj.getDouble("feels_like"));
-                                data.setHumidity((float) obj.getDouble("humidity"));
-
-                                //weather
-                                data.setWeather(obj.getJSONArray("weather").getJSONObject(0).getString("main"));
-                                data.setDescription(obj.getJSONArray("weather").getJSONObject(0).getString("description"));
-                                data.setIcon(obj.getJSONArray("weather").getJSONObject(0).getString("icon"));
-                                data.setWind_speed((float) obj.getDouble("wind_speed"));
-
-                                if (obj.has("rain"))
-                                    data.setRain_1h((float) obj.getJSONObject("rain").getDouble("1h"));
-                                else
-                                    data.setRain_1h(0);
-                                if (obj.has("snow"))
-                                    data.setSnow_1h((float) obj.getJSONObject("snow").getDouble("1h"));
-                                else
-                                    data.setSnow_1h(0);
-                                result.add(data);
-                            }
-
-                            listener.getResult(result);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            listener.getResult(null);
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // Error
-                error.printStackTrace();
-                listener.getResult(null);
+        synchronized (this) {
+            try {
+                if (!LocationData.isGpsReady()) {
+                    LocationData.receiveCurrentLocation(this);
+                    this.wait();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        });
-        requestQueue.add(request);
+        }
+
+        receiveHistoricalWeatherData();
+        receiveForecastWeatherData();
+        receiveAirPollutionData();
+        receiveDailyWeatherData();
+    }
+
+    private static void receiveHistoricalWeatherData() {
+        HistoricalWeatherReceiver.getInstance().getHistoricalWeather(
+                (result) -> {
+                    for (int i = 0; i < result.size() - 1; i++) {
+                        WeatherData output = WeatherData.hourlyWeatherData.get(i);
+                        WeatherData input  = result.get(i);
+
+                        output.setDt(input.getDt());
+
+                        //main
+                        output.setTemp(input.getTemp());
+                        output.setFeels_like(input.getFeels_like());
+                        output.setHumidity(input.getHumidity());
+
+                        //weather
+                        output.setWeather(input.getWeather());
+                        output.setIcon(input.getIcon());
+                        output.setWind_speed(input.getWind_speed());
+
+                        output.setRain(input.getRain());
+                        output.setSnow(input.getSnow());
+                    }
+                    todayWeatherReady = true;
+                });
+    }
+    private static void receiveForecastWeatherData() {
+        WeatherForecastReceiver.getInstance().getWeatherForecast(
+                (result) -> {
+                    int di = (result.get(0).getHour() + 15) % 24;
+                    for (int i = 0; i < result.size() && i + di < WeatherData.hourlyWeatherData.size(); i++) {
+                        WeatherData output = WeatherData.hourlyWeatherData.get(i + di);
+                        WeatherData input  = result.get(i);
+
+                        output.setDt(input.getDt());
+
+                        //main
+                        output.setTemp(input.getTemp());
+                        output.setFeels_like(input.getFeels_like());
+                        output.setHumidity(input.getHumidity());
+
+                        //weather
+                        output.setWeather(input.getWeather());
+                        output.setIcon(input.getIcon());
+                        output.setWind_speed(input.getWind_speed());
+
+                        output.setRain(input.getRain());
+                        output.setSnow(input.getSnow());
+                    }
+                    tomorrowWeatherReady = true;
+                });
+    }
+    private static void receiveDailyWeatherData() {
+        DailyWeatherReceiver.getInstance().getDailyWeather(
+                (result) -> {
+                    for (int i = 0; i < result.size(); i++) {
+                        WeatherData output = WeatherData.dailyWeatherData.get(i);
+                        WeatherData input  = result.get(i);
+
+                        output.setDt(input.getDt());
+
+                        //main
+                        output.setTemp(input.getTemp());
+                        output.setFeels_like(input.getFeels_like());
+                        output.setHumidity(input.getHumidity());
+
+                        //weather
+                        output.setWeather(input.getWeather());
+                        output.setIcon(input.getIcon());
+                        output.setWind_speed(input.getWind_speed());
+
+                        //
+                        output.setRain(input.getRain());
+                        output.setSnow(input.getSnow());
+                    }
+                    dailyWeatherReady = true;
+                });
+    }
+    private static void receiveAirPollutionData() {
+        AirPollutionReceiver.getInstance().getAirPollution(
+                (result) -> {
+                    int i = 0, j = 0;
+                    while (i < WeatherData.hourlyWeatherData.size() && j < result.size()) {
+                        WeatherData output = WeatherData.hourlyWeatherData.get(i);
+                        WeatherData input  = result.get(j);
+                        if (output.getDt() == input.getDt()) {
+                            output.setPm2_5(input.getPm2_5());
+                            output.setPm10(input.getPm10());
+                            i++;
+                            j++;
+                        }
+                        else if (output.getDt() < input.getDt())
+                            i++;
+                        else
+                            j++;
+                    }
+                    airPollutionReady = true;
+                });
 
     }
+
+    public static boolean isWeatherReady() {
+        return todayWeatherReady && tomorrowWeatherReady && dailyWeatherReady && airPollutionReady;
+    }
+
 }

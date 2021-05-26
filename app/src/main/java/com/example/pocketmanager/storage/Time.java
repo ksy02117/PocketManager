@@ -38,6 +38,10 @@ public class Time implements Comparable<Time>{
     public int getMin() { return min; }
     public int getSec() { return sec; }
 
+    public static long getCurrentDt() {
+        return Calendar.getInstance().getTimeInMillis() / 1000;
+    }
+
     @Override
     public int compareTo(Time o) {
         if (dt == o.dt)

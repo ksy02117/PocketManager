@@ -11,11 +11,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.pocketmanager.network.AirPollutionReceiver;
 import com.example.pocketmanager.network.GeoCodingReceiver;
-import com.example.pocketmanager.network.WeatherReceiver;
+import com.example.pocketmanager.network.DailyWeatherReceiver;
+import com.example.pocketmanager.network.HistoricalWeatherReceiver;
+import com.example.pocketmanager.network.WeatherForecastReceiver;
+import com.example.pocketmanager.storage.LocationData;
+import com.example.pocketmanager.storage.WeatherData;
 import com.example.pocketmanager.ui.schedule.ScheduleFragment;
 import com.example.pocketmanager.ui.transporation.TransportationFragment;
 import com.example.pocketmanager.ui.weather.WeatherSelection;
@@ -95,9 +98,15 @@ public class MainActivity extends AppCompatActivity {
         menu1Fragment = new ScheduleFragment();
 
         //Network Receivers
-        WeatherReceiver.getInstance(this);
+        HistoricalWeatherReceiver.getInstance(this);
+        WeatherForecastReceiver.getInstance(this);
+        DailyWeatherReceiver.getInstance(this);
         AirPollutionReceiver.getInstance(this);
         GeoCodingReceiver.getInstance(this);
+
+        //weatherData
+        LocationData.receiveCurrentLocation();
+        WeatherData.receiveWeatherData();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
         fragmentManager.beginTransaction().replace(R.id.main_frame,menu1Fragment).commit();
@@ -119,14 +128,14 @@ public class MainActivity extends AppCompatActivity {
 
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    GeoCodingReceiver.getCurrentAddress();
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
+                    LocationData.receiveCurrentLocation();
                 } else {
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }

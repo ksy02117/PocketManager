@@ -17,12 +17,13 @@ import com.example.pocketmanager.R;
 import com.example.pocketmanager.storage.WeatherData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyWeatherAdapter extends RecyclerView.Adapter<MyWeatherAdapter.ViewHolder> {
-    private ArrayList<WeatherData> list;
+    private List<WeatherData> list;
     private Context context;
 
-    public MyWeatherAdapter(Context context, ArrayList<WeatherData> list) {
+    public MyWeatherAdapter(Context context, List<WeatherData> list) {
         this.list = list;
         this.context = context;
     }

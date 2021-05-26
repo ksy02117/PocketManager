@@ -17,13 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.network.AirPollutionReceiver;
-import com.example.pocketmanager.network.WeatherReceiver;
-import com.example.pocketmanager.storage.LocationData;
 import com.example.pocketmanager.storage.WeatherData;
 
 public class WeatherFragment extends Fragment {
-    private ProgressBar mProgressBar;
     private ScrollView mScrollView;
     private LinearLayoutManager mLayoutManager;
     private RecyclerView weather_recycler, rain_recycler;
@@ -43,7 +39,6 @@ public class WeatherFragment extends Fragment {
         view = inflater.inflate(R.layout.tenki, container, false);
 
         mScrollView = (ScrollView) view.findViewById(R.id.weather_layout);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
         weather_recycler = (RecyclerView) view.findViewById(R.id.weather_by_time_list);
         rain_recycler = (RecyclerView) view.findViewById(R.id.rain_by_time_list);
@@ -57,153 +52,15 @@ public class WeatherFragment extends Fragment {
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
         rain_recycler.setLayoutManager((mLayoutManager));
 
-        getCurrentLocationWeather();
+
+        display();
 
 
         return view;
     }
 
-    /*
-    public void getWeather(float latitude, float longitude) {
-
-
-        GeoCodingReceiver.getCurrentAddress();
-        WeatherData.initCurrentLocationWeatherData();
-
-
-        WeatherReceiver.getInstance().getWeather(latitude, longitude,
-                (result) -> {
-                    int i = 0, j = 0;
-                    while (i < WeatherData.currentLocationWeatherData.size() && j < result.size()) {
-                        WeatherData output = WeatherData.currentLocationWeatherData.get(i);
-                        WeatherData input  = result.get(j);
-                        if (output.getDt() == input.getDt()) {
-                            //main
-                            output.setTemp(input.getTemp());
-                            output.setFeels_like(input.getFeels_like());
-                            output.setHumidity(input.getHumidity());
-
-                            //weather
-                            output.setWeather(input.getWeather());
-                            output.setDescription(input.getDescription());
-                            output.setIcon(input.getIcon());
-                            output.setWind_speed(input.getWind_speed());
-
-                            output.setRain_1h(input.getRain_1h());
-                            output.setSnow_1h(input.getSnow_1h());
-                            i++;
-                            j++;
-                        }
-                        else if (output.getDt() < input.getDt())
-                            i++;
-                        else
-                            j++;
-                    }
-                    display();
-                });
-
-        AirPollutionReceiver.getInstance().getAirPollution(latitude, longitude,
-                (result) -> {
-                    int i = 0, j = 0;
-                    while (i < WeatherData.currentLocationWeatherData.size() && j < result.size()) {
-                        WeatherData output = WeatherData.currentLocationWeatherData.get(i);
-                        WeatherData input  = result.get(j);
-                        if (output.getDt() == input.getDt()) {
-                            output.setPm2_5(input.getPm2_5());
-                            output.setPm10(input.getPm10());
-                            i++;
-                            j++;
-                        }
-                        else if (output.getDt() < input.getDt())
-                            i++;
-                        else
-                            j++;
-                    }
-                    display();
-                });
-    }
-     */
-    public void getCurrentLocationWeather() {
-        mScrollView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-
-        LocationData.setCurrentLocation();
-        WeatherData.initCurrentLocationWeatherData();
-
-        boolean done = false;
-        Double latitude = 0.0;
-        Double longitude = 0.0;
-        while (!done) {
-            try {
-                latitude = LocationData.getCurrentLocation().getLatitude();
-                longitude = LocationData.getCurrentLocation().getLongitude();
-                done = true;
-            } catch (Exception e) {
-                try {
-                    this.wait(1000);
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-            }
-        }
-
-        WeatherReceiver.getInstance().getWeather(latitude, longitude,
-                (result) -> {
-                    int i = 0, j = 0;
-                    while (i < WeatherData.currentLocationWeatherData.size() && j < result.size()) {
-                        WeatherData output = WeatherData.currentLocationWeatherData.get(i);
-                        WeatherData input  = result.get(j);
-                        if (output.getDt() == input.getDt()) {
-                            //main
-                            output.setTemp(input.getTemp());
-                            output.setFeels_like(input.getFeels_like());
-                            output.setHumidity(input.getHumidity());
-
-                            //weather
-                            output.setWeather(input.getWeather());
-                            output.setDescription(input.getDescription());
-                            output.setIcon(input.getIcon());
-                            output.setWind_speed(input.getWind_speed());
-
-                            output.setRain_1h(input.getRain_1h());
-                            output.setSnow_1h(input.getSnow_1h());
-                            i++;
-                            j++;
-                        }
-                        else if (output.getDt() < input.getDt())
-                            i++;
-                        else
-                            j++;
-                    }
-                    display();
-                });
-
-        AirPollutionReceiver.getInstance().getAirPollution(latitude, longitude,
-                (result) -> {
-                    int i = 0, j = 0;
-                    while (i < WeatherData.currentLocationWeatherData.size() && j < result.size()) {
-                        WeatherData output = WeatherData.currentLocationWeatherData.get(i);
-                        WeatherData input  = result.get(j);
-                        if (output.getDt() == input.getDt()) {
-                            output.setPm2_5(input.getPm2_5());
-                            output.setPm10(input.getPm10());
-                            i++;
-                            j++;
-                        }
-                        else if (output.getDt() < input.getDt())
-                            i++;
-                        else
-                            j++;
-                    }
-                    display();
-                    mProgressBar.setVisibility(View.GONE);
-                    mScrollView.setVisibility(View.VISIBLE);
-                });
-
-    }
-
     public void display() {
-        adapter = new MyWeatherAdapter(getActivity(), WeatherData.currentLocationWeatherData);
+        adapter = new MyWeatherAdapter(getActivity(), WeatherData.getTodayWeather());
         weather_recycler.setAdapter(adapter);
         rain_recycler.setAdapter(adapter);
 
@@ -222,7 +79,7 @@ public class WeatherFragment extends Fragment {
         TextView windSpeed = (TextView) view.findViewById(R.id.wind_speed);
         TextView pm10 = (TextView) view.findViewById(R.id.pm10);
         TextView pm2_5 = (TextView) view.findViewById(R.id.pm2_5);
-        WeatherData curData = WeatherData.currentLocationWeatherData.get(0);
+        WeatherData curData = WeatherData.getCurrentWeather();
         int resourceId = getResources().getIdentifier("w_" + curData.getIcon().replace('n', 'd'), "drawable", getContext().getPackageName());
         int pm10Color, pm2_5Color;
 
@@ -262,5 +119,6 @@ public class WeatherFragment extends Fragment {
 
         pm10.setTextColor(pm10Color);
         pm2_5.setTextColor(pm2_5Color);
+
     }
 }

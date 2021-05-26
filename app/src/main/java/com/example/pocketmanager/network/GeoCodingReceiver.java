@@ -8,15 +8,23 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.example.pocketmanager.storage.LocationData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,7 +76,7 @@ public class GeoCodingReceiver {
     }
 
 
-    public static LocationData getCurrentAddress() {
+    public static LocationData getCurrentAddress(APIListener<LinkedList<Double>> listener) {
         if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return null;
@@ -78,9 +86,13 @@ public class GeoCodingReceiver {
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
-                            // Logic to handle location object
-                            LocationData.setCurrentLocation(location.getLatitude(), location.getLongitude());
+                            LinkedList<Double> result = new LinkedList<>();
+                            result.add(location.getLatitude());
+                            result.add(location.getLongitude());
+                            listener.getResult(result);
                         }
+                        else
+                            System.out.println("");
                     }
                 });
 
