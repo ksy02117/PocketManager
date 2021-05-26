@@ -23,12 +23,17 @@ import com.example.pocketmanager.network.WeatherReceiver;
 import com.example.pocketmanager.ui.home.HomeFragment;
 import com.example.pocketmanager.ui.schedule.ScheduleFragment;
 import com.example.pocketmanager.ui.map.MapFragment;
+import com.example.pocketmanager.ui.transporation.IncomingTrain;
+import com.example.pocketmanager.ui.transporation.PathInfoManager;
+import com.example.pocketmanager.ui.transporation.ShortestPath;
 import com.example.pocketmanager.ui.weather.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private TextView curDate;
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment menu2Fragment;
     private Fragment menu3Fragment;
     private Fragment menu4Fragment;
+    ShortestPath s;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -88,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
                                 fragmentManager.beginTransaction().add(R.id.main_frame, menu2Fragment).commit();
                             }
                             else fragmentManager.beginTransaction().show(menu2Fragment).commit();
+                            // MapFragment에 ShortestPath 객체 전달
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("Obj", s);
+                            menu2Fragment.setArguments(bundle);
 
                             if(menu1Fragment != null) fragmentManager.beginTransaction().hide(menu1Fragment).commit();
                             if(menu3Fragment != null) fragmentManager.beginTransaction().hide(menu3Fragment).commit();
@@ -132,6 +142,36 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.main_frame,menu4Fragment).commit();
 
         curDate = (TextView)findViewById(R.id.current_date);
+
+        // test (유진)-----------------------
+
+        PathInfoManager p = new PathInfoManager();
+
+        p.setDestination("37.548918, 127.075117");
+        p.setOrigin("37.546988, 127.105476");
+        //p.setSubwayName("광나루(장신대)");
+
+
+        try {
+            s = p.getShortestPathInfo();
+            ArrayList<IncomingTrain> t = p.getIncomingTrainInfo();
+            for (IncomingTrain a : t){
+                a.log();
+            }
+
+
+
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        //getHashKey();
+
+        //----------------------------
     }
 
     public void setDate(TextView view) {
@@ -168,4 +208,27 @@ public class MainActivity extends AppCompatActivity {
     public void setMainText(TextView view, String str) {
         view.setText(str);
     }
+
+    /*private void getHashKey(){
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo == null)
+            Log.e("KeyHash", "KeyHash:null");
+
+        for (Signature signature : packageInfo.signatures) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            } catch (NoSuchAlgorithmException e) {
+                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
+            }
+        }
+    }*/
+
+
 }

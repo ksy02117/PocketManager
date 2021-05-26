@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.schedule.addScheduleActivity" android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
+        <meta-data android:name="com.kakao.sdk.AppKey" android:value="3d2c9c89ec884730f3c37a2ab41e6d7c"/>
     </application>
 
 </manifest>
