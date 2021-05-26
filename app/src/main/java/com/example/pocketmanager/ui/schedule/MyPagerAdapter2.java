@@ -17,11 +17,14 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.storage.CalData;
+import com.example.pocketmanager.storage.Event;
+import com.example.pocketmanager.storage.Time;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.ListIterator;
 
 public class MyPagerAdapter2 extends PagerAdapter {
     private RecyclerView mRecyclerView;
@@ -43,7 +46,7 @@ public class MyPagerAdapter2 extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        int realPos = position - 500;
+        int realPos = position - 100;
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.calendar_week_view, container, false);
@@ -66,7 +69,7 @@ public class MyPagerAdapter2 extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 1000;
+        return 200;
     }
 
     @Override
@@ -78,9 +81,46 @@ public class MyPagerAdapter2 extends PagerAdapter {
         arrData = new ArrayList<>();
         mCal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
+        /*
         for (int i = 0; i < 7; i++) {
             arrData.add(new CalData(mCal.getTime()));
             mCal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+         */
+
+        // 이벤트가 없을 경우
+        if (Event.upcomingEvents.isEmpty()) {
+            for (int i = 0; i < 7; i++) {
+                arrData.add(new CalData(mCal.getTime()));
+                mCal.add(Calendar.DAY_OF_MONTH, 1);
+            }
+        }
+        else {
+            ListIterator<Event> it = Event.upcomingEvents.listIterator();
+            ArrayList<Event> eventArrayList = new ArrayList<>();
+            Event e = it.next();
+
+            for (int i = 0; i < 7; i++) {
+                if (!Time.isCurrentDay(e.getStartTime(), mCal)) {
+                    arrData.add(new CalData(mCal.getTime()));
+                    mCal.add(Calendar.DAY_OF_MONTH, 1);
+                    continue;
+                }
+
+                //?
+                eventArrayList.add(e);
+                while (it.hasNext()) {
+                    e = it.next();
+                    if (!Time.isCurrentDay(e.getStartTime(), mCal))
+                        break;
+
+                    eventArrayList.add(e);
+                }
+
+                arrData.add(new CalData(mCal.getTime(), eventArrayList));
+                mCal.add(Calendar.DAY_OF_MONTH, 1);
+            }
         }
 
         adapter = new CalendarAdapter2(mView.getContext(), arrData);

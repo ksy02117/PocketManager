@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#eeeeee"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!--Edit Text-->
+    <EditText
+        android:id="@+id/event_name"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_alignParentTop="true"
+        android:hint="일정 이름" />
+
+    <EditText
+        android:id="@+id/event_description"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_below="@id/event_name"
+        android:hint="일정 설명" />
+
+    <!--Time Select-->
+    <LinearLayout
+        android:id="@+id/time_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_description"
+        android:orientation="vertical">
+
+        <TextView
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="시작 시간"
+            android:textSize="16sp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/start_date"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="0000.00.00"
+                android:textSize="15sp"
+                android:onClick="onClickStartDialog"/>
+            <TimePicker
+                android:id="@+id/start_time_picker"
+                android:layout_marginLeft="-20dp"
+                android:layout_marginRight="-20dp"
+                android:layout_marginTop="-50dp"
+                android:layout_marginBottom="-50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:timePickerMode="spinner"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="종료 시간"
+            android:textSize="16sp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/end_date"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="0000.00.00"
+                android:textSize="15sp"
+                android:onClick="onClickEndDialog"/>
+            <TimePicker
+                android:id="@+id/end_time_picker"
+                android:layout_marginLeft="-20dp"
+                android:layout_marginRight="-20dp"
+                android:layout_marginTop="-50dp"
+                android:layout_marginBottom="-50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:timePickerMode="spinner"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@id/time_layout"
+        android:background="@drawable/line"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/time_layout"
+        android:orientation="vertical">
+
+        <TextView
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="위치"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/add_cancel"
+            android:text="취소"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:background="#00000000"
+            android:layout_width="0dp"
+            android:layout_height="53dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/add_confirm"
+            android:text="확인"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:background="#00000000"
+            android:layout_width="0dp"
+            android:layout_height="53dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+</RelativeLayout>

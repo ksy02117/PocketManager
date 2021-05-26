@@ -51,7 +51,8 @@ public class Event {
                 if (event_node.startTime.getDt() < endTime.getDt())
                     break;
             }
-            it.previous();
+            if (it.hasPrevious())
+                it.previous();
             if (!it.hasPrevious()) {
                 it.add(new_event);
                 return true;
@@ -72,7 +73,8 @@ public class Event {
                 if (event_node.endTime.getDt() > startTime.getDt())
                     break;
             }
-            it.previous();
+            if (it.hasPrevious())
+                it.previous();
             if (!it.hasPrevious()) {
                 it.add(new_event);
                 return true;
@@ -101,4 +103,11 @@ public class Event {
         else
             return pastEvents.remove(event);
     }
+
+    /** Getter **/
+    public String getEventName() {
+        return eventName;
+    }
+    public Time getStartTime() { return startTime; }
+    public Time getEndTime() { return endTime; }
 }

@@ -50,16 +50,7 @@ public class WeatherSelection extends Fragment {
         @NotNull
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return WeatherFragment.newInstance();
-                case 1:
-                    return WeatherFragment.newInstance();
-                case 2:
-                    return WeatherFragment.newInstance();
-                default:
-                    return null;
-            }
+            return WeatherFragment.newInstance(position);
         }
 
         @Override

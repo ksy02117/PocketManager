@@ -2,6 +2,8 @@ package com.example.pocketmanager.ui.schedule;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.storage.CalData;
+import com.example.pocketmanager.storage.Event;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +26,8 @@ import java.util.Calendar;
 public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.ViewHolder>{
     private ArrayList<CalData> list;
     private Context context;
+    private float dd;
+    View view;
 
     public CalendarAdapter2(Context context, ArrayList<CalData> list) {
         this.list = list;
@@ -33,8 +38,10 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
     @NotNull
     @Override
     public CalendarAdapter2.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context)
+        view = LayoutInflater.from(context)
                 .inflate(R.layout.calendar_week, parent, false);
+
+        dd = parent.getResources().getDisplayMetrics().density;
 
         return new CalendarAdapter2.ViewHolder(view);
     }
@@ -61,6 +68,20 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
 
         holder.dayText.setText(list.get(position).getDate().getDate() + "");
         holder.dayView.getLayoutParams().width = context.getResources().getDisplayMetrics().widthPixels / 7;
+        ArrayList<Event> eventArrayList = list.get(position).getEvents();
+
+        // 이벤트 비어있으면
+        if (Event.upcomingEvents.isEmpty() || eventArrayList == null)
+            return;
+
+        for (Event e : eventArrayList) {
+            int dt = (int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 180;
+            Log.d("패딩패딩패딩패딩패딩", "" + dt);
+
+            addSchedule(e, Math.round(dt * dd));
+        }
+
+
         //holder.dayText.setText("Tl~qkf");
     }
 
@@ -79,5 +100,19 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
             dayView = itemView;
             dayText = (TextView) itemView.findViewById(R.id.calendar_week_day);
         }
+    }
+
+    private void addSchedule(Event e, int padding) {
+        TextView test;
+        LinearLayout ll = (LinearLayout) view;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER_HORIZONTAL;
+
+        test = new TextView(context);
+        test.setLayoutParams(params);
+        test.setText(e.getEventName());
+        test.setPadding(0, padding / 2, 0, padding / 2);
+
+        ll.addView(test);
     }
 }

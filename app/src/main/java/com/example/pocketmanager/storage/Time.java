@@ -47,4 +47,14 @@ public class Time implements Comparable<Time>{
         else
             return -1;
     }
+
+    public static boolean isCurrentDay(Time t, Calendar c) {
+        int year, month, day;
+
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH) + 1;
+        day = c.get(Calendar.DAY_OF_MONTH);
+
+        return t.getYear() == year && t.getMonth() == month && t.getDay() == day;
+    }
 }

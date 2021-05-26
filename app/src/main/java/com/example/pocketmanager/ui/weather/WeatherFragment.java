@@ -27,13 +27,17 @@ public class WeatherFragment extends Fragment {
     private ScrollView mScrollView;
     private LinearLayoutManager mLayoutManager;
     private RecyclerView weather_recycler, rain_recycler;
-    private MyWeatherAdapter adapter;
+    private MyWeatherAdapter weatherAdapter;
+    private MyRainVolumeAdapter rainAdapter;
+    int tab;    //0: ~24h | 1: ~48h | 2: ~7d
     View view;
 
     public WeatherFragment() {}
 
-    public static WeatherFragment newInstance() {
+    public static WeatherFragment newInstance(int tab) {
         WeatherFragment weatherFragment = new WeatherFragment();
+        weatherFragment.tab = tab;
+
         return weatherFragment;
     }
 
@@ -51,6 +55,8 @@ public class WeatherFragment extends Fragment {
         weather_recycler.setHasFixedSize(true);
         rain_recycler.setHasFixedSize(true);
 
+        mLayoutManager = new LinearLayoutManager(this.getContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
         weather_recycler.setLayoutManager(mLayoutManager);
 
         mLayoutManager = new LinearLayoutManager(this.getContext());
@@ -58,7 +64,6 @@ public class WeatherFragment extends Fragment {
         rain_recycler.setLayoutManager((mLayoutManager));
 
         getCurrentLocationWeather();
-
 
         return view;
     }
@@ -203,9 +208,10 @@ public class WeatherFragment extends Fragment {
     }
 
     public void display() {
-        adapter = new MyWeatherAdapter(getActivity(), WeatherData.currentLocationWeatherData);
-        weather_recycler.setAdapter(adapter);
-        rain_recycler.setAdapter(adapter);
+        weatherAdapter = new MyWeatherAdapter(getActivity(), WeatherData.currentLocationWeatherData);
+        rainAdapter = new MyRainVolumeAdapter(getActivity(), WeatherData.currentLocationWeatherData);
+        weather_recycler.setAdapter(weatherAdapter);
+        rain_recycler.setAdapter(rainAdapter);
 
         // 기온
         TextView curTemp = (TextView) view.findViewById(R.id.current_temperature);
