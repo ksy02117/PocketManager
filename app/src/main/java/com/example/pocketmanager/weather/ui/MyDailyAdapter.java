@@ -13,16 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
+import com.example.pocketmanager.weather.DailyWeatherData;
 import com.example.pocketmanager.weather.WeatherData;
 
 import java.util.List;
 
 
 public class MyDailyAdapter extends RecyclerView.Adapter<MyDailyAdapter.ViewHolder> {
-    private List<WeatherData> list;
+    private List<DailyWeatherData> list;
     private Context context;
 
-    public MyDailyAdapter(Context context, List<WeatherData> list) {
+    public MyDailyAdapter(Context context, List<DailyWeatherData> list) {
         this.list = list;
         this.context = context;
     }
@@ -39,15 +40,15 @@ public class MyDailyAdapter extends RecyclerView.Adapter<MyDailyAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        WeatherData w = list.get(position);
+        DailyWeatherData w = list.get(position);
 
         holder.weatherImage.setImageDrawable(getDrawableIcon(w.getIcon()));
 
         String currentDate = w.getMonth() + "월 " + w.getDay() + "일";
         holder.currentDay.setText(currentDate);
         holder.currentWeather.setText(w.getWeather());
-       // holder.maxTemp.setText(w.get);
-        //holder.minTemp.setText(w.getWeather());
+        holder.maxTemp.setText(w.getMax_temp() + "℃");
+        holder.minTemp.setText(w.getMin_temp() + "℃");
 
     }
 

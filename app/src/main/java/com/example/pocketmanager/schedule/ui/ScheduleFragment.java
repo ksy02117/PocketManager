@@ -21,7 +21,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.schedule.Event;
-import com.example.pocketmanager.schedule.LocationData;
+import com.example.pocketmanager.general.LocationData;
 import com.example.pocketmanager.general.Time;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;

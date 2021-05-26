@@ -37,7 +37,6 @@ public class WeatherData implements Serializable {
     private float pm10;
 
 
-
     public long getDt() { return time.getDt(); }
     public void setDt(long dt) { time.setDt(dt); }
 
@@ -97,6 +96,9 @@ public class WeatherData implements Serializable {
     public static WeatherData getCurrentWeather() {
         int index = (int) (Time.getCurrentDt() / 3600 - Time.getCurrentDt() / 3600 / 24 * 24);
         return hourlyWeatherData.get(index);
+    }
+    public static WeatherData getNextCurrentWeather() {
+        return hourlyWeatherData.get(26);
     }
     public static List<WeatherData> getTodayWeather() {
         return hourlyWeatherData.subList(0, 24);

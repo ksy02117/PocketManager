@@ -4,7 +4,7 @@ import com.example.pocketmanager.general.Time;
 
 public class DailyWeatherData {
 
-    private Time time;
+    private Time time = new Time();
     private float max_temp;
     private float min_temp;
     private float pop;
@@ -13,6 +13,13 @@ public class DailyWeatherData {
 
     public long getDt() { return time.getDt(); }
     public void setDt(long dt) { time.setDt(dt); }
+
+    public int getYear() { return time.getYear(); }
+    public int getMonth() { return time.getMonth(); }
+    public int getDay() { return time.getMin(); }
+    public int getHour() { return time.getHour(); }
+    public int getMin() { return time.getMin(); }
+    public int getSec() { return time.getSec(); }
 
     public float getMax_temp() { return max_temp; }
     public void setMax_temp(float max_temp) { this.max_temp = max_temp; }

@@ -1,4 +1,4 @@
-package com.example.pocketmanager.schedule;
+package com.example.pocketmanager.general;
 
 import android.location.Address;
 
@@ -14,7 +14,7 @@ public class LocationData {
     private static LocationData currentLocation = new LocationData();
     private static volatile boolean gpsReady;
 
-    private Address adr = new Address(Locale.US);
+    private Address adr = new Address(Locale.KOREA);
     private String description;
 
 

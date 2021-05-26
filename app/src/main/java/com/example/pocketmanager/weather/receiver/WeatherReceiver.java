@@ -1,6 +1,6 @@
 package com.example.pocketmanager.weather.receiver;
 
-import com.example.pocketmanager.schedule.LocationData;
+import com.example.pocketmanager.general.LocationData;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.weather.DailyWeatherData;
 import com.example.pocketmanager.weather.WeatherData;
@@ -81,7 +81,7 @@ public class WeatherReceiver implements Runnable {
                         output.setIcon(input.getIcon());
                         output.setWind_speed(input.getWind_speed());
 
-                        output.setPop(input.getPop());
+                        output.setPop(0);
                         output.setRain(input.getRain());
                         output.setSnow(input.getSnow());
                     }

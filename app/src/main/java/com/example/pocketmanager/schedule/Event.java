@@ -1,5 +1,6 @@
 package com.example.pocketmanager.schedule;
 
+import com.example.pocketmanager.general.LocationData;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.weather.WeatherData;
 

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
+import com.example.pocketmanager.general.LocationData;
 import com.example.pocketmanager.weather.WeatherData;
 
 public class WeatherFragment extends Fragment {
@@ -71,18 +72,27 @@ public class WeatherFragment extends Fragment {
     }
 
     public void display() {
+        WeatherData curData = null;
         if (tab == TODAY_TAB) {
             weatherAdapter = new MyWeatherAdapter(getActivity(), WeatherData.getTodayWeather());
             rainAdapter = new MyRainVolumeAdapter(getActivity(), WeatherData.getTodayWeather());
+            curData = WeatherData.getCurrentWeather();
         }
         else if (tab == TOMORROW_TAB) {
             weatherAdapter = new MyWeatherAdapter(getActivity(), WeatherData.getTomorrowWeather());
             rainAdapter = new MyRainVolumeAdapter(getActivity(), WeatherData.getTomorrowWeather());
+            curData = WeatherData.getNextCurrentWeather();
+        }
+        else {
+            weatherAdapter = new MyWeatherAdapter(getActivity(), WeatherData.getTodayWeather());
+            rainAdapter = new MyRainVolumeAdapter(getActivity(), WeatherData.getTodayWeather());
+            curData = WeatherData.getCurrentWeather();
         }
 
         weather_recycler.setAdapter(weatherAdapter);
         rain_recycler.setAdapter(rainAdapter);
 
+        TextView locationName = (TextView) view.findViewById(R.id.current_location);
         // 기온
         TextView curTemp = (TextView) view.findViewById(R.id.current_temperature);
         TextView maxTemp = (TextView) view.findViewById(R.id.max_temperature);
@@ -98,12 +108,14 @@ public class WeatherFragment extends Fragment {
         TextView windSpeed = (TextView) view.findViewById(R.id.wind_speed);
         TextView pm10 = (TextView) view.findViewById(R.id.pm10);
         TextView pm2_5 = (TextView) view.findViewById(R.id.pm2_5);
-        WeatherData curData = WeatherData.getCurrentWeather();
+
         int resourceId = getResources().getIdentifier("w_" + curData.getIcon().replace('n', 'd'), "drawable", getContext().getPackageName());
         int pm10Color, pm2_5Color;
 
         int p1 = (int) curData.getPm10();
         int p2 = (int) curData.getPm2_5();
+
+        locationName.setText(LocationData.getCurrentLocation().getAddress());
 
         curTemp.setText(String.format("%s℃", curData.getTemp()));
         feelsLike.setText(String.format("체감 %s°", curData.getFeels_like()));
