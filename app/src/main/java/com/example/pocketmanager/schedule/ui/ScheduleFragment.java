@@ -41,6 +41,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
     private FloatingActionButton addSchedule;
     private LinearLayout mCalendarLayout;
     private ProgressBar mProgressBar;
+    private TabLayout tabLayout;
     private Point size;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         d.getSize(size);
 
         //  TabLayout 이벤트 처리
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.calendar_tab);
+        tabLayout = (TabLayout) view.findViewById(R.id.calendar_tab);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -93,7 +94,10 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 currentIndex = position;
 
                 mCalendar = Calendar.getInstance();
-                mCalendar.add(Calendar.MONTH, rPos);
+                if (tabLayout.getSelectedTabPosition() == 0)
+                    mCalendar.add(Calendar.MONTH, rPos);
+                else
+                    mCalendar.add(Calendar.WEEK_OF_YEAR, rPos);
 
                 curDate.setText(mCalendar.get(Calendar.YEAR) + "년 " + (mCalendar.get(Calendar.MONTH) + 1) + "월");
             }
@@ -160,7 +164,10 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
                 monthAdapter = new MyPagerAdapter(this.getContext());
                 weekAdapter = new MyPagerAdapter2(this.getContext());
-                mPager.setAdapter(monthAdapter);
+                if (tabLayout.getSelectedTabPosition() == 0)
+                    mPager.setAdapter(monthAdapter);
+                else
+                    mPager.setAdapter(weekAdapter);
                 mPager.setCurrentItem(currentIndex);
             }
         }

@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         curDate = (TextView)findViewById(R.id.current_date);
 
         // test (유진)-----------------------
-        getHashKey();
+
         PathInfoManager p = new PathInfoManager();
 
         p.setDestination("37.548918, 127.075117");
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
         view.setText(str);
     }
 
-    private void getHashKey(){
+    /*private void getHashKey(){
         PackageInfo packageInfo = null;
         try {
             packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
@@ -234,9 +234,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
             }
         }
-    }
-
-
+    }*/
 
 
 }

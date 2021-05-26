@@ -2,6 +2,7 @@ package com.example.pocketmanager.schedule.ui;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,10 @@ public class CalendarAdapter extends BaseAdapter
 
         LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.rlItemViewCalendar);
 
+
         for (Event e : eventArrayList) {
+            Log.d("task start!", "-------------");
+            Log.d("" + e.getEventName(), "" + e.getStartTime());
             addSchedule(ll, e);
         }
 
@@ -100,6 +104,7 @@ public class CalendarAdapter extends BaseAdapter
         test.setLayoutParams(params);
         test.setText(e.getEventName());
         test.setTextSize(10);
+        test.setMaxLines(1);
         test.setPadding(dpAsPixels, 0, 0, 0);
 
         ll.addView(test);

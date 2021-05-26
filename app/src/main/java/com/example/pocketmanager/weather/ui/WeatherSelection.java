@@ -50,7 +50,10 @@ public class WeatherSelection extends Fragment {
         @NotNull
         @Override
         public Fragment getItem(int position) {
-            return WeatherFragment.newInstance(position);
+            if (position < 2)
+                return WeatherFragment.newInstance(position);
+            else
+                return DailyWeatherFragment.newInstance();
         }
 
         @Override
@@ -68,7 +71,7 @@ public class WeatherSelection extends Fragment {
                 case 1:
                     return "내일";
                 case 2:
-                    return "모레";
+                    return "주간";
                 default:
                     return null;
             }
