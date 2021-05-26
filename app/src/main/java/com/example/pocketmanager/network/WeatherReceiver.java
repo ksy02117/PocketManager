@@ -65,7 +65,7 @@ public class WeatherReceiver implements Runnable {
     private static void receiveHistoricalWeatherData() {
         HistoricalWeatherReceiver.getInstance().getHistoricalWeather(
                 (result) -> {
-                    for (int i = 0; i < result.size() - 1; i++) {
+                    for (int i = 0; i < result.size(); i++) {
                         WeatherData output = WeatherData.hourlyWeatherData.get(i);
                         WeatherData input  = result.get(i);
 
