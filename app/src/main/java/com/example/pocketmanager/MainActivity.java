@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
         p.setDestination("37.548918, 127.075117");
         p.setOrigin("37.546988, 127.105476");
-        //p.setSubwayName("광나루(장신대)");
+        p.setSubwayName("광나루(장신대)");
 
 
         try {

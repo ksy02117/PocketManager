@@ -158,7 +158,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 LocationData ld = new LocationData();
                 ld.setLocation(latitude, longitude);
 
-                Event.addEvent(eventName, startTime, endTime, ld, eventDesc);
+                Event.addEvent(eventName, startTime, endTime, ld, eventDesc, false);
                 for (Event e : Event.upcomingEvents)
                     Log.d("이벤트", "" + e.getEventName());
 

@@ -28,6 +28,12 @@ public class WeatherFragment extends Fragment {
     int tab;    //0: ~24h | 1: ~48h | 2: ~7d
     View view;
 
+    private static final int TODAY_TAB = 0;
+    private static final int TOMORROW_TAB = 1;
+    private static final int DAILY_TAB = 2;
+
+
+
     public WeatherFragment() {}
 
     public static WeatherFragment newInstance(int tab) {
@@ -66,9 +72,21 @@ public class WeatherFragment extends Fragment {
     }
 
     public void display() {
-        adapter = new MyWeatherAdapter(getActivity(), WeatherData.currentLocationWeatherData);
-        weather_recycler.setAdapter(adapter);
-        rain_recycler.setAdapter(adapter);
+        if (tab == TODAY_TAB) {
+            weatherAdapter = new MyWeatherAdapter(getActivity(), WeatherData.getTodayWeather());
+            rainAdapter = new MyRainVolumeAdapter(getActivity(), WeatherData.getTodayWeather());
+        }
+        else if (tab == TOMORROW_TAB) {
+            weatherAdapter = new MyWeatherAdapter(getActivity(), WeatherData.getTomorrowWeather());
+            rainAdapter = new MyRainVolumeAdapter(getActivity(), WeatherData.getTomorrowWeather());
+        }
+        else {
+            weatherAdapter = new MyWeatherAdapter(getActivity(), WeatherData.getDailyWeather());
+            rainAdapter = new MyRainVolumeAdapter(getActivity(), WeatherData.getDailyWeather());
+        }
+
+        weather_recycler.setAdapter(weatherAdapter);
+        rain_recycler.setAdapter(rainAdapter);
 
         // 기온
         TextView curTemp = (TextView) view.findViewById(R.id.current_temperature);

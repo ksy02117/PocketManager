@@ -17,12 +17,13 @@ import com.example.pocketmanager.R;
 import com.example.pocketmanager.storage.WeatherData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyRainVolumeAdapter extends RecyclerView.Adapter<MyRainVolumeAdapter.ViewHolder> {
-    private ArrayList<WeatherData> list;
+    private List<WeatherData> list;
     private Context context;
 
-    public MyRainVolumeAdapter(Context context, ArrayList<WeatherData> list) {
+    public MyRainVolumeAdapter(Context context, List<WeatherData> list) {
         this.list = list;
         this.context = context;
     }
@@ -39,7 +40,7 @@ public class MyRainVolumeAdapter extends RecyclerView.Adapter<MyRainVolumeAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        float rain = list.get(position).getRain_1h();
+        float rain = list.get(position).getRain();
 
         holder.rainVolume.setScaleY(rain / 15);
         holder.timeView.setText(list.get(position).getHour() + "시");
