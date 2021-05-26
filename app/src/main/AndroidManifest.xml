@@ -15,9 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PocketManager"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true" >
         <activity
-            android:name=".MainActivity"
+            android:name=".general.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,8 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.schedule.addScheduleActivity" android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
-        <meta-data android:name="com.kakao.sdk.AppKey" android:value="3d2c9c89ec884730f3c37a2ab41e6d7c"/>
+        <activity android:name=".schedule.ui.addScheduleActivity" android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
+        <meta-data android:name="com.kakao.sdk.AppKey" android:value="4a7effe4df4c5eefc22f19a3c96d9157"/>
     </application>
 
 </manifest>
