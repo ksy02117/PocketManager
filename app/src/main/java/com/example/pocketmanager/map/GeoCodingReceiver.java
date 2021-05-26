@@ -31,7 +31,7 @@ public class GeoCodingReceiver {
 
     public static synchronized <Acticity> Geocoder getInstance(Activity context) {
         if (instance == null)
-            instance = new Geocoder((Context) context, Locale.US);
+            instance = new Geocoder((Context) context, Locale.KOREA);
         act = context;
         ctx = (Context) context;
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(ctx);

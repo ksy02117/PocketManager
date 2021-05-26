@@ -14,7 +14,7 @@ public class LocationData {
     private static LocationData currentLocation = new LocationData();
     private static volatile boolean gpsReady;
 
-    private Address adr = new Address(Locale.KOREA);
+    private Address adr = new Address(new Locale("ko_kr"));
     private String description;
 
 
@@ -29,10 +29,12 @@ public class LocationData {
     public double getLatitude() { return adr.getLatitude(); }
     public double getLongitude() { return adr.getLongitude(); }
     public String getAddress() {
-        String result = "";
-        for (int i = 0; i < adr.getMaxAddressLineIndex(); i++)
-            result += adr.getAddressLine(i);
-        return result;
+        //TODO fix
+        StringBuilder builder = new StringBuilder();
+        builder.append(adr.getLocality());
+        builder.append(" " + adr.getSubLocality());
+
+        return builder.toString();
     }
     public String getName() { return adr.getFeatureName(); }
     public String getDescription() { return description; }

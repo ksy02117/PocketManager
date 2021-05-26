@@ -51,6 +51,20 @@ public class WeatherData implements Serializable {
     public void setTemp(float temp) { this.temp = temp; }
     public float getFeels_like() { return feels_like; }
     public void setFeels_like(float feels_like) { this.feels_like = feels_like; }
+    public float getMax_temp() {
+        for (int i = 0; i < dailyWeatherData.size(); i++) {
+            if (time.getDt() / 86400 == dailyWeatherData.get(i).getDt() / 86400)
+                return dailyWeatherData.get(i).getMax_temp();
+        }
+        return 0.0f;
+    }
+    public float getMin_temp() {
+        for (int i = 0; i < dailyWeatherData.size(); i++) {
+            if (time.getDt() / 86400 == dailyWeatherData.get(i).getDt() / 86400)
+                return dailyWeatherData.get(i).getMin_temp();
+        }
+        return 0.0f;
+    }
 
     public float getHumidity() { return humidity; }
     public void setHumidity(float humidity) { this.humidity = humidity; }
