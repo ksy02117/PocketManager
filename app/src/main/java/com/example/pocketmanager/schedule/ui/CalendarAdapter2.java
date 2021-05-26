@@ -75,7 +75,6 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
 
         for (Event e : eventArrayList) {
             int dt = (int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 180;
-            Log.d("패딩패딩패딩패딩패딩", "" + dt);
 
             addSchedule(e, Math.round(dt * dd));
         }
@@ -110,6 +109,7 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
         test = new TextView(context);
         test.setLayoutParams(params);
         test.setText(e.getEventName());
+        test.setMaxLines(1);
         test.setPadding(0, padding / 2, 0, padding / 2);
 
         ll.addView(test);

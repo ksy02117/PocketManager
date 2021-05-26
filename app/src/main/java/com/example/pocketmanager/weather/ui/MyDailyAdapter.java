@@ -1,4 +1,4 @@
-package com.example.pocketmanager.ui.weather;
+package com.example.pocketmanager.weather.ui;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -13,9 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.storage.WeatherData;
+import com.example.pocketmanager.weather.WeatherData;
 
 import java.util.List;
+
 
 public class MyDailyAdapter extends RecyclerView.Adapter<MyDailyAdapter.ViewHolder> {
     private List<WeatherData> list;

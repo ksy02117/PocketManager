@@ -1,4 +1,4 @@
-package com.example.pocketmanager.ui.weather;
+package com.example.pocketmanager.weather.ui;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.storage.WeatherData;
+import com.example.pocketmanager.weather.WeatherData;
 
 public class DailyWeatherFragment extends Fragment {
     private LinearLayoutManager mLayoutManager;
