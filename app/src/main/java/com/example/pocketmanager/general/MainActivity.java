@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setAlarm() {
-        //AlarmReceiver에 값 전달
+        //Alarm Receiver 에 값 전달
         Intent receiverIntent = new Intent(MainActivity.this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, receiverIntent, 0);
 
