@@ -17,8 +17,7 @@ public class Event extends AbstractEvent{
     private HashMap<Long, LinkedList<SubEvent>> subEvents = new HashMap<>();
 
 
-
-    public Event(long id, String name, Time startTime, Time endTime, LocationData location, boolean outdoor, String description, int priority) {
+    private Event(long id, String name, Time startTime, Time endTime, LocationData location, boolean outdoor, String description, int priority) {
         super(id, name, startTime, endTime, location, outdoor, description, priority);
     }
 

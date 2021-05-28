@@ -17,8 +17,19 @@ public class Time implements Comparable<Time>{
     public Time() {
         setDt(0);
     }
-    public Time(long dt) {
-        setDt(dt);
+    public Time(long dt) { setDt(dt); }
+    public Time(int year, int month, int day, int hour, int minute, int second) {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
+        cal.set(year, month, day, hour, minute, second);
+
+        dt = cal.getTimeInMillis() / 1000L;
+        dateID = dt / 86400;
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.hour = hour;
+        this.min = minute;
+        this.sec = second;
     }
 
     public long getDt() { return dt; }
@@ -30,6 +41,7 @@ public class Time implements Comparable<Time>{
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
         cal.setTimeInMillis(dt * 1000L);
 
+        this.dt = dt;
         dateID = dt / 86400;
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH) + 1;
