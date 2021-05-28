@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.ListIterator;
 
 public class MyPagerAdapter extends PagerAdapter {
@@ -88,31 +89,16 @@ public class MyPagerAdapter extends PagerAdapter {
             }
         }
         else {
-            ListIterator<Event> it = Event.events.get(0).listIterator();
-            ArrayList<Event> eventArrayList = new ArrayList<>();
-            Event e = null;
-
-            if (it.hasNext())
-                e = it.next();
-
             for (int i = 0; i < 42; i++) {
-                if (!Time.isCurrentDay(e.getStartTime(), mCal)) {
+                LinkedList<Event> e = Event.events.get(mCal.getTimeInMillis() / 1000);
+
+                if (e == null) {
                     arrData.add(new CalData(mCal.getTime()));
                     mCal.add(Calendar.DAY_OF_MONTH, 1);
                     continue;
                 }
 
-                //?
-                eventArrayList.add(e);
-                while (it.hasNext()) {
-                    e = it.next();
-                    if (!Time.isCurrentDay(e.getStartTime(), mCal))
-                        break;
-
-                    eventArrayList.add(e);
-                }
-
-                arrData.add(new CalData(mCal.getTime(), eventArrayList));
+                arrData.add(new CalData(mCal.getTime(), e));
                 mCal.add(Calendar.DAY_OF_MONTH, 1);
             }
         }

@@ -57,10 +57,11 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
 
         //데이터 가져오기
         Intent intent = getIntent();
-        name = intent.getStringExtra("eventName");
-        description = intent.getStringExtra("eventDescription");
-        startDt = intent.getLongExtra("startTime", 0);
-        endDt = intent.getLongExtra("endTime", 0);
+        Event e = (Event) intent.getSerializableExtra("event");
+        name = e.getEventName();
+        description = e.getDescription();
+        startDt = e.getStartTime().getDt();
+        endDt = e.getEndTime().getDt();
         Time startTime = new Time();
         Time endTime = new Time();
         SimpleDateFormat s = new SimpleDateFormat("HH:mm", Locale.getDefault());

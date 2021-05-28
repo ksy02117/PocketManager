@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 
 public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.ViewHolder>{
     private ArrayList<CalData> list;
@@ -77,19 +78,15 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
         holder.dayText.setText(list.get(position).getDate().getDate() + "");
         holder.dayOfMonthText.setText(convertDayOfMonth(dayOfWeek));
         holder.dayView.getLayoutParams().width = context.getResources().getDisplayMetrics().widthPixels / 3;
-        ArrayList<Event> eventArrayList = list.get(position).getEvents();
+        LinkedList<Event> eventArrayList = list.get(position).getEvents();
+
 
         // 이벤트 비어있으면
         if (Event.events.isEmpty() || eventArrayList == null)
             return;
 
-        for (Event e : eventArrayList) {
-
-
+        for (Event e : eventArrayList)
             addSchedule(e);
-        }
-
-
         //holder.dayText.setText("Tl~qkf");
     }
 

@@ -106,10 +106,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), EventDetailsActivity.class);
-                intent.putExtra("eventName", e.getEventName());
-                intent.putExtra("eventDescription", e.getDescription());
-                intent.putExtra("startTime", e.getStartTime().getDt());
-                intent.putExtra("endTime", e.getEndTime().getDt());
+                intent.putExtra("event", e);
                 startActivityForResult(intent, 1);
             }
         });

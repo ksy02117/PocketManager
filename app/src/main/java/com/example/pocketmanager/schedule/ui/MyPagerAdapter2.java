@@ -1,6 +1,7 @@
 package com.example.pocketmanager.schedule.ui;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.ListIterator;
 
 public class MyPagerAdapter2 extends PagerAdapter {
@@ -50,8 +52,6 @@ public class MyPagerAdapter2 extends PagerAdapter {
 
         mCal.set(Calendar.YEAR, thisYear);
         mCal.set(Calendar.DAY_OF_YEAR, thisDay + realPos * 3);
-        //Log.d("realPos"," " + realPos);
-        //Log.d("mCal"," " + mCal.get(Calendar.YEAR) + "." + mCal.get(Calendar.MONTH));
 
         setCalendarDate();
         ((ViewPager) container).addView(mRecyclerView);
@@ -85,42 +85,27 @@ public class MyPagerAdapter2 extends PagerAdapter {
 
          */
 
-        /*
-        // 이벤트가 없을 경우
-        if (Event.upcomingEvents.isEmpty()) {
+        if (Event.events.isEmpty()) {
             for (int i = 0; i < 3; i++) {
                 arrData.add(new CalData(mCal.getTime()));
                 mCal.add(Calendar.DAY_OF_MONTH, 1);
             }
         }
         else {
-            ListIterator<Event> it = Event.upcomingEvents.listIterator();
-            ArrayList<Event> eventArrayList = new ArrayList<>();
-            Event e = it.next();
-
             for (int i = 0; i < 3; i++) {
-                if (!Time.isCurrentDay(e.getStartTime(), mCal)) {
+                LinkedList<Event> e = Event.events.get(mCal.getTimeInMillis() / 1000);
+
+                if (e == null) {
                     arrData.add(new CalData(mCal.getTime()));
                     mCal.add(Calendar.DAY_OF_MONTH, 1);
                     continue;
                 }
 
-                //?
-                eventArrayList.add(e);
-                while (it.hasNext()) {
-                    e = it.next();
-                    if (!Time.isCurrentDay(e.getStartTime(), mCal))
-                        break;
-
-                    eventArrayList.add(e);
-                }
-
-                arrData.add(new CalData(mCal.getTime(), eventArrayList));
+                Log.d("test", "" + e);
+                arrData.add(new CalData(mCal.getTime(), e));
                 mCal.add(Calendar.DAY_OF_MONTH, 1);
             }
         }
-
-         */
 
         adapter = new CalendarAdapter2(mView.getContext(), arrData);
 

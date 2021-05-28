@@ -19,6 +19,7 @@ import com.example.pocketmanager.schedule.storage.Event;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 
 public class CalendarAdapter extends BaseAdapter
 {
@@ -53,7 +54,7 @@ public class CalendarAdapter extends BaseAdapter
         TextView ViewText = (TextView)convertView.findViewById(R.id.ViewText);
         ImageView ViewImage = (ImageView) convertView.findViewById(R.id.highlight);
         Date tmpDate = arrData.get(position).getDate();
-        ArrayList<Event> eventArrayList = arrData.get(position).getEvents();
+        LinkedList<Event> eventArrayList = arrData.get(position).getEvents();
 
         Calendar tmpCal = Calendar.getInstance();
         int thisMonth = arrData.get(7).getDate().getMonth();
@@ -89,16 +90,13 @@ public class CalendarAdapter extends BaseAdapter
             ViewImage.setVisibility(View.VISIBLE);
         }
 
-        // 이벤트 비어있으면
-        //if (Event.upcomingEvents.isEmpty() || eventArrayList == null)
-        //    return convertView;
+        if (Event.events.isEmpty() || eventArrayList == null)
+            return convertView;
 
         l = (LinearLayout) convertView.findViewById(R.id.rlItemViewCalendar);
 
-
-        for (Event e : eventArrayList) {
+        for (Event e : eventArrayList)
             addSchedule(e);
-        }
 
         return convertView;
     }
