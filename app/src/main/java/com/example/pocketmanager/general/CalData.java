@@ -1,6 +1,6 @@
 package com.example.pocketmanager.general;
 
-import com.example.pocketmanager.schedule.Event;
+import com.example.pocketmanager.schedule.storage.Event;
 
 import java.util.ArrayList;
 import java.util.Date;

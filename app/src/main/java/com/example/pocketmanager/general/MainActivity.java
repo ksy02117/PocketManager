@@ -13,6 +13,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.pocketmanager.R;
+import com.example.pocketmanager.map.LocationDBHelper;
+import com.example.pocketmanager.map.LocationData;
+import com.example.pocketmanager.schedule.storage.AbstractEvent;
+import com.example.pocketmanager.schedule.storage.EventDBHelper;
 import com.example.pocketmanager.weather.receiver.AirPollutionReceiver;
 import com.example.pocketmanager.map.GeoCodingReceiver;
 import com.example.pocketmanager.weather.receiver.DailyWeatherReceiver;
@@ -132,8 +136,14 @@ public class MainActivity extends AppCompatActivity {
         AirPollutionReceiver.getInstance(this);
         GeoCodingReceiver.getInstance(this);
 
+        //DataBases
+        DBHelper.getInstance(this);
+        LocationDBHelper.initLocations();
+        EventDBHelper.initEvents();
+
 
         //weatherData
+        LocationData.initGpsReady();
         LocationData.receiveCurrentLocation();
         WeatherData.receiveWeatherData();
 
@@ -171,6 +181,11 @@ public class MainActivity extends AppCompatActivity {
         //getHashKey();
 
         //----------------------------
+    }
+    @Override
+    protected void onDestroy() {
+        DBHelper.getInstance().close();
+        super.onDestroy();
     }
 
     public void setDate(TextView view) {

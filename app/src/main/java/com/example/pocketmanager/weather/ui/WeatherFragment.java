@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.general.LocationData;
+import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.weather.WeatherData;
 
 public class WeatherFragment extends Fragment {

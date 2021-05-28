@@ -12,7 +12,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.CalData;
-import com.example.pocketmanager.schedule.Event;
+import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.general.Time;
 
 import org.jetbrains.annotations.NotNull;
@@ -81,14 +81,14 @@ public class MyPagerAdapter extends PagerAdapter {
         mCal.add(Calendar.DAY_OF_MONTH, -startday + 1);
 
         // 이벤트가 없을 경우
-        if (Event.upcomingEvents.isEmpty()) {
+        if (Event.events.isEmpty()) {
             for (int i = 0; i < 42; i++) {
                 arrData.add(new CalData(mCal.getTime()));
                 mCal.add(Calendar.DAY_OF_MONTH, 1);
             }
         }
         else {
-            ListIterator<Event> it = Event.upcomingEvents.listIterator();
+            ListIterator<Event> it = Event.events.get(0).listIterator();
             ArrayList<Event> eventArrayList = new ArrayList<>();
             Event e = null;
 

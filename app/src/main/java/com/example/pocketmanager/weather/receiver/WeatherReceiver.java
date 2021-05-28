@@ -1,6 +1,6 @@
 package com.example.pocketmanager.weather.receiver;
 
-import com.example.pocketmanager.general.LocationData;
+import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.weather.DailyWeatherData;
 import com.example.pocketmanager.weather.WeatherData;

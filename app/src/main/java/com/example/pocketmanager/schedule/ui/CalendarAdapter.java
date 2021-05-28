@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.CalData;
-import com.example.pocketmanager.schedule.Event;
+import com.example.pocketmanager.schedule.storage.Event;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,7 +81,7 @@ public class CalendarAdapter extends BaseAdapter
             ViewImage.setVisibility(View.VISIBLE);
 
         // 이벤트 비어있으면
-        if (Event.upcomingEvents.isEmpty() || eventArrayList == null)
+        if (Event.events.isEmpty() || eventArrayList == null)
             return convertView;
 
         LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.rlItemViewCalendar);
