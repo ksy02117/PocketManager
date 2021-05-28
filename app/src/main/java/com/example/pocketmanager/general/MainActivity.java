@@ -25,7 +25,6 @@ import com.example.pocketmanager.map.LocationDBHelper;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.schedule.storage.AbstractEvent;
 import com.example.pocketmanager.schedule.storage.EventDBHelper;
-import com.example.pocketmanager.schedule.LocationData;
 import com.example.pocketmanager.schedule.alarm.AlarmReceiver;
 import com.example.pocketmanager.weather.receiver.AirPollutionReceiver;
 import com.example.pocketmanager.map.GeoCodingReceiver;
@@ -172,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         curDate = (TextView)findViewById(R.id.current_date);
 
         // test (유진)-----------------------
-
+        /*
         PathInfoManager p = new PathInfoManager();
 
         p.setDestination("37.550266, 127.073351");
@@ -204,11 +203,10 @@ public class MainActivity extends AppCompatActivity {
 
         mCalender = new GregorianCalendar();
 
-        Log.v("HelloAlarmActivity", mCalender.getTime().toString());
-
-        setContentView(R.layout.activity_main);
         setAlarm();
         //----------------------------
+
+         */
     }
     @Override
     protected void onDestroy() {
@@ -252,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setAlarm() {
-        //AlarmReceiver에 값 전달
+        //Alarm Receiver 에 값 전달
         Intent receiverIntent = new Intent(MainActivity.this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, receiverIntent, 0);
 

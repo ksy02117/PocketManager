@@ -17,7 +17,6 @@ public class LocationData {
 
     private static LocationData currentLocation = new LocationData();
     private static LinkedList<Runnable> pendingTreads = new LinkedList<Runnable>();
-    private static volatile boolean gpsReady;
 
     private long id;
     private String name = "";
@@ -107,11 +106,9 @@ public class LocationData {
         pendingTreads.add(t);
     }
     public static void receiveCurrentLocation() {
-        gpsReady = false;
         GeoCodingReceiver.getCurrentAddress(
                 (result)->{
                     currentLocation.adr = GeoCodingReceiver.getAddressfromCoord(result.get(0), result.get(1));
-                    gpsReady = true;
                     Iterator<Runnable> it = pendingTreads.iterator();
                     while (it.hasNext()) {
                         Runnable t = it.next();
@@ -123,10 +120,6 @@ public class LocationData {
                 });
     }
     public static LocationData getCurrentLocation() {
-        if (gpsReady)
-            return currentLocation;
-        return null;
+        return currentLocation;
     }
-    public static boolean isGpsReady() { return gpsReady; }
-    public static void initGpsReady() { gpsReady = false; }
 }
