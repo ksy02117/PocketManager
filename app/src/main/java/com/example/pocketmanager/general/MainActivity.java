@@ -156,6 +156,9 @@ public class MainActivity extends AppCompatActivity {
 
         //DataBases
         DBHelper.getInstance(this);
+        //for clearing event every time
+        EventDBHelper.clear();
+        //
         LocationDBHelper.initLocations();
         EventDBHelper.initEvents();
 
