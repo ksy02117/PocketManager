@@ -5,11 +5,11 @@ import com.example.pocketmanager.general.Time;
 public class DailyWeatherData {
 
     private Time time = new Time();
-    private float max_temp;
-    private float min_temp;
-    private float pop;
-    private String weather;
-    private String icon;
+    private float max_temp = 0.0f;
+    private float min_temp = 0.0f;
+    private float pop = 0.0f;
+    private String weather = "";
+    private String icon = "";
 
     public long getDt() { return time.getDt(); }
     public void setDt(long dt) { time.setDt(dt); }

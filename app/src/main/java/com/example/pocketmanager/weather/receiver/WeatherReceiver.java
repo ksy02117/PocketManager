@@ -69,100 +69,110 @@ public class WeatherReceiver implements Runnable {
     private static void receiveHistoricalWeatherData() {
         HistoricalWeatherReceiver.getInstance().getHistoricalWeather(
                 (result) -> {
-                    for (int i = 0; i < result.size(); i++) {
-                        WeatherData output = WeatherData.hourlyWeatherData.get(i);
-                        WeatherData input  = result.get(i);
+                    if (result != null) {
+                        for (int i = 0; i < result.size(); i++) {
+                            WeatherData output = WeatherData.hourlyWeatherData.get(i);
+                            WeatherData input = result.get(i);
 
-                        output.setDt(input.getDt());
+                            output.setDt(input.getDt());
 
-                        //main
-                        output.setTemp(input.getTemp());
-                        output.setFeels_like(input.getFeels_like());
-                        output.setHumidity(input.getHumidity());
+                            //main
+                            output.setTemp(input.getTemp());
+                            output.setFeels_like(input.getFeels_like());
+                            output.setHumidity(input.getHumidity());
 
-                        //weather
-                        output.setWeather(input.getWeather());
-                        output.setIcon(input.getIcon());
-                        output.setWind_speed(input.getWind_speed());
+                            //weather
+                            output.setWeather(input.getWeather());
+                            output.setIcon(input.getIcon());
+                            output.setWind_speed(input.getWind_speed());
 
-                        output.setPop(0);
-                        output.setRain(input.getRain());
-                        output.setSnow(input.getSnow());
+                            output.setPop(0);
+                            output.setRain(input.getRain());
+                            output.setSnow(input.getSnow());
+                        }
+                        todayWeatherReady = true;
+                        notifyThread();
                     }
-                    todayWeatherReady = true;
-                    notifyThread();
                 });
     }
     private static void receiveForecastWeatherData() {
         WeatherForecastReceiver.getInstance().getWeatherForecast(
                 (result) -> {
-                    int di = (result.get(0).getHour() + 15) % 24;
-                    for (int i = 0; i < result.size() && i + di < WeatherData.hourlyWeatherData.size(); i++) {
-                        WeatherData output = WeatherData.hourlyWeatherData.get(i + di);
-                        WeatherData input  = result.get(i);
+                    if (result != null) {
+                        int di = (result.get(0).getHour() + 15) % 24;
+                        for (int i = 0; i < result.size() && i + di < WeatherData.hourlyWeatherData.size(); i++) {
+                            WeatherData output = WeatherData.hourlyWeatherData.get(i + di);
+                            WeatherData input = result.get(i);
 
-                        output.setDt(input.getDt());
+                            output.setDt(input.getDt());
 
-                        //main
-                        output.setTemp(input.getTemp());
-                        output.setFeels_like(input.getFeels_like());
-                        output.setHumidity(input.getHumidity());
+                            //main
+                            output.setTemp(input.getTemp());
+                            output.setFeels_like(input.getFeels_like());
+                            output.setHumidity(input.getHumidity());
 
-                        //weather
-                        output.setWeather(input.getWeather());
-                        output.setIcon(input.getIcon());
-                        output.setWind_speed(input.getWind_speed());
+                            //weather
+                            output.setWeather(input.getWeather());
+                            output.setIcon(input.getIcon());
+                            output.setWind_speed(input.getWind_speed());
 
-                        output.setPop(input.getPop());
-                        output.setRain(input.getRain());
-                        output.setSnow(input.getSnow());
+                            output.setPop(input.getPop());
+                            output.setRain(input.getRain());
+                            output.setSnow(input.getSnow());
+                        }
+                        tomorrowWeatherReady = true;
+                        notifyThread();
                     }
-                    tomorrowWeatherReady = true;
-                    notifyThread();
+
                 });
     }
     private static void receiveDailyWeatherData() {
         DailyWeatherReceiver.getInstance().getDailyWeather(
                 (result) -> {
-                    for (int i = 0; i < result.size(); i++) {
-                        DailyWeatherData output = WeatherData.dailyWeatherData.get(i);
-                        DailyWeatherData input  = result.get(i);
+                    if (result != null) {
+                        for (int i = 0; i < result.size(); i++) {
+                            DailyWeatherData output = WeatherData.dailyWeatherData.get(i);
+                            DailyWeatherData input = result.get(i);
 
-                        output.setDt(input.getDt());
+                            output.setDt(input.getDt());
 
-                        //main
-                        output.setMax_temp(input.getMax_temp());
-                        output.setMin_temp(input.getMin_temp());
+                            //main
+                            output.setMax_temp(input.getMax_temp());
+                            output.setMin_temp(input.getMin_temp());
 
-                        //weather
-                        output.setWeather(input.getWeather());
-                        output.setIcon(input.getIcon());
-                        output.setPop(input.getPop());
+                            //weather
+                            output.setWeather(input.getWeather());
+                            output.setIcon(input.getIcon());
+                            output.setPop(input.getPop());
+                        }
+                        dailyWeatherReady = true;
+                        notifyThread();
                     }
-                    dailyWeatherReady = true;
-                    notifyThread();
+
                 });
     }
     private static void receiveAirPollutionData() {
         AirPollutionReceiver.getInstance().getAirPollution(
                 (result) -> {
-                    int i = 0, j = 0;
-                    while (i < WeatherData.hourlyWeatherData.size() && j < result.size()) {
-                        WeatherData output = WeatherData.hourlyWeatherData.get(i);
-                        WeatherData input  = result.get(j);
-                        if (output.getDt() == input.getDt()) {
-                            output.setPm2_5(input.getPm2_5());
-                            output.setPm10(input.getPm10());
-                            i++;
-                            j++;
+                    if (result != null) {
+                        int i = 0, j = 0;
+                        while (i < WeatherData.hourlyWeatherData.size() && j < result.size()) {
+                            WeatherData output = WeatherData.hourlyWeatherData.get(i);
+                            WeatherData input = result.get(j);
+                            if (output.getDt() == input.getDt()) {
+                                output.setPm2_5(input.getPm2_5());
+                                output.setPm10(input.getPm10());
+                                i++;
+                                j++;
+                            } else if (output.getDt() < input.getDt())
+                                i++;
+                            else
+                                j++;
                         }
-                        else if (output.getDt() < input.getDt())
-                            i++;
-                        else
-                            j++;
+                        airPollutionReady = true;
+                        notifyThread();
                     }
-                    airPollutionReady = true;
-                    notifyThread();
+
                 });
 
     }
