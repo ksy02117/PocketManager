@@ -55,7 +55,7 @@ public class MyDailyAdapter extends RecyclerView.Adapter<MyDailyAdapter.ViewHold
         if (pop == 0)
             holder.currentPop.setVisibility(View.GONE);
         else
-            holder.currentPop.setText(w.getPop() + "%");
+            holder.currentPop.setText((int)(w.getPop() * 100) + "%");
     }
 
     @Override

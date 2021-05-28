@@ -29,12 +29,13 @@ public class MyPagerAdapter2 extends PagerAdapter {
     private ArrayList<CalData> arrData;
     private Calendar mCal, mToday;
     private View mView;
-    private int thisWeek, thisMonth, thisYear;
+    private int thisDay, thisWeek, thisMonth, thisYear;
 
     public MyPagerAdapter2(Context context) {
         super();
         mContext = context ;
         mCal = Calendar.getInstance();
+        thisDay = mCal.get(Calendar.DAY_OF_YEAR);
         thisWeek = mCal.get(Calendar.WEEK_OF_YEAR);
         thisMonth = mCal.get(Calendar.MONTH);
         thisYear = mCal.get(Calendar.YEAR);
@@ -48,7 +49,7 @@ public class MyPagerAdapter2 extends PagerAdapter {
         mView = inflater.inflate(R.layout.calendar_week_view, container, false);
 
         mCal.set(Calendar.YEAR, thisYear);
-        mCal.set(Calendar.WEEK_OF_YEAR, thisWeek + realPos);
+        mCal.set(Calendar.DAY_OF_YEAR, thisDay + realPos * 3);
         //Log.d("realPos"," " + realPos);
         //Log.d("mCal"," " + mCal.get(Calendar.YEAR) + "." + mCal.get(Calendar.MONTH));
 
@@ -75,7 +76,6 @@ public class MyPagerAdapter2 extends PagerAdapter {
 
     private void setCalendarDate(){
         arrData = new ArrayList<>();
-        mCal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
         /*
         for (int i = 0; i < 7; i++) {
@@ -87,7 +87,7 @@ public class MyPagerAdapter2 extends PagerAdapter {
 
         // 이벤트가 없을 경우
         if (Event.upcomingEvents.isEmpty()) {
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 3; i++) {
                 arrData.add(new CalData(mCal.getTime()));
                 mCal.add(Calendar.DAY_OF_MONTH, 1);
             }
@@ -97,7 +97,7 @@ public class MyPagerAdapter2 extends PagerAdapter {
             ArrayList<Event> eventArrayList = new ArrayList<>();
             Event e = it.next();
 
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 3; i++) {
                 if (!Time.isCurrentDay(e.getStartTime(), mCal)) {
                     arrData.add(new CalData(mCal.getTime()));
                     mCal.add(Calendar.DAY_OF_MONTH, 1);

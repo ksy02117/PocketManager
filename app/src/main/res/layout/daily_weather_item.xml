@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5월 5일 수요일"
-            android:textColor="@color/black"/>
+            android:textColor="@color/baseTextColor"/>
 
         <TextView
             android:id="@+id/daily_weather"
@@ -71,7 +71,7 @@
             android:layout_gravity="center"
             android:text="50°"
             android:textSize="15sp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/baseTextColor"/>
 
         <TextView
             android:id="@+id/daily_min"

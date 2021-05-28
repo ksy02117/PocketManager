@@ -10,6 +10,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.example.pocketmanager.R;
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) throws NullPointerException {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navView = findViewById(R.id.bottomNavigationView);
@@ -149,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
         p.setDestination("37.548918, 127.075117");
         p.setOrigin("37.546988, 127.105476");
         //p.setSubwayName("광나루(장신대)");
-
 
         try {
             s = p.getShortestPathInfo();
@@ -228,6 +229,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }*/
-
-
 }

@@ -19,6 +19,8 @@ import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.LocationData;
 import com.example.pocketmanager.weather.WeatherData;
 
+import org.w3c.dom.Text;
+
 public class WeatherFragment extends Fragment {
     private ScrollView mScrollView;
     private LinearLayoutManager mLayoutManager;
@@ -106,6 +108,8 @@ public class WeatherFragment extends Fragment {
         // 기타
         TextView humidity = (TextView) view.findViewById(R.id.humidity);
         TextView windSpeed = (TextView) view.findViewById(R.id.wind_speed);
+        TextView pop = (TextView) view.findViewById(R.id.rain_probability);
+        TextView precipitation = (TextView) view.findViewById(R.id.precipitation);
         TextView pm10 = (TextView) view.findViewById(R.id.pm10);
         TextView pm2_5 = (TextView) view.findViewById(R.id.pm2_5);
 
@@ -127,6 +131,8 @@ public class WeatherFragment extends Fragment {
 
         humidity.setText(String.format("%s%%", curData.getHumidity()));
         windSpeed.setText(String.format("%sm/s", curData.getWind_speed()));
+        pop.setText((int)(curData.getPop() * 100) + "%");
+        precipitation.setText(curData.getRain() + "mm");
 
         pm10.setText(String.format("%s", p1));
         pm2_5.setText(String.format("%s", p2));

@@ -53,20 +53,29 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
         int year = list.get(position).getDate().getYear();
         Calendar today = Calendar.getInstance();
 
+        int baseColor = view.getResources().getColor(R.color.baseTextColor);
+        int baseBlue = view.getResources().getColor(R.color.baseCalendarBlue);
+        int baseRed = view.getResources().getColor(R.color.baseCalendarRed);
+
         if(dayOfWeek == 0)
-            holder.dayText.setTextColor(Color.RED);
+            holder.dayText.setTextColor(baseRed);
         else if(dayOfWeek == 6)
-            holder.dayText.setTextColor(Color.BLUE);
+            holder.dayText.setTextColor(baseBlue);
         else
-            holder.dayText.setTextColor(Color.BLACK);
+            holder.dayText.setTextColor(baseColor);
 
         if (dayOfMonth == today.get(Calendar.DAY_OF_MONTH) &&
                 month == today.get(Calendar.MONTH) &&
-                year + 1900 == today.get(Calendar.YEAR))
+                year + 1900 == today.get(Calendar.YEAR)) {
+            holder.dayOfMonthText.setTextColor(Color.BLACK);
+            holder.dayText.setTextColor(Color.BLACK);
             holder.dayView.setBackgroundColor(Color.parseColor("#ffc9dc"));
+        }
+
 
         holder.dayText.setText(list.get(position).getDate().getDate() + "");
-        holder.dayView.getLayoutParams().width = context.getResources().getDisplayMetrics().widthPixels / 7;
+        holder.dayOfMonthText.setText(convertDayOfMonth(dayOfWeek));
+        holder.dayView.getLayoutParams().width = context.getResources().getDisplayMetrics().widthPixels / 3;
         ArrayList<Event> eventArrayList = list.get(position).getEvents();
 
         // 이벤트 비어있으면
@@ -90,12 +99,14 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View dayView;
+        public TextView dayOfMonthText;
         public TextView dayText;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             dayView = itemView;
+            dayOfMonthText = (TextView) itemView.findViewById(R.id.calendar_day_of_month);
             dayText = (TextView) itemView.findViewById(R.id.calendar_week_day);
         }
     }
@@ -113,5 +124,24 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
         test.setPadding(0, padding / 2, 0, padding / 2);
 
         ll.addView(test);
+    }
+
+    private String convertDayOfMonth(int dayOfWeek) {
+        switch(dayOfWeek) {
+            case 0:
+                return "일";
+            case 1:
+                return "월";
+            case 2:
+                return "화";
+            case 3:
+                return "수";
+            case 4:
+                return "목";
+            case 5:
+                return "금";
+            default:
+                return "토";
+        }
     }
 }

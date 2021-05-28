@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,19 +28,24 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import static android.app.Activity.RESULT_OK;
 
 public class ScheduleFragment extends Fragment implements View.OnClickListener {
-    private int currentYear, currentMonth;
+    private WindowManager wm;
     private int currentIndex;
     private Calendar mCalendar;
     private View view;
     private ViewPager mPager;
     private MyPagerAdapter monthAdapter;
     private MyPagerAdapter2 weekAdapter;
-    private FloatingActionButton addSchedule;
-    private LinearLayout mCalendarLayout;
+    private FloatingActionButton fabMenu, fabEveryTime, fabAddSchedule;
+    private LinearLayout linEveryTime, linAddSchedule;
+    private TextView textAddSchedule, textEveryTime;
+    private boolean isFABOpen;
+    private RelativeLayout mScheduleLayout;
+    private LinearLayout mCalendarLayout, mDayOfWeekLayout;
     private ProgressBar mProgressBar;
     private TabLayout tabLayout;
     private Point size;
@@ -47,10 +53,42 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.schedule, container, false);
 
+        fabMenu = (FloatingActionButton) view.findViewById(R.id.add_fab);
+        fabEveryTime = (FloatingActionButton) view.findViewById(R.id.add_from_everytime);
+        fabAddSchedule = (FloatingActionButton) view.findViewById(R.id.add_schedule);
+        linAddSchedule = (LinearLayout) view.findViewById(R.id.add_schedule_view);
+        linEveryTime = (LinearLayout) view.findViewById(R.id.add_from_everytime_view);
+        textAddSchedule = (TextView) view.findViewById(R.id.add_schedule_text);
+        textEveryTime = (TextView) view.findViewById(R.id.add_from_everytime_text);
+
+        fabEveryTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeFABMenu();
+                //데이터 담아서 팝업(액티비티) 호출
+                Intent intent = new Intent(getContext(), addEveryTimeActivity.class);
+                intent.putExtra("data", "Test Popup");
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        fabAddSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeFABMenu();
+                //데이터 담아서 팝업(액티비티) 호출
+                Intent intent = new Intent(getContext(), addScheduleActivity.class);
+                intent.putExtra("type", "a");
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        mScheduleLayout = (RelativeLayout) view.findViewById(R.id.schedule_layout);
         mCalendarLayout = (LinearLayout) view.findViewById(R.id.calendar_view);
+        mDayOfWeekLayout = (LinearLayout) view.findViewById(R.id.schedule_day_of_week);
         mProgressBar = (ProgressBar) view.findViewById(R.id.calendar_progress_bar);
 
-        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
         size = new Point();
         d.getSize(size);
@@ -97,15 +135,14 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 if (tabLayout.getSelectedTabPosition() == 0)
                     mCalendar.add(Calendar.MONTH, rPos);
                 else
-                    mCalendar.add(Calendar.WEEK_OF_YEAR, rPos);
+                    mCalendar.add(Calendar.DAY_OF_YEAR, rPos * 3);
 
                 curDate.setText(mCalendar.get(Calendar.YEAR) + "년 " + (mCalendar.get(Calendar.MONTH) + 1) + "월");
             }
         });
 
         mPager.setCurrentItem(100);
-        addSchedule = (FloatingActionButton) view.findViewById(R.id.add_schedule);
-        addSchedule.setOnClickListener(this);
+        fabMenu.setOnClickListener(this);
 
         // Progress Bar
         mCalendarLayout.setVisibility(View.VISIBLE);
@@ -122,9 +159,11 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         switch (index) {
             case 0 :
                 mPager.setAdapter(monthAdapter);
+                mDayOfWeekLayout.setVisibility(View.VISIBLE);
                 break ;
             case 1 :
                 mPager.setAdapter(weekAdapter);
+                mDayOfWeekLayout.setVisibility(View.GONE);
                 break ;
         }
         mPager.setCurrentItem(100);
@@ -132,10 +171,28 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        //데이터 담아서 팝업(액티비티) 호출
-        Intent intent = new Intent(this.getContext(), addScheduleActivity.class);
-        intent.putExtra("data", "Test Popup");
-        startActivityForResult(intent, 1);
+        if (!isFABOpen)
+            showFABMenu();
+        else
+            closeFABMenu();
+    }
+
+    private void showFABMenu(){
+        isFABOpen=true;
+        mPager.setAlpha(0.5f);
+        linAddSchedule.animate().translationY(-getResources().getDimension(R.dimen.standard_75));
+        linEveryTime.animate().translationY(-getResources().getDimension(R.dimen.standard_145));
+        textAddSchedule.setVisibility(View.VISIBLE);
+        textEveryTime.setVisibility(View.VISIBLE);
+    }
+
+    private void closeFABMenu(){
+        isFABOpen=false;
+        mPager.setAlpha(1.0f);
+        linAddSchedule.animate().translationY(0);
+        linEveryTime.animate().translationY(0);
+        textAddSchedule.setVisibility(View.INVISIBLE);
+        textEveryTime.setVisibility(View.INVISIBLE);
     }
 
     @Override

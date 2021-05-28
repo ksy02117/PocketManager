@@ -1,34 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:layout_marginTop="20dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:src="@drawable/everytime"
+        app:tint="@color/pink3" />
     <TextView
-        android:padding="30dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="에브리타임 로그인"
-        android:textSize="20sp"/>
+        android:text="에브리타임"
+        android:textSize="25sp"
+        android:textColor="@color/baseTextColor"/>
 
     <EditText
         android:id="@+id/editID"
         android:layout_marginBottom="10dp"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:hint="아이디"/>
 
     <EditText
         android:id="@+id/editPassword"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:hint="비밀번호"
         android:inputType="textPassword"/>
 
     <Button
         android:id="@+id/bt_Login"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="280dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

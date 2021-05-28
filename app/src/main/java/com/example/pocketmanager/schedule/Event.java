@@ -35,9 +35,7 @@ public class Event {
     public static final int PRIORITY_LOW = 0;
     public static final int PRIORITY_TRANS = 0;
 
-
-
-    private Event(String name, Time startTime, Time endTime, LocationData location, String description, boolean outdoor, int priority) {
+    public Event(String name, Time startTime, Time endTime, LocationData location, String description, boolean outdoor, int priority) {
         this.eventName = new String(name);
         this.startTime = startTime;
         this.endTime = endTime;
@@ -162,6 +160,7 @@ public class Event {
     public String getEventName() {
         return eventName;
     }
+    public String getDescription() { return description; }
     public Time getStartTime() { return startTime; }
     public Time getEndTime() { return endTime; }
 }
