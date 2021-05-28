@@ -22,5 +22,5 @@
     <color name="baseCalendarRed">#c84141</color>
     <color name="baseCalendarBlue">#6486eb</color>
     <color name="parentEventRed">#c83c3c</color>
-    <color name="childEventGreen">#3cc864</color>
+    <color name="childEventGreen">#3cb45a</color>
 </resources>

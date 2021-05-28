@@ -135,6 +135,11 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
                 endHour, endMinute);
         long endDt = tmpCal.getTimeInMillis();
 
+        if (endDt <= startDt) {
+            Toast.makeText(this, "종료 시간이 시작 시간보다 빠릅니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         //데이터 전달하기
         Intent intent = new Intent();
         intent.putExtra("result", "Close Popup");

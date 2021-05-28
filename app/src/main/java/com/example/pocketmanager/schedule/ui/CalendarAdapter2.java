@@ -1,6 +1,8 @@
 package com.example.pocketmanager.schedule.ui;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,7 +27,7 @@ import java.util.Calendar;
 public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.ViewHolder>{
     private ArrayList<CalData> list;
     private Context context;
-    private float dd;
+    private float scale;
     View view;
 
     public CalendarAdapter2(Context context, ArrayList<CalData> list) {
@@ -40,7 +42,7 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
         view = LayoutInflater.from(context)
                 .inflate(R.layout.calendar_week, parent, false);
 
-        dd = parent.getResources().getDisplayMetrics().density;
+        scale = this.context.getResources().getDisplayMetrics().density;
 
         return new CalendarAdapter2.ViewHolder(view);
     }
@@ -83,9 +85,9 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
             return;
 
         for (Event e : eventArrayList) {
-            int dt = (int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 180;
 
-            addSchedule(e, Math.round(dt * dd));
+
+            addSchedule(e);
         }
 
 
@@ -111,17 +113,32 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
         }
     }
 
-    private void addSchedule(Event e, int padding) {
+    private void addSchedule(Event e) {
         TextView test;
         LinearLayout ll = (LinearLayout) view;
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER_HORIZONTAL;
+        LinearLayout.LayoutParams params;
+        int duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
+        int bgColor = this.context.getResources().getColor(R.color.parentEventRed);
+        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
 
         test = new TextView(context);
         test.setLayoutParams(params);
         test.setText(e.getEventName());
+        test.setBackgroundColor(bgColor);
+        test.setTextColor(Color.WHITE);
+        test.setGravity(Gravity.CENTER);
         test.setMaxLines(1);
-        test.setPadding(0, padding / 2, 0, padding / 2);
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context , EventDetailsActivity.class);
+                intent.putExtra("eventName", e.getEventName());
+                intent.putExtra("eventDescription", e.getDescription());
+                intent.putExtra("startTime", e.getStartTime().getDt());
+                intent.putExtra("endTime", e.getEndTime().getDt());
+                ((Activity) context).startActivityForResult(intent, 1);
+            }
+        });
 
         ll.addView(test);
     }
@@ -143,5 +160,9 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
             default:
                 return "토";
         }
+    }
+
+    private int getPixel(int dp) {
+        return (int) (dp * scale + 0.5f);
     }
 }

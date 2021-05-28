@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,18 +61,18 @@ public class HomeFragment extends Fragment {
         LocationData testLocation = new LocationData();
         testLocation.setLocation(-90, 0);
 
-        mCalendar.set(2021, 5, 28, 12, 0);
+        mCalendar.set(2021, 4, 28, 12, 0);
         startTime.setDt(mCalendar.getTimeInMillis() / 1000);
-        mCalendar.set(2021, 5, 28, 13, 30);
+        mCalendar.set(2021, 4, 28, 13, 30);
         endTime.setDt(mCalendar.getTimeInMillis() / 1000);
 
         Event e1 = new Event("TEST1", startTime, endTime, testLocation, "TEST1 DESCRIPTION", true, 0);
         todayStartTime = new Time();
         todayStartTime.setDt(startTime.getDt());
 
-        mCalendar.set(2021, 5, 28, 15, 0);
+        mCalendar.set(2021, 4, 28, 15, 0);
         startTime.setDt(mCalendar.getTimeInMillis() / 1000);
-        mCalendar.set(2021, 5, 28, 16, 0);
+        mCalendar.set(2021, 4, 28, 16, 0);
         endTime.setDt(mCalendar.getTimeInMillis() / 1000);
 
         Event e2 = new Event("TEST2", startTime, endTime, testLocation, "TEST2 DESCRIPTION", true, 0);
@@ -152,8 +151,6 @@ public class HomeFragment extends Fragment {
     private void addWeather(int startHour) {
         ImageView newIcon;
         RelativeLayout.LayoutParams params;
-
-        Log.d("startHour","" + startHour);
 
         int duration = getPixel(60);
         int untilStart = getPixel((startHour - todayStartTime.getHour()) * 60);

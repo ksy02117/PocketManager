@@ -42,7 +42,7 @@ public class addEveryTimeActivity extends Activity implements View.OnClickListen
         loginID = (EditText) findViewById(R.id.editID);
         loginPW = (EditText) findViewById(R.id.editPassword);
         loginBT = (Button) findViewById(R.id.bt_Login);
-
+        loginBT.setOnClickListener(this);
 
         //데이터 가져오기
         Intent intent = getIntent();
@@ -52,13 +52,6 @@ public class addEveryTimeActivity extends Activity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         Button b = (Button) v;
-
-        // 취소
-        if (b.getText().equals("취소")) {
-            setResult(RESULT_CANCELED);
-            finish();
-            return;
-        }
 
         // 빈 일정 이름 경고
         id = loginID.getText().toString();
