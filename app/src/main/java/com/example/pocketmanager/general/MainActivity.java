@@ -162,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         //weatherData
-        LocationData.initGpsReady();
         LocationData.receiveCurrentLocation();
         WeatherData.receiveWeatherData();
 
