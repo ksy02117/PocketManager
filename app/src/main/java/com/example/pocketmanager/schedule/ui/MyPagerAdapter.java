@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.TimeZone;
 
 public class MyPagerAdapter extends PagerAdapter {
     private Calendar mCal;
@@ -35,7 +36,7 @@ public class MyPagerAdapter extends PagerAdapter {
     public MyPagerAdapter(Context context) {
         super();
         mContext = context ;
-        mCal = Calendar.getInstance(); // Calendar 객체 생성
+        mCal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9")); // Calendar 객체 생성
 
         thisWeek = mCal.get(Calendar.WEEK_OF_YEAR);
         thisMonth = mCal.get(Calendar.MONTH);
@@ -93,10 +94,10 @@ public class MyPagerAdapter extends PagerAdapter {
             Time t = new Time();
 
             for (int i = 0; i < 42; i++) {
-                LinkedList<Event> e = new LinkedList<>();
+                LinkedList<Event> e;
                 t.setDt(mCal.getTimeInMillis() / 1000);
                 long currentID = t.getDateID();
-                e = Event.events.get(mCal.getTimeInMillis());
+                e = Event.events.get(currentID);
 
                 if (e == null) {
                     arrData.add(new CalData(mCal.getTime()));
@@ -104,7 +105,6 @@ public class MyPagerAdapter extends PagerAdapter {
                     continue;
                 }
 
-                Log.d("Tlqkf", "dd");
                 arrData.add(new CalData(mCal.getTime(), e));
                 mCal.add(Calendar.DAY_OF_MONTH, 1);
             }

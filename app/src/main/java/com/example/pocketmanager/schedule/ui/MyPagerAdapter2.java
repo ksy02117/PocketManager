@@ -92,8 +92,13 @@ public class MyPagerAdapter2 extends PagerAdapter {
             }
         }
         else {
+            Time t = new Time();
+
             for (int i = 0; i < 3; i++) {
-                LinkedList<Event> e = Event.events.get(mCal.getTimeInMillis());
+                LinkedList<Event> e;
+                t.setDt(mCal.getTimeInMillis() / 1000);
+                long currentID = t.getDateID();
+                e = Event.events.get(currentID);
 
                 if (e == null) {
                     arrData.add(new CalData(mCal.getTime()));

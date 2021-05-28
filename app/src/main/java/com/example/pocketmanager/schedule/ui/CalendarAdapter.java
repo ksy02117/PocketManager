@@ -103,20 +103,12 @@ public class CalendarAdapter extends BaseAdapter
 
     private void addSchedule(Event e) {
         TextView test;
-        LinearLayout.LayoutParams params;
-        int bgColor = context.getResources().getColor(R.color.parentEventRed);
-        int duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
-        int untilStart = getPixel((int) (e.getStartTime().getDt() - todayStartTime.getDt()) / 60);
-        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
-        params.setMargins(0, untilStart, 0, 0);
 
         test = new TextView(context);
-        test.setLayoutParams(params);
         test.setText(e.getEventName());
         test.setGravity(Gravity.CENTER);
         test.setTextSize(10);
         test.setMaxLines(1);
-        test.setBackgroundColor(bgColor);
         test.setPadding(0, 0, 0, 0);
 
         l.addView(test);

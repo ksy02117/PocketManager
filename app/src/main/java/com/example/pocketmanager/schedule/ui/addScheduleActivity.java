@@ -14,10 +14,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.pocketmanager.R;
+import com.example.pocketmanager.general.Time;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class addScheduleActivity extends Activity implements View.OnClickListener {
     private Calendar tmpCal;
@@ -49,7 +51,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         setContentView(R.layout.add);
 
         //UI 객체생성
-        tmpCal = Calendar.getInstance();
+        tmpCal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
         confirm = (Button) findViewById(R.id.add_confirm);
         cancel = (Button) findViewById(R.id.add_cancel);
         eventName = (EditText) findViewById(R.id.event_name);
@@ -127,15 +129,12 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         startMinute = startPicker.getCurrentMinute();
         endHour = endPicker.getCurrentHour();
         endMinute = endPicker.getCurrentMinute();
-        tmpCal.set(Integer.parseInt(arrStart[0]), Integer.parseInt(arrStart[1]) - 1, Integer.parseInt(arrStart[2]),
-                startHour, startMinute);
-        long startDt = tmpCal.getTimeInMillis();
+        Time startTime = new Time(Integer.parseInt(arrStart[0]), Integer.parseInt(arrStart[1]) - 1, Integer.parseInt(arrStart[2]),
+                startHour, startMinute, 0);
+        Time endTime = new Time(Integer.parseInt(arrEnd[0]), Integer.parseInt(arrEnd[1]) - 1, Integer.parseInt(arrEnd[2]),
+                endHour, endMinute, 0);
 
-        tmpCal.set(Integer.parseInt(arrEnd[0]), Integer.parseInt(arrEnd[1]) - 1, Integer.parseInt(arrEnd[2]),
-                endHour, endMinute);
-        long endDt = tmpCal.getTimeInMillis();
-
-        if (endDt <= startDt) {
+        if (startTime.compareTo(endTime) >= 0) {
             Toast.makeText(this, "종료 시간이 시작 시간보다 빠릅니다.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -145,8 +144,8 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         intent.putExtra("result", "Close Popup");
         intent.putExtra("event_name", eventNameString);
         intent.putExtra("event_description", eventDescString);
-        intent.putExtra("start_time", startDt);
-        intent.putExtra("end_time", endDt);
+        intent.putExtra("start_time", startTime);
+        intent.putExtra("end_time", endTime);
         intent.putExtra("latitude", -90.0);
         intent.putExtra("longitude", 0.0);
         setResult(RESULT_OK, intent);

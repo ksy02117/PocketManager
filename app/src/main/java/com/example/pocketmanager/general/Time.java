@@ -1,9 +1,10 @@
 package com.example.pocketmanager.general;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class Time implements Comparable<Time>{
+public class Time implements Comparable<Time> , Serializable {
 
     private long dt;
     private long dateID;

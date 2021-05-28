@@ -203,12 +203,10 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 String result = data.getStringExtra("result");
                 String eventName = data.getStringExtra("event_name");
                 String eventDesc = data.getStringExtra("event_description");
-                Time startTime = new Time();
-                Time endTime = new Time();
-                long startDt = data.getLongExtra("start_time", 0);
-                long endDt = data.getLongExtra("end_time", 0);
-                startTime.setDt(startDt / 1000);
-                endTime.setDt(endDt / 1000);
+                Time startTime, endTime;
+                startTime = (Time) data.getSerializableExtra("start_time");
+                endTime = (Time) data.getSerializableExtra("end_time");
+
                 double latitude = data.getDoubleExtra("latitude", 0);
                 double longitude = data.getDoubleExtra("longitude", 0);
 
