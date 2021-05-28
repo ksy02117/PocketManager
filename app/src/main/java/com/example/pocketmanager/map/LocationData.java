@@ -6,6 +6,7 @@ import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.schedule.storage.EventDBHelper;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Locale;
 
@@ -15,6 +16,7 @@ public class LocationData {
     public static LinkedList<LocationData> favorites = new LinkedList<>();
 
     private static LocationData currentLocation = new LocationData();
+    private static LinkedList<Runnable> pendingTreads = new LinkedList<Runnable>();
     private static volatile boolean gpsReady;
 
     private long id;
@@ -101,20 +103,23 @@ public class LocationData {
 
 
 
-    public static void receiveCurrentLocation() {
-        receiveCurrentLocation(null);
+    public static void addPendingThread(Runnable t) {
+        pendingTreads.add(t);
     }
-    public static void receiveCurrentLocation(Runnable t) {
+    public static void receiveCurrentLocation() {
         gpsReady = false;
         GeoCodingReceiver.getCurrentAddress(
                 (result)->{
                     currentLocation.adr = GeoCodingReceiver.getAddressfromCoord(result.get(0), result.get(1));
                     gpsReady = true;
-                    if (t != null) {
+                    Iterator<Runnable> it = pendingTreads.iterator();
+                    while (it.hasNext()) {
+                        Runnable t = it.next();
                         synchronized (t) {
                             t.notify();
                         }
                     }
+                    pendingTreads.clear();
                 });
     }
     public static LocationData getCurrentLocation() {

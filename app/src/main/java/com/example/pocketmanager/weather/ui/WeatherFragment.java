@@ -18,10 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.weather.WeatherData;
+import com.example.pocketmanager.weather.receiver.WeatherReceiver;
 
 import org.w3c.dom.Text;
 
-public class WeatherFragment extends Fragment {
+public class WeatherFragment extends Fragment implements Runnable{
     private ScrollView mScrollView;
     private LinearLayoutManager mLayoutManager;
     private RecyclerView weather_recycler, rain_recycler;
@@ -67,10 +68,25 @@ public class WeatherFragment extends Fragment {
         rain_recycler.setLayoutManager((mLayoutManager));
 
 
-        display();
+        new Thread(this).start();
 
 
         return view;
+    }
+
+    @Override
+    public void run() {
+        synchronized (this) {
+            try {
+                if (!WeatherReceiver.isWeatherReady()) {
+                    WeatherReceiver.addPendingThread(this);
+                    this.wait();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        display();
     }
 
     public void display() {
@@ -160,4 +176,6 @@ public class WeatherFragment extends Fragment {
         pm2_5.setTextColor(pm2_5Color);
 
     }
+
+
 }

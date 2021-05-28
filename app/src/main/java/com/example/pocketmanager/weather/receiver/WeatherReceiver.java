@@ -5,8 +5,12 @@ import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.weather.DailyWeatherData;
 import com.example.pocketmanager.weather.WeatherData;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
 public class WeatherReceiver implements Runnable {
     private static WeatherReceiver instance = new WeatherReceiver();
+    private static LinkedList<Runnable> pendingThreads = new LinkedList<>();
 
     private static boolean todayWeatherReady;
     private static boolean tomorrowWeatherReady;
@@ -48,7 +52,7 @@ public class WeatherReceiver implements Runnable {
         synchronized (this) {
             try {
                 if (!LocationData.isGpsReady()) {
-                    LocationData.receiveCurrentLocation(this);
+                    LocationData.addPendingThread(this);
                     this.wait();
                 }
             } catch (InterruptedException e) {
@@ -86,6 +90,7 @@ public class WeatherReceiver implements Runnable {
                         output.setSnow(input.getSnow());
                     }
                     todayWeatherReady = true;
+                    notifyThread();
                 });
     }
     private static void receiveForecastWeatherData() {
@@ -113,6 +118,7 @@ public class WeatherReceiver implements Runnable {
                         output.setSnow(input.getSnow());
                     }
                     tomorrowWeatherReady = true;
+                    notifyThread();
                 });
     }
     private static void receiveDailyWeatherData() {
@@ -134,6 +140,7 @@ public class WeatherReceiver implements Runnable {
                         output.setPop(input.getPop());
                     }
                     dailyWeatherReady = true;
+                    notifyThread();
                 });
     }
     private static void receiveAirPollutionData() {
@@ -155,12 +162,29 @@ public class WeatherReceiver implements Runnable {
                             j++;
                     }
                     airPollutionReady = true;
+                    notifyThread();
                 });
 
     }
 
     public static boolean isWeatherReady() {
         return todayWeatherReady && tomorrowWeatherReady && dailyWeatherReady && airPollutionReady;
+    }
+
+    public static void addPendingThread(Runnable t) {
+        pendingThreads.add(t);
+    }
+    public static void notifyThread() {
+        if (!isWeatherReady())
+            return;
+        Iterator<Runnable> it = pendingThreads.iterator();
+        while (it.hasNext()) {
+            Runnable t = it.next();
+            synchronized (t) {
+                t.notify();
+            }
+        }
+        pendingThreads.clear();
     }
 
 }
