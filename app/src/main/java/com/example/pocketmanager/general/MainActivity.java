@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                             else fragmentManager.beginTransaction().show(menu2Fragment).commit();
                             // MapFragment에 ShortestPath 객체 전달
                             Bundle bundle = new Bundle();
-                            bundle.putSerializable("Obj", s);
+                            bundle.putSerializable("ShortestPath", s);
                             menu2Fragment.setArguments(bundle);
 
                             if(menu1Fragment != null) fragmentManager.beginTransaction().hide(menu1Fragment).commit();
@@ -150,10 +150,10 @@ public class MainActivity extends AppCompatActivity {
         curDate = (TextView)findViewById(R.id.current_date);
 
         // test (유진)-----------------------
-        getHashKey();
         PathInfoManager p = new PathInfoManager();
 
-        p.setDestination("37.548918, 127.075117");
+        p.setDestination("37.550266, 127.073351");
+        //p.setOrigin(LocationData.getCurrentLocation().getLatitude() + ", " + LocationData.getCurrentLocation().getLongitude());
         p.setOrigin("37.546988, 127.105476");
         //p.setSubwayName("광나루(장신대)");
 
@@ -173,9 +173,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
-        //getHashKey();
 
         //----------------------------
     }
@@ -215,26 +212,6 @@ public class MainActivity extends AppCompatActivity {
         view.setText(str);
     }
 
-    private void getHashKey(){
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (packageInfo == null)
-            Log.e("KeyHash", "KeyHash:null");
-
-        for (Signature signature : packageInfo.signatures) {
-            try {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.e("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            } catch (NoSuchAlgorithmException e) {
-                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
-            }
-        }
-    }
 
 
 
