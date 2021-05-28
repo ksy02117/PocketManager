@@ -6,12 +6,20 @@ import java.util.TimeZone;
 public class Time implements Comparable<Time>{
 
     private long dt;
+    private long dateID;
     private int year;
     private int month;
     private int day;
     private int hour;
     private int min;
     private int sec;
+
+    public Time() {
+        setDt(0);
+    }
+    public Time(long dt) {
+        setDt(dt);
+    }
 
     public long getDt() { return dt; }
     public void setDt(long dt) {
@@ -22,6 +30,7 @@ public class Time implements Comparable<Time>{
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
         cal.setTimeInMillis(dt * 1000L);
 
+        dateID = dt / 86400;
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH) + 1;
         day = cal.get(Calendar.DAY_OF_MONTH);
@@ -30,7 +39,7 @@ public class Time implements Comparable<Time>{
         sec = cal.get(Calendar.SECOND);
     }
 
-
+    public long getDateID() { return dateID; }
     public int getYear() { return year; }
     public int getMonth() { return month; }
     public int getDay() { return day; }

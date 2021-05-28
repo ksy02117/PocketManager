@@ -11,7 +11,6 @@ import android.location.Location;
 import androidx.core.app.ActivityCompat;
 
 import com.example.pocketmanager.general.APIListener;
-import com.example.pocketmanager.general.LocationData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;

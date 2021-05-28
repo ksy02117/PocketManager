@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +20,8 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.schedule.Event;
-import com.example.pocketmanager.general.LocationData;
+import com.example.pocketmanager.schedule.storage.Event;
+import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.general.Time;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -212,12 +211,10 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 double latitude = data.getDoubleExtra("latitude", 0);
                 double longitude = data.getDoubleExtra("longitude", 0);
 
-                LocationData ld = new LocationData();
-                ld.setLocation(latitude, longitude);
+                LocationData ld = LocationData.createLocation("", latitude, longitude);
 
-                Event.addEvent(eventName, startTime, endTime, ld, eventDesc, false);
-                for (Event e : Event.upcomingEvents)
-                    Log.d("이벤트", "" + e.getEventName());
+
+                Event.createEvent(eventName, startTime, endTime, null, false, eventDesc, Event.PRIORITY_MEDIUM);
 
                 monthAdapter = new MyPagerAdapter(this.getContext());
                 weekAdapter = new MyPagerAdapter2(this.getContext());

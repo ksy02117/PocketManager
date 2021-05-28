@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.CalData;
-import com.example.pocketmanager.schedule.Event;
+import com.example.pocketmanager.schedule.storage.Event;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -81,7 +80,7 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
         ArrayList<Event> eventArrayList = list.get(position).getEvents();
 
         // 이벤트 비어있으면
-        if (Event.upcomingEvents.isEmpty() || eventArrayList == null)
+        if (Event.events.isEmpty() || eventArrayList == null)
             return;
 
         for (Event e : eventArrayList) {

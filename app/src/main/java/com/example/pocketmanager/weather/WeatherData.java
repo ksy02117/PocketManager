@@ -37,6 +37,15 @@ public class WeatherData implements Serializable {
     private float pm10;
 
 
+    public WeatherData() {
+
+    }
+    public WeatherData(long dt) {
+        time.setDt(dt);
+    }
+
+
+
     public long getDt() { return time.getDt(); }
     public void setDt(long dt) { time.setDt(dt); }
 
