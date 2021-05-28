@@ -98,11 +98,12 @@ public class PathInfoManager {
 
                 if (shortestPathStep.getTravelMode().equals("TRANSIT")){ //transit_details
                     JSONObject tmp = obj.getJSONObject("transit_details");
+                    shortestPathStep.setTransportationType(tmp.getJSONObject("line").getJSONObject("vehicle").getString("type"));
                     // 출발 정보 설정
                     shortestPathStep.setDepartureTime(tmp.getJSONObject("departure_time").getString("text"));
                     shortestPathStep.setDepartureTimeValue(tmp.getJSONObject("departure_time").getString("value"));
                     shortestPathStep.setDepartureStopName(tmp.getJSONObject("departure_stop").getString("name"));
-                    if (subwayName == null) { // 특정 시각에 도착하는 지하철을 탔을때 예상 도착시간을 계산하기 위한 데이터 얻기
+                    if (subwayName == null && shortestPathStep.getTransportationType().equals("SUBWAY")) { // 특정 시각에 도착하는 지하철을 탔을때 예상 도착시간을 계산하기 위한 데이터 얻기
                         subwayName = changeODSaySubwayNameToTOPIS(shortestPathStep.getDepartureStopName());
                         headsign = Integer.parseInt(tmp.getString("headsign"));
                         int d = 0;

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.pocketmanager.R;
+import com.example.pocketmanager.general.MainActivity;
 import com.example.pocketmanager.transportation.ShortestPath;
 import com.example.pocketmanager.transportation.ShortestPathStep;
 
@@ -65,7 +66,7 @@ public class MapFragment extends Fragment {
             else markerType = MapPOIItem.MarkerType.YellowPin;              // 이외에는 노랑색
             // 지하철이나 도보에 맞게 name 변형
             String name = "";
-            if (s.getTravelMode().equals("TRANSIT")) name = "지하철 " + s.getArrivalStopName() + "행";
+            if (s.getTravelMode().equals("TRANSIT") && s.getTransportationType().equals("SUBWAY")) name = "지하철 " + s.getArrivalStopName() + "행";
             else name = stepNameToEffectiveName(s.getHtmlInstruction());
             // 마커 그리기
             addAndDrawMarker(mapView, name, point, markerType);
@@ -141,6 +142,7 @@ public class MapFragment extends Fragment {
         if (stepName.substring(0, 3).equals("군자동")) stepName = stepName.replaceFirst("군자동 ", "");
 
         return stepName;
+
     }
 
 
