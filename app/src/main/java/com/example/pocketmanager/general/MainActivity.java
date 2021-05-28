@@ -154,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
 
         p.setDestination("37.550266, 127.073351");
         //p.setOrigin(LocationData.getCurrentLocation().getLatitude() + ", " + LocationData.getCurrentLocation().getLongitude());
-        p.setOrigin("37.546988, 127.105476");
+        //p.setOrigin("37.546988, 127.105476");
+        //p.setOrigin("37.466600, 126.824800");
+        p.setOrigin("37.509593, 126.773195");
         //p.setSubwayName("광나루(장신대)");
 
 

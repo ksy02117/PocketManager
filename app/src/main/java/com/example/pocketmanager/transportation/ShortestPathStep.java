@@ -22,7 +22,10 @@ public class ShortestPathStep implements Serializable { // 최단경로를 이�
     // 이동 방식 ("WALKING" or "TRANSIT")
     private String travelMode;
 
-    // 지하철로 이동하는 단계일때 부가정보
+    // 대중교통으로 이동하는 단계일때 부가정보
+    // 유형
+    private String transportationType;
+
     // 출발
     private String departureTime;
     private String departureTimeValue;
@@ -174,5 +177,13 @@ public class ShortestPathStep implements Serializable { // 최단경로를 이�
 
     public void setNumStops(String numStops) {
         this.numStops = numStops;
+    }
+
+    public String getTransportationType() {
+        return transportationType;
+    }
+
+    public void setTransportationType(String transportationType) {
+        this.transportationType = transportationType;
     }
 }

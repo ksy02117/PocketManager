@@ -65,7 +65,7 @@ public class MapFragment extends Fragment {
             else markerType = MapPOIItem.MarkerType.YellowPin;              // 이외에는 노랑색
             // 지하철이나 도보에 맞게 name 변형
             String name = "";
-            if (s.getTravelMode().equals("TRANSIT")) name = "지하철 " + s.getArrivalStopName() + "행";
+            if (s.getTravelMode().equals("TRANSIT") && s.getTransportationType().equals("SUBWAY")) name = "지하철 " + s.getArrivalStopName() + "행";
             else name = stepNameToEffectiveName(s.getHtmlInstruction());
             // 마커 그리기
             addAndDrawMarker(mapView, name, point, markerType);
