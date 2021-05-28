@@ -3,10 +3,17 @@ package com.example.pocketmanager.general;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -18,6 +25,8 @@ import com.example.pocketmanager.map.LocationDBHelper;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.schedule.storage.AbstractEvent;
 import com.example.pocketmanager.schedule.storage.EventDBHelper;
+import com.example.pocketmanager.schedule.LocationData;
+import com.example.pocketmanager.schedule.alarm.AlarmReceiver;
 import com.example.pocketmanager.weather.receiver.AirPollutionReceiver;
 import com.example.pocketmanager.map.GeoCodingReceiver;
 import com.example.pocketmanager.weather.receiver.DailyWeatherReceiver;
@@ -33,10 +42,14 @@ import com.example.pocketmanager.transportation.ShortestPath;
 import com.example.pocketmanager.weather.ui.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
     private Fragment menu3Fragment;
     private Fragment menu4Fragment;
     ShortestPath s;
+    private AlarmManager alarmManager;
+    private GregorianCalendar mCalender;
+
+    private NotificationManager notificationManager;
+    NotificationCompat.Builder builder;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -159,7 +177,9 @@ public class MainActivity extends AppCompatActivity {
 
         p.setDestination("37.550266, 127.073351");
         //p.setOrigin(LocationData.getCurrentLocation().getLatitude() + ", " + LocationData.getCurrentLocation().getLongitude());
-        p.setOrigin("37.546988, 127.105476");
+        //p.setOrigin("37.546988, 127.105476");
+        //p.setOrigin("37.466600, 126.824800");
+        p.setOrigin("37.509593, 126.773195");
         //p.setSubwayName("광나루(장신대)");
 
 
@@ -178,7 +198,16 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
+        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        mCalender = new GregorianCalendar();
+
+        Log.v("HelloAlarmActivity", mCalender.getTime().toString());
+
+        setContentView(R.layout.activity_main);
+        setAlarm();
         //----------------------------
     }
     @Override
@@ -222,7 +251,29 @@ public class MainActivity extends AppCompatActivity {
         view.setText(str);
     }
 
+    public void setAlarm() {
+        //AlarmReceiver에 값 전달
+        Intent receiverIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, receiverIntent, 0);
 
+        String from = "2021-05-28 23:20:20"; //임의로 날짜와 시간을 지정
+
+        //날짜 포맷을 바꿔주는 소스코드
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date datetime = null;
+        try {
+            datetime = dateFormat.parse(from);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datetime);
+
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
+
+
+    }
 
 
 
