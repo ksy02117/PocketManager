@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
@@ -25,7 +26,6 @@ import com.example.pocketmanager.map.LocationDBHelper;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.schedule.storage.AbstractEvent;
 import com.example.pocketmanager.schedule.storage.EventDBHelper;
-import com.example.pocketmanager.schedule.LocationData;
 import com.example.pocketmanager.schedule.alarm.AlarmReceiver;
 import com.example.pocketmanager.weather.receiver.AirPollutionReceiver;
 import com.example.pocketmanager.map.GeoCodingReceiver;
@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
         curDate = (TextView)findViewById(R.id.current_date);
 
+        /*
         // test (유진)-----------------------
 
         PathInfoManager p = new PathInfoManager();
@@ -206,9 +207,10 @@ public class MainActivity extends AppCompatActivity {
 
         Log.v("HelloAlarmActivity", mCalender.getTime().toString());
 
-        setContentView(R.layout.activity_main);
         setAlarm();
         //----------------------------
+
+         */
     }
     @Override
     protected void onDestroy() {

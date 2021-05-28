@@ -1,6 +1,7 @@
 package com.example.pocketmanager.schedule.ui;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,8 +90,13 @@ public class MyPagerAdapter extends PagerAdapter {
             }
         }
         else {
+            Time t = new Time();
+
             for (int i = 0; i < 42; i++) {
-                LinkedList<Event> e = Event.events.get(mCal.getTimeInMillis() / 1000);
+                LinkedList<Event> e = new LinkedList<>();
+                t.setDt(mCal.getTimeInMillis() / 1000);
+                long currentID = t.getDateID();
+                e = Event.events.get(mCal.getTimeInMillis());
 
                 if (e == null) {
                     arrData.add(new CalData(mCal.getTime()));
@@ -98,6 +104,7 @@ public class MyPagerAdapter extends PagerAdapter {
                     continue;
                 }
 
+                Log.d("Tlqkf", "dd");
                 arrData.add(new CalData(mCal.getTime(), e));
                 mCal.add(Calendar.DAY_OF_MONTH, 1);
             }

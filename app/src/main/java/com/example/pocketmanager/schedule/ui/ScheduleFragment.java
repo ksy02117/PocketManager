@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -212,7 +213,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 double longitude = data.getDoubleExtra("longitude", 0);
 
                 LocationData ld = LocationData.createLocation("", latitude, longitude);
-
 
                 Event.createEvent(eventName, startTime, endTime, null, false, eventDesc, Event.PRIORITY_MEDIUM);
 

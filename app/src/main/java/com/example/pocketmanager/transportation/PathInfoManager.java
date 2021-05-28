@@ -185,6 +185,7 @@ public class PathInfoManager {
         ArrayList<IncomingTrain> incomingTrains = getAllIncomingTrainInfo();
         ArrayList<IncomingTrain> result = new ArrayList<IncomingTrain>();
         String direction = null;
+
         if (incomingTrains.get(0).getStationId() < headsign) direction = "하행";
         else direction = "상행";
         for (IncomingTrain t : incomingTrains){
