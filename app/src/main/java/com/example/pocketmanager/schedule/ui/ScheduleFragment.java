@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.pocketmanager.R;
+import com.example.pocketmanager.home.ui.HomeFragment;
 import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.general.Time;
@@ -213,6 +214,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 LocationData ld = LocationData.createLocation("", latitude, longitude);
 
                 Event.createEvent(eventName, startTime, endTime, null, false, eventDesc, Event.PRIORITY_MEDIUM);
+                
 
                 monthAdapter = new MyPagerAdapter(this.getContext());
                 weekAdapter = new MyPagerAdapter2(this.getContext());

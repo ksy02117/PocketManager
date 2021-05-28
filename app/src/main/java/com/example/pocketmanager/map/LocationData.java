@@ -6,11 +6,12 @@ import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.schedule.storage.EventDBHelper;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public class LocationData {
+public class LocationData implements Serializable {
 
     public static LinkedList<LocationData> locations = new LinkedList<>();
     public static LinkedList<LocationData> favorites = new LinkedList<>();

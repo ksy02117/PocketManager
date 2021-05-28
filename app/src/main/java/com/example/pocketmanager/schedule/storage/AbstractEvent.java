@@ -5,9 +5,10 @@ import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.weather.WeatherData;
 import com.example.pocketmanager.weather.receiver.EventWeatherReceiver;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class AbstractEvent {
+public abstract class AbstractEvent implements Serializable {
     protected long id;
     protected Time startTime = new Time();
     protected Time endTime = new Time();
