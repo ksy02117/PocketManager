@@ -130,6 +130,12 @@ public class EventDBHelper {
         db.delete(EventContract.EventEntry.TABLE_NAME, selection, selectionArgs);
     }
 
+    public static synchronized void clear() {
+        SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
+
+        db.delete(EventContract.EventEntry.TABLE_NAME, null, null);
+    }
+
     public static synchronized void updateStartTime(long id, Time startTime) {
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 

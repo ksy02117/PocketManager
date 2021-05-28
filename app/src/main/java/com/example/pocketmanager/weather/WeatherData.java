@@ -11,30 +11,30 @@ public class WeatherData implements Serializable {
 
     public static ArrayList<DailyWeatherData> dailyWeatherData = new ArrayList<>(8);
     public static ArrayList<WeatherData> hourlyWeatherData = new ArrayList<>(48);
-    public static boolean todayWeatherReady;
-    public static boolean tomorrowWeatherReady;
-    public static boolean dailyWeatherReady;
-    public static boolean airPollutionReady;
+    public static boolean todayWeatherReady = false;
+    public static boolean tomorrowWeatherReady = false;
+    public static boolean dailyWeatherReady = false;
+    public static boolean airPollutionReady = false;
 
 
     private Time time = new Time();
 
-    private float temp;
+    private float temp = 0.0f;
     //체감온도
-    private float feels_like;
-    private float humidity;
+    private float feels_like = 0.0f;
+    private float humidity = 0.0f;
 
-    private String weather;
-    private String icon;
-    private float wind_speed;
-    private float pop;
-    private float rain;
-    private float snow;
+    private String weather = "";
+    private String icon = "";
+    private float wind_speed = 0.0f;
+    private float pop = 0.0f;
+    private float rain = 0.0f;
+    private float snow = 0.0f;
 
     //초미세먼지
-    private float pm2_5;
+    private float pm2_5 = 0.0f;
     //미세먼지
-    private float pm10;
+    private float pm10 = 0.0f;
 
 
     public WeatherData() {
