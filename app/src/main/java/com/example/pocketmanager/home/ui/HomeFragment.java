@@ -18,12 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.general.LocationData;
 import com.example.pocketmanager.general.Time;
-import com.example.pocketmanager.schedule.Event;
+import com.example.pocketmanager.map.LocationData;
+import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.schedule.ui.EventDetailsActivity;
-import com.example.pocketmanager.schedule.ui.addEveryTimeActivity;
-import com.example.pocketmanager.weather.WeatherData;
 
 import java.util.Calendar;
 import java.util.List;
@@ -56,26 +54,7 @@ public class HomeFragment extends Fragment {
 
          */
         // test data
-        Time startTime = new Time();
-        Time endTime = new Time();
-        LocationData testLocation = new LocationData();
-        testLocation.setLocation(-90, 0);
 
-        mCalendar.set(2021, 4, 28, 12, 0);
-        startTime.setDt(mCalendar.getTimeInMillis() / 1000);
-        mCalendar.set(2021, 4, 28, 13, 30);
-        endTime.setDt(mCalendar.getTimeInMillis() / 1000);
-
-        Event e1 = new Event("TEST1", startTime, endTime, testLocation, "TEST1 DESCRIPTION", true, 0);
-        todayStartTime = new Time();
-        todayStartTime.setDt(startTime.getDt());
-
-        mCalendar.set(2021, 4, 28, 15, 0);
-        startTime.setDt(mCalendar.getTimeInMillis() / 1000);
-        mCalendar.set(2021, 4, 28, 16, 0);
-        endTime.setDt(mCalendar.getTimeInMillis() / 1000);
-
-        Event e2 = new Event("TEST2", startTime, endTime, testLocation, "TEST2 DESCRIPTION", true, 0);
 
         timeRecycler = (RecyclerView) view.findViewById(R.id.home_timeline);
         timeRecycler.setHasFixedSize(true);
@@ -83,19 +62,10 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         timeRecycler.setLayoutManager(mLayoutManager);
-
-        int endHour;
-        if (endTime.getMin() == 0)
-            endHour = endTime.getHour();
-        else
-            endHour = endTime.getHour() + 1;
-
-        Log.d("e1.startTime", "" + e1.getStartTime().getHour());
-
-        timeAdapter = new TimelineAdapter(getActivity(), todayStartTime.getHour(), endHour);
+        //timeAdapter = new TimelineAdapter(getActivity(), todayStartTime.getHour(), endHour);
         timeRecycler.setAdapter(timeAdapter);
 
-        addEvent(e1);
+        //addEvent(e1);
         //addEvent(e2);
 
         return view;

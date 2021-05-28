@@ -2,7 +2,6 @@ package com.example.pocketmanager.schedule.ui;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.CalData;
 import com.example.pocketmanager.general.Time;
-import com.example.pocketmanager.schedule.Event;
+import com.example.pocketmanager.schedule.storage.Event;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,8 +90,8 @@ public class CalendarAdapter extends BaseAdapter
         }
 
         // 이벤트 비어있으면
-        if (Event.upcomingEvents.isEmpty() || eventArrayList == null)
-            return convertView;
+        //if (Event.upcomingEvents.isEmpty() || eventArrayList == null)
+        //    return convertView;
 
         l = (LinearLayout) convertView.findViewById(R.id.rlItemViewCalendar);
 

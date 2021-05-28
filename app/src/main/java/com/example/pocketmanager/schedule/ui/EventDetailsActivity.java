@@ -8,14 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.Time;
-import com.example.pocketmanager.schedule.Event;
+import com.example.pocketmanager.schedule.storage.Event;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
