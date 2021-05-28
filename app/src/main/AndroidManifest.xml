@@ -28,7 +28,7 @@
         <activity android:name=".schedule.ui.addScheduleActivity" android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
         <activity android:name=".schedule.ui.addEveryTimeActivity"/>
         <activity android:name=".schedule.ui.EventDetailsActivity"/>
-        <meta-data android:name="com.kakao.sdk.AppKey" android:value="4a7effe4df4c5eefc22f19a3c96d9157"/>
+        <meta-data android:name="com.kakao.sdk.AppKey" android:value="45e72680d3b69156f4fb1f54c3183d69"/>
     </application>
 
 </manifest>
