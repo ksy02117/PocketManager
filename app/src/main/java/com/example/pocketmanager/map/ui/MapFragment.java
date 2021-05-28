@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.pocketmanager.R;
+import com.example.pocketmanager.general.MainActivity;
 import com.example.pocketmanager.transportation.ShortestPath;
 import com.example.pocketmanager.transportation.ShortestPathStep;
 
@@ -141,6 +142,7 @@ public class MapFragment extends Fragment {
         if (stepName.substring(0, 3).equals("군자동")) stepName = stepName.replaceFirst("군자동 ", "");
 
         return stepName;
+
     }
 
 
