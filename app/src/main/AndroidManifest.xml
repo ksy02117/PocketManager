@@ -28,6 +28,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".schedule.ui.addScheduleActivity" android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
+        <activity android:name=".schedule.ui.addEveryTimeActivity"/>
+        <activity android:name=".schedule.ui.EventDetailsActivity"/>
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="45e72680d3b69156f4fb1f54c3183d69"/>
     </application>
 

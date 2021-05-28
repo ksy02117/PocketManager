@@ -2,7 +2,7 @@ package com.example.pocketmanager.schedule.ui;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.CalData;
+import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.schedule.storage.Event;
 
 import java.util.ArrayList;
@@ -24,7 +25,9 @@ public class CalendarAdapter extends BaseAdapter
     private Context context;
     private ArrayList<CalData> arrData;
     private LayoutInflater inflater;
-    private int dpAsPixels;
+    private LinearLayout l;
+    private float scale;
+    private Time todayStartTime;
 
     public CalendarAdapter(Context c, ArrayList<CalData> arr) {
         this.context = c;
@@ -45,8 +48,7 @@ public class CalendarAdapter extends BaseAdapter
         if (convertView == null)
             convertView = inflater.inflate(R.layout.calendar_item, parent, false);
 
-        float scale = parent.getResources().getDisplayMetrics().density;
-        dpAsPixels = (int) (10 * scale + 0.5f);
+        scale = parent.getResources().getDisplayMetrics().density;
 
         TextView ViewText = (TextView)convertView.findViewById(R.id.ViewText);
         ImageView ViewImage = (ImageView) convertView.findViewById(R.id.highlight);
@@ -63,50 +65,66 @@ public class CalendarAdapter extends BaseAdapter
 
         ViewText.setText(tmpDate.getDate() + "");
 
+        int baseGray = convertView.getResources().getColor(R.color.baseGray);
+        int baseColor = convertView.getResources().getColor(R.color.baseTextColor);
+        int baseBlue = convertView.getResources().getColor(R.color.baseCalendarBlue);
+        int baseRed = convertView.getResources().getColor(R.color.baseCalendarRed);
+
         if (tmpDate.getMonth() != thisMonth) {
-            ViewText.setTextColor(Color.LTGRAY);
+            ViewText.setTextColor(baseGray);
 
             return convertView;
         }
 
         if(dayOfWeek == 0)
-            ViewText.setTextColor(Color.RED);
+            ViewText.setTextColor(baseRed);
         else if(dayOfWeek == 6)
-            ViewText.setTextColor(Color.BLUE);
+            ViewText.setTextColor(baseBlue);
         else
-            ViewText.setTextColor(Color.BLACK);
+            ViewText.setTextColor(baseColor);
 
         if (tmpDate.getDate() == today && tmpDate.getMonth() == tmpCal.get(Calendar.MONTH) &&
-                tmpDate.getYear() + 1900 == thisYear)
+                tmpDate.getYear() + 1900 == thisYear) {
+            ViewText.setTextColor(Color.BLACK);
             ViewImage.setVisibility(View.VISIBLE);
+        }
 
         // 이벤트 비어있으면
-        if (Event.events.isEmpty() || eventArrayList == null)
-            return convertView;
+        //if (Event.upcomingEvents.isEmpty() || eventArrayList == null)
+        //    return convertView;
 
-        LinearLayout ll = (LinearLayout) convertView.findViewById(R.id.rlItemViewCalendar);
+        l = (LinearLayout) convertView.findViewById(R.id.rlItemViewCalendar);
 
 
         for (Event e : eventArrayList) {
-            Log.d("task start!", "-------------");
-            Log.d("" + e.getEventName(), "" + e.getStartTime());
-            addSchedule(ll, e);
+            addSchedule(e);
         }
 
         return convertView;
     }
 
-    private void addSchedule(LinearLayout ll, Event e) {
+    private void addSchedule(Event e) {
         TextView test;
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params;
+        int bgColor = context.getResources().getColor(R.color.parentEventRed);
+        int duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
+        int untilStart = getPixel((int) (e.getStartTime().getDt() - todayStartTime.getDt()) / 60);
+        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
+        params.setMargins(0, untilStart, 0, 0);
 
         test = new TextView(context);
         test.setLayoutParams(params);
         test.setText(e.getEventName());
+        test.setGravity(Gravity.CENTER);
         test.setTextSize(10);
         test.setMaxLines(1);
-        test.setPadding(dpAsPixels, 0, 0, 0);
+        test.setBackgroundColor(bgColor);
+        test.setPadding(0, 0, 0, 0);
 
-        ll.addView(test);
+        l.addView(test);
+    }
+
+    private int getPixel(int dp) {
+        return (int) (dp * scale + 0.5f);
     }
 }

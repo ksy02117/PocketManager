@@ -27,7 +27,12 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
     private String eventNameString, eventDescString;
     private TimePicker startPicker, endPicker;
     private DatePickerDialog.OnDateSetListener startDateListener, endDateListener;
+    private int type;
     private int startHour, startMinute, endHour, endMinute;
+
+    // type
+    private final int ADD = 0;
+    private final int MODIFY = 1;
 
     public addScheduleActivity() { }
     public static addScheduleActivity getInstance() {
@@ -83,7 +88,17 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
 
         //데이터 가져오기
         Intent intent = getIntent();
-        String data = intent.getStringExtra("data");
+        int type = intent.getIntExtra("type", 0);
+        if (type == MODIFY) {
+            String name = intent.getStringExtra("eventName");
+            String description = intent.getStringExtra("eventDescription");
+            long startDt = intent.getLongExtra("startDt", 0);
+            long endDt = intent.getLongExtra("endDt", 0);
+
+            eventName.setText(name);
+            eventDesc.setText(description);
+
+        }
     }
 
     @Override
@@ -119,6 +134,11 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         tmpCal.set(Integer.parseInt(arrEnd[0]), Integer.parseInt(arrEnd[1]) - 1, Integer.parseInt(arrEnd[2]),
                 endHour, endMinute);
         long endDt = tmpCal.getTimeInMillis();
+
+        if (endDt <= startDt) {
+            Toast.makeText(this, "종료 시간이 시작 시간보다 빠릅니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         //데이터 전달하기
         Intent intent = new Intent();

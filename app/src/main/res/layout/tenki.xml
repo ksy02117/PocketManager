@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/baseBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
@@ -23,7 +24,8 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="서울특별시 광진구"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textColor="@color/baseTextColor"/>
 
             <!--WEATHER IMAGE-->
             <ImageView
@@ -50,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_baseline_arrow_drop_up_24"
-                    app:tint="#fa5032"/>
+                    app:tint="@color/baseCalendarRed"/>
 
                 <TextView
                     android:id="@+id/max_temperature"
@@ -59,7 +61,7 @@
                     android:layout_gravity="center"
                     android:text="0°"
                     android:textSize="12sp"
-                    android:textColor="#fa5032"/>
+                    android:textColor="@color/baseCalendarRed"/>
             </LinearLayout>
 
 
@@ -77,7 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_baseline_arrow_drop_down_24"
-                    app:tint="#3278fa"/>
+                    app:tint="@color/baseCalendarBlue"/>
                 <TextView
                     android:id="@+id/min_temperature"
                     android:layout_width="wrap_content"
@@ -85,7 +87,7 @@
                     android:layout_gravity="center"
                     android:text="0°"
                     android:textSize="12sp"
-                    android:textColor="#3278fa"/>
+                    android:textColor="@color/baseCalendarBlue"/>
             </LinearLayout>
 
             <!--CURRENT TEMPERATURE-->
@@ -98,7 +100,7 @@
                 app:layout_constraintTop_toBottomOf="@id/weather_image"
                 android:text="0℃"
                 android:textSize="30sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/baseTextColor"/>
 
             <!--TEMPERATURE DIFFERENCE-->
             <TextView
@@ -123,7 +125,7 @@
                 app:layout_constraintTop_toBottomOf="@id/current_temperature"
                 android:text="맑음"
                 android:textSize="16sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/baseTextColor"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -160,13 +162,14 @@
                         android:layout_gravity="center"
                         android:text="0%"
                         android:textSize="10dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/baseTextColor"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="습도"
-                        android:textSize="10dp" />
+                        android:textSize="10dp"
+                        android:textColor="@color/baseTextColor"/>
                 </LinearLayout>
 
                 <!--WIND SPEED-->
@@ -184,13 +187,14 @@
                         android:layout_gravity="center"
                         android:text="0m/s"
                         android:textSize="10dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/baseTextColor"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="풍속"
-                        android:textSize="10dp" />
+                        android:textSize="10dp"
+                        android:textColor="@color/baseTextColor"/>
                 </LinearLayout>
 
                 <!--POP-->
@@ -208,12 +212,13 @@
                         android:layout_gravity="center"
                         android:text="0%"
                         android:textSize="10dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/baseTextColor"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="강수확률"
-                        android:textSize="10dp" />
+                        android:textSize="10dp"
+                        android:textColor="@color/baseTextColor"/>
                 </LinearLayout>
 
                 <!--RAIN VOLUME-->
@@ -231,13 +236,14 @@
                         android:layout_gravity="center"
                         android:text="0mm"
                         android:textSize="10dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/baseTextColor"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="강수량"
-                        android:textSize="10dp" />
+                        android:textSize="10dp"
+                        android:textColor="@color/baseTextColor"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -248,7 +254,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/extra_info"
-                android:background="#e6e6e6"/>
+                android:background="@color/baseGray"/>
 
             <TextView
                 android:id="@+id/dust_text"
@@ -305,7 +311,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/pm10"
-                android:background="#e6e6e6"/>
+                android:background="@color/baseGray"/>
 
             <TextView
                 android:id="@+id/by_time_text"
@@ -315,7 +321,8 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator2"
                 app:layout_constraintBottom_toTopOf="@id/weather_by_time_list"
-                android:text="시간대별 날씨"/>
+                android:text="시간대별 날씨"
+                android:textColor="@color/baseTextColor"/>
 
             <!--WEATHER BY TIME LIST-->
             <androidx.recyclerview.widget.RecyclerView
@@ -338,7 +345,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/weather_by_time_list"
                 app:layout_constraintBottom_toTopOf="@id/rain_volume_by_time"
-                android:background="#e6e6e6"/>
+                android:background="@color/baseGray"/>
 
             <TextView
                 android:id="@+id/rain_volume_by_time"
@@ -348,7 +355,8 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator3"
                 app:layout_constraintBottom_toTopOf="@id/rain_by_time_list"
-                android:text="시간대별 강수량"/>
+                android:text="시간대별 강수량"
+                android:textColor="@color/baseTextColor"/>
 
 
 

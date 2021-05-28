@@ -1,6 +1,8 @@
 package com.example.pocketmanager.schedule.ui;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,7 +26,7 @@ import java.util.Calendar;
 public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.ViewHolder>{
     private ArrayList<CalData> list;
     private Context context;
-    private float dd;
+    private float scale;
     View view;
 
     public CalendarAdapter2(Context context, ArrayList<CalData> list) {
@@ -39,7 +41,7 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
         view = LayoutInflater.from(context)
                 .inflate(R.layout.calendar_week, parent, false);
 
-        dd = parent.getResources().getDisplayMetrics().density;
+        scale = this.context.getResources().getDisplayMetrics().density;
 
         return new CalendarAdapter2.ViewHolder(view);
     }
@@ -52,20 +54,29 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
         int year = list.get(position).getDate().getYear();
         Calendar today = Calendar.getInstance();
 
+        int baseColor = view.getResources().getColor(R.color.baseTextColor);
+        int baseBlue = view.getResources().getColor(R.color.baseCalendarBlue);
+        int baseRed = view.getResources().getColor(R.color.baseCalendarRed);
+
         if(dayOfWeek == 0)
-            holder.dayText.setTextColor(Color.RED);
+            holder.dayText.setTextColor(baseRed);
         else if(dayOfWeek == 6)
-            holder.dayText.setTextColor(Color.BLUE);
+            holder.dayText.setTextColor(baseBlue);
         else
-            holder.dayText.setTextColor(Color.BLACK);
+            holder.dayText.setTextColor(baseColor);
 
         if (dayOfMonth == today.get(Calendar.DAY_OF_MONTH) &&
                 month == today.get(Calendar.MONTH) &&
-                year + 1900 == today.get(Calendar.YEAR))
+                year + 1900 == today.get(Calendar.YEAR)) {
+            holder.dayOfMonthText.setTextColor(Color.BLACK);
+            holder.dayText.setTextColor(Color.BLACK);
             holder.dayView.setBackgroundColor(Color.parseColor("#ffc9dc"));
+        }
+
 
         holder.dayText.setText(list.get(position).getDate().getDate() + "");
-        holder.dayView.getLayoutParams().width = context.getResources().getDisplayMetrics().widthPixels / 7;
+        holder.dayOfMonthText.setText(convertDayOfMonth(dayOfWeek));
+        holder.dayView.getLayoutParams().width = context.getResources().getDisplayMetrics().widthPixels / 3;
         ArrayList<Event> eventArrayList = list.get(position).getEvents();
 
         // 이벤트 비어있으면
@@ -73,9 +84,9 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
             return;
 
         for (Event e : eventArrayList) {
-            int dt = (int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 180;
 
-            addSchedule(e, Math.round(dt * dd));
+
+            addSchedule(e);
         }
 
 
@@ -89,28 +100,68 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View dayView;
+        public TextView dayOfMonthText;
         public TextView dayText;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             dayView = itemView;
+            dayOfMonthText = (TextView) itemView.findViewById(R.id.calendar_day_of_month);
             dayText = (TextView) itemView.findViewById(R.id.calendar_week_day);
         }
     }
 
-    private void addSchedule(Event e, int padding) {
+    private void addSchedule(Event e) {
         TextView test;
         LinearLayout ll = (LinearLayout) view;
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER_HORIZONTAL;
+        LinearLayout.LayoutParams params;
+        int duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
+        int bgColor = this.context.getResources().getColor(R.color.parentEventRed);
+        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
 
         test = new TextView(context);
         test.setLayoutParams(params);
         test.setText(e.getEventName());
+        test.setBackgroundColor(bgColor);
+        test.setTextColor(Color.WHITE);
+        test.setGravity(Gravity.CENTER);
         test.setMaxLines(1);
-        test.setPadding(0, padding / 2, 0, padding / 2);
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context , EventDetailsActivity.class);
+                intent.putExtra("eventName", e.getEventName());
+                intent.putExtra("eventDescription", e.getDescription());
+                intent.putExtra("startTime", e.getStartTime().getDt());
+                intent.putExtra("endTime", e.getEndTime().getDt());
+                ((Activity) context).startActivityForResult(intent, 1);
+            }
+        });
 
         ll.addView(test);
+    }
+
+    private String convertDayOfMonth(int dayOfWeek) {
+        switch(dayOfWeek) {
+            case 0:
+                return "일";
+            case 1:
+                return "월";
+            case 2:
+                return "화";
+            case 3:
+                return "수";
+            case 4:
+                return "목";
+            case 5:
+                return "금";
+            default:
+                return "토";
+        }
+    }
+
+    private int getPixel(int dp) {
+        return (int) (dp * scale + 0.5f);
     }
 }

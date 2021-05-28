@@ -15,4 +15,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    
+    <color name="baseTextColor">#2c2c2c</color>
+    <color name="baseBackground">#ffffff</color>
+    <color name="baseGray">#e6e6e6</color>
+    <color name="baseCalendarRed">#c84141</color>
+    <color name="baseCalendarBlue">#6486eb</color>
+    <color name="parentEventRed">#c83c3c</color>
+    <color name="childEventGreen">#3cb45a</color>
 </resources>
