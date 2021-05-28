@@ -4,6 +4,7 @@ import com.example.pocketmanager.map.LocationDBHelper;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.general.Time;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-public class Event extends AbstractEvent{
+public class Event extends AbstractEvent implements Serializable {
     public static HashMap<Long, LinkedList<Event>> events = new HashMap<>();
 
     private HashMap<Long, LinkedList<SubEvent>> subEvents = new HashMap<>();
