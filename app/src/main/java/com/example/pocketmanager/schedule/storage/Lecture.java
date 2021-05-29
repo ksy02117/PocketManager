@@ -7,18 +7,20 @@ import java.util.ArrayList;
 public class Lecture {
     private String name;
     private String professor;
-    private ArrayList<String> time = new ArrayList<>();
+    private ArrayList<String> time;
     private String place;
 
     public Lecture() {
         name = "";
         professor = "";
+        time = null;
         place = "";
     }
 
-    public Lecture(String name, String professor, String time, String place) {
+    public Lecture(String name, String professor, ArrayList<String> time, String place) {
         this.name = name;
         this.professor = professor;
+        this.time = time;
         this.place = place;
     }
 
@@ -37,8 +39,8 @@ public class Lecture {
     public ArrayList<String> getTime() {
         return time;
     }
-    public void setTime(String time) {
-        this.time.set(0, time);
+    public void setTime(ArrayList<String> time) {
+        this.time = time;
     }
     public String getPlace() {
         return place;
@@ -54,6 +56,7 @@ public class Lecture {
         System.out.println(place);*/
         Log.d("name", name);
         Log.d("professor", professor);
+        for (String s : time) Log.d("time", s);
         Log.d("place", place);
     }
 }

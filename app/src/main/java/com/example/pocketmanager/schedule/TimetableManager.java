@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 public class TimetableManager {
@@ -55,7 +56,19 @@ public class TimetableManager {
             // 아래 각각의 데이터들이 lecture에 저장됨 (예시)
             lecture.setName(names.get(i).attr("value").toString());            // "오픈소스SW개론"
             lecture.setProfessor(professors.get(i).attr("value").toString());  // "변정현"
-            lecture.setTime(times.get(i).attr("value").toString());            // "수13:30-16:30"
+            String tmp = times.get(i).attr("value").toString();
+            ArrayList<String> timeArr = new ArrayList<String>();
+            if (tmp.contains(",")) {
+                String[] strArr = tmp.split(",");
+                Collections.addAll(timeArr, strArr);
+            }
+            else if (tmp.charAt(1) == '월' || tmp.charAt(1) == '화' || tmp.charAt(1) == '수' || tmp.charAt(1) == '목'|| tmp.charAt(1) == '금') {
+                timeArr.add(tmp.charAt(0) + tmp.substring(2));
+                timeArr.add(tmp.charAt(1) + tmp.substring(2));
+            }
+            else timeArr.add(tmp);
+
+            lecture.setTime(timeArr);                                                      // "수13:30-16:30"
             lecture.setPlace(places.get(i).attr("value").toString());          // "센B112"
 
             //lectures에 추가
