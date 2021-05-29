@@ -257,7 +257,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                     mPager.setAdapter(weekAdapter);
                 }
                 mPager.setCurrentItem(currentIndex);
-            //}
+            }
         }
     }
 }

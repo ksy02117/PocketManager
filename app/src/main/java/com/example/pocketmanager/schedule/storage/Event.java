@@ -134,7 +134,13 @@ public class Event extends AbstractEvent implements Serializable {
         return flag;
     }
     private static boolean removeEvent(List<Event> list, Event event) {
-        return list.remove(event);
+        Iterator<Event> it = list.iterator();
+        while (it.hasNext()){
+            Event tmp = it.next();
+            if (tmp.getID() == event.getID())
+                return list.remove(tmp);
+        }
+        return false;
     }
 
 
