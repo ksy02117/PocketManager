@@ -1,7 +1,6 @@
 package com.example.pocketmanager.schedule;
 
-import com.example.pocketmanager.schedule.EverytimeCrawlingTask;
-import com.example.pocketmanager.schedule.Lecture;
+import com.example.pocketmanager.schedule.storage.Lecture;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,8 +12,8 @@ import java.util.concurrent.ExecutionException;
 
 public class TimetableManager {
     // 에브리타임 아이디, 비밀번호
-    private String everytimeID = "";
-    private String everytimePassword = "";
+    private static String everytimeID = "";
+    private static String everytimePassword = "";
 
     // 아이디 비번주는 생성자
     public TimetableManager(String everytimeID , String everytimePassword) {
@@ -36,7 +35,7 @@ public class TimetableManager {
         this.everytimePassword = everytimePassword;
     }
 
-    public ArrayList<Lecture> getTimetable() throws IOException, ExecutionException, InterruptedException {
+    public static ArrayList<Lecture> getTimetable() throws IOException, ExecutionException, InterruptedException {
         // 시간표 정보를 담은 HTML을 불러옴
         String[] params = {everytimeID, everytimePassword};
         String temp = new EverytimeCrawlingTask().execute(params).get();

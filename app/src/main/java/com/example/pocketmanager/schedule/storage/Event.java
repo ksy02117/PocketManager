@@ -4,6 +4,8 @@ import com.example.pocketmanager.map.LocationDBHelper;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.general.Time;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -117,7 +119,7 @@ public class Event extends AbstractEvent implements Serializable {
 
 
 
-    public static boolean removeEvent(Event event) {
+    public static boolean removeEvent(@NotNull Event event) {
         long startDateID = event.getStartTime().getDateID();
         long endDateID = event.getEndTime().getDateID();
         boolean flag = true;
