@@ -87,7 +87,6 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
 
         for (Event e : eventArrayList)
             addSchedule(e);
-        //holder.dayText.setText("Tl~qkf");
     }
 
     @Override
