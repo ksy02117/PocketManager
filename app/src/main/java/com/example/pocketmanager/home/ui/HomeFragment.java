@@ -133,6 +133,11 @@ public class HomeFragment extends Fragment {
         });
 
         addWeather(startHour);
+        LinkedList<SubEvent> sub =  e.getSubEvents().get(e.getStartTime().getDateID());
+        if (sub != null) {
+            for (SubEvent s : sub)
+                addSubEvent(s);
+        }
         eventLayout.addView(test);
     }
 

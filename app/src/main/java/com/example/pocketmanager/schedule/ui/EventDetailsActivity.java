@@ -84,7 +84,7 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
                 Intent intent = new Intent(getApplicationContext(), addScheduleActivity.class);
                 intent.putExtra("eventType", 1);
                 intent.putExtra("parentEvent", currentEvent);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 2);
             }
         });
     }
@@ -163,6 +163,10 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
 
                 setTexts();
             }
+        }
+        if (requestCode == 2) {
+            setResult(RESULT_OK);
+            finish();
         }
     }
 }
