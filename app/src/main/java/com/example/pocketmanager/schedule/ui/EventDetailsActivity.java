@@ -5,11 +5,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.Time;
@@ -23,6 +26,8 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
     private Event currentEvent;
     private TextView eventName, eventDesc, eventStartDate, eventEndDate, eventStartTime, eventEndTime;
     private String name, description;
+    private Time startTime, endTime;
+    private SimpleDateFormat s;
     private long startDt, endDt;
 
     private ImageView addSub;
@@ -57,15 +62,34 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
 
         //데이터 가져오기
         Intent intent = getIntent();
-        Event e = (Event) intent.getSerializableExtra("event");
-        name = e.getEventName();
-        description = e.getDescription();
-        startDt = e.getStartTime().getDt();
-        endDt = e.getEndTime().getDt();
-        Time startTime = new Time();
-        Time endTime = new Time();
-        SimpleDateFormat s = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        currentEvent = (Event) intent.getSerializableExtra("event");
+        name = currentEvent.getEventName();
+        description = currentEvent.getDescription();
+        startDt = currentEvent.getStartTime().getDt();
+        endDt = currentEvent.getEndTime().getDt();
+        startTime = new Time();
+        endTime = new Time();
+        s = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
+        setTexts();
+
+        cancel.setOnClickListener(this);
+        modify.setOnClickListener(this);
+        delete.setOnClickListener(this);
+
+        // add SubEvent
+        addSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), addScheduleActivity.class);
+                intent.putExtra("eventType", 1);
+                intent.putExtra("parentEvent", currentEvent);
+                startActivityForResult(intent, 1);
+            }
+        });
+    }
+
+    private void setTexts() {
         startTime.setDt(startDt);
         endTime.setDt(endDt);
 
@@ -78,19 +102,6 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
             eventEndDate.setText(endTime.getMonth() + "월 " + endTime.getDay() + "일");
         eventStartTime.setText(s.format(new Date(startTime.getDt() * 1000)));
         eventEndTime.setText(s.format(new Date(endTime.getDt() * 1000)));
-
-        cancel.setOnClickListener(this);
-        modify.setOnClickListener(this);
-        delete.setOnClickListener(this);
-
-        addSub.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), addScheduleActivity.class);
-                intent.putExtra("data", "Test Popup");
-                startActivityForResult(intent, 1);
-            }
-        });
     }
 
     @Override
@@ -106,10 +117,7 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
         else if (b.getText().equals("수정")) {
             Intent intent = new Intent(getApplicationContext(), addScheduleActivity.class);
             intent.putExtra("type", 1);
-            intent.putExtra("eventName", name);
-            intent.putExtra("eventDescription", description);
-            intent.putExtra("startDt", startDt);
-            intent.putExtra("endDt", endDt);
+            intent.putExtra("event", currentEvent);
             startActivityForResult(intent, 1);
         }
         // delete
@@ -120,20 +128,41 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
     void show()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("이걸 삭제한다고?");
+        builder.setMessage("일정을 삭제할까요?");
         builder.setPositiveButton("예",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // yes
-                        //Event.removeEvent();
+                        Event.removeEvent(currentEvent);
+                        setResult(RESULT_OK);
+                        finish();
                     }
                 });
         builder.setNegativeButton("아니오",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // no
                     }
                 });
         builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        if(requestCode==1 && data != null){
+            if (resultCode == 1) {
+
+                currentEvent = (Event) data.getSerializableExtra("event");
+                name = currentEvent.getEventName();
+                description = currentEvent.getDescription();
+                startDt = currentEvent.getStartTime().getDt();
+                endDt = currentEvent.getEndTime().getDt();
+
+                Log.d("hate_name", "" + name);
+                Log.d("hate_description", "" + description);
+                Log.d("hate_startdt", "" + startDt);
+                Log.d("hate_enddt", "" + endDt);
+
+                setTexts();
+            }
+        }
     }
 }

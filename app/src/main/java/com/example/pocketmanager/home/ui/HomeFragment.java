@@ -21,6 +21,7 @@ import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.schedule.storage.Event;
+import com.example.pocketmanager.schedule.storage.SubEvent;
 import com.example.pocketmanager.schedule.ui.EventDetailsActivity;
 
 import java.util.Calendar;
@@ -66,8 +67,9 @@ public class HomeFragment extends Fragment {
         if (e == null)
             return;
 
+        Time s = e.getFirst().getStartTime();
         startHour = e.getFirst().getStartTime().getHour();
-        todayStartTime = e.getFirst().getStartTime();
+        todayStartTime = new Time(s.getYear(), s.getMonth(), s.getDay(), s.getHour(), 0, s.getSec());
         endHour = e.getLast().getEndTime().getHour();
 
         if (e.getLast().getEndTime().getMin() != 0)
@@ -102,7 +104,7 @@ public class HomeFragment extends Fragment {
         endHour = e.getEndTime().getHour();
         endMinute = e.getEndTime().getMin();
         duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
-        untilStart = getPixel((int) (e.getStartTime().getHour() - todayStartTime.getDt()) / 60);
+        untilStart = getPixel((int) (e.getStartTime().getDt() - todayStartTime.getDt()) / 60);
         eventName = e.getEventName();
         textColor = getResources().getColor(R.color.baseTextColor);
         parentColor = getResources().getColor(R.color.parentEventRed);
@@ -118,6 +120,43 @@ public class HomeFragment extends Fragment {
         test.setMaxLines(1);
         test.setGravity(Gravity.CENTER);
         test.setBackgroundColor(parentColor);
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), EventDetailsActivity.class);
+                intent.putExtra("event", e);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        addWeather(startHour);
+        eventLayout.addView(test);
+    }
+
+    private void addSubEvent(SubEvent e) {
+        TextView test;
+        RelativeLayout.LayoutParams params;
+        int startHour;
+        int childColor;
+        int leftMargin;
+        int duration, untilStart;
+
+        startHour = e.getStartTime().getHour();
+        duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
+        untilStart = getPixel((int) (e.getStartTime().getDt() - todayStartTime.getDt()) / 60);
+        leftMargin = getPixel(10);
+        childColor = getResources().getColor(R.color.childEventGreen);
+        params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
+        params.setMargins(leftMargin, untilStart, 0, 0);
+
+        test = new TextView(this.getContext());
+        test.setLayoutParams(params);
+        test.setText(e.getEventName());
+        test.setTextSize(16);
+        test.setTextColor(Color.WHITE);
+        test.setMaxLines(1);
+        test.setGravity(Gravity.CENTER);
+        test.setBackgroundColor(childColor);
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

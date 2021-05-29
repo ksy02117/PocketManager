@@ -31,6 +31,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.Calendar;
 import java.util.concurrent.LinkedBlockingDeque;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class ScheduleFragment extends Fragment implements View.OnClickListener {
@@ -256,7 +257,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                     mPager.setAdapter(weekAdapter);
                 }
                 mPager.setCurrentItem(currentIndex);
-            }
+            //}
         }
     }
 }
