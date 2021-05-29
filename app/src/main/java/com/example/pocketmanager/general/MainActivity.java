@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment menu2Fragment;
     private Fragment menu3Fragment;
     private Fragment menu4Fragment;
-    ShortestPath s;
+    ShortestPath s = new ShortestPath();
     private AlarmManager alarmManager;
     private GregorianCalendar mCalender;
 
@@ -195,11 +195,11 @@ public class MainActivity extends AppCompatActivity {
 
         mCalender = new GregorianCalendar();
 
-        Log.v("HelloAlarmActivity", mCalender.getTime().toString());
 
-        setContentView(R.layout.activity_main);
-        setAlarm();
+        //setContentView(R.layout.activity_main);
+        //setAlarm();
         //----------------------------
+
     }
 
     public void setDate(TextView view) {
