@@ -33,7 +33,6 @@ public class HomeFragment extends Fragment {
     private RelativeLayout eventLayout, weatherLayout;
     private RecyclerView timeRecycler;
     private TimelineAdapter timeAdapter;
-    private Calendar mCalendar;
     private Time todayStartTime;
     private float scale;
     View view;
@@ -60,9 +59,7 @@ public class HomeFragment extends Fragment {
 
     public void update() {
         int startHour, endHour;
-        mCalendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
         Time t = new Time();
-        t.setDt(mCalendar.getTimeInMillis() / 1000);
         long id = t.getDateID();
 
         LinkedList<Event> e = Event.events.get(id);

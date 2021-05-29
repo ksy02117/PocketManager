@@ -25,22 +25,18 @@ import java.util.ListIterator;
 import java.util.TimeZone;
 
 public class MyPagerAdapter extends PagerAdapter {
-    private Calendar mCal;
     private GridView mGridView;
     private CalendarAdapter adapter;
     private ArrayList<CalData> arrData;
     private Context mContext;
     private View mView;
-    private int thisMonth, thisYear, thisWeek;
+    private Time currentTime;
+    private Time day1;
 
     public MyPagerAdapter(Context context) {
         super();
         mContext = context ;
-        mCal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9")); // Calendar 객체 생성
-
-        thisWeek = mCal.get(Calendar.WEEK_OF_YEAR);
-        thisMonth = mCal.get(Calendar.MONTH);
-        thisYear = mCal.get(Calendar.YEAR);
+        currentTime = new Time();
     }
 
     @Override
@@ -50,8 +46,7 @@ public class MyPagerAdapter extends PagerAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.calendar_grid, container, false);
 
-        mCal.set(Calendar.YEAR, thisYear);
-        mCal.set(Calendar.MONTH, thisMonth + realPos);
+        day1 = new Time(currentTime.getYear(), currentTime.getMonth() + realPos, 1, 0, 0, 0);
 
         setCalendarDate();
         ((ViewPager) container).addView(mGridView);
@@ -77,17 +72,18 @@ public class MyPagerAdapter extends PagerAdapter {
     private void setCalendarDate(){
         arrData = new ArrayList<>();
 
-        mCal.set(Calendar.DAY_OF_MONTH, 1);
-        int startday = mCal.get(Calendar.DAY_OF_WEEK);
+        Calendar p = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
+        p.set(day1.getYear(), day1.getMonth() - 1, day1.getDay());
+        int startDay = p.get(Calendar.DAY_OF_WEEK);
 
         // move calendar backwards to the beginning of the week
-        mCal.add(Calendar.DAY_OF_MONTH, -startday + 1);
+        p.add(Calendar.DAY_OF_MONTH, -startDay + 1);
 
         // 이벤트가 없을 경우
         if (Event.events.isEmpty()) {
             for (int i = 0; i < 42; i++) {
-                arrData.add(new CalData(mCal.getTime()));
-                mCal.add(Calendar.DAY_OF_MONTH, 1);
+                arrData.add(new CalData(p.getTime()));
+                p.add(Calendar.DAY_OF_MONTH, 1);
             }
         }
         else {
@@ -95,24 +91,24 @@ public class MyPagerAdapter extends PagerAdapter {
 
             for (int i = 0; i < 42; i++) {
                 LinkedList<Event> e;
-                t.setDt(mCal.getTimeInMillis() / 1000);
+                t.setDt(p.getTimeInMillis() / 1000);
                 long currentID = t.getDateID();
                 e = Event.events.get(currentID);
 
                 if (e == null) {
-                    arrData.add(new CalData(mCal.getTime()));
-                    mCal.add(Calendar.DAY_OF_MONTH, 1);
+                    arrData.add(new CalData(p.getTime()));
+                    p.add(Calendar.DAY_OF_MONTH, 1);
                     continue;
                 }
 
-                arrData.add(new CalData(mCal.getTime(), e));
-                mCal.add(Calendar.DAY_OF_MONTH, 1);
+                arrData.add(new CalData(p.getTime(), e));
+                p.add(Calendar.DAY_OF_MONTH, 1);
             }
         }
 
         adapter = new CalendarAdapter(mView.getContext(), arrData);
         mGridView = (GridView) mView.findViewById(R.id.calendar_grid);
-        mGridView.setId(thisMonth + 1);
+        mGridView.setId(currentTime.getMonth() + 1);
         mGridView.setAdapter(adapter);
     }
 }

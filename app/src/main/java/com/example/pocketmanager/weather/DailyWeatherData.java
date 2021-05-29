@@ -14,6 +14,7 @@ public class DailyWeatherData {
     public long getDt() { return time.getDt(); }
     public void setDt(long dt) { time.setDt(dt); }
 
+    public long getDateID() { return time.getDateID(); }
     public int getYear() { return time.getYear(); }
     public int getMonth() { return time.getMonth(); }
     public int getDay() { return time.getDay(); }

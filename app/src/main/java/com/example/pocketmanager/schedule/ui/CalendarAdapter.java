@@ -57,7 +57,7 @@ public class CalendarAdapter extends BaseAdapter
         LinkedList<Event> eventArrayList = arrData.get(position).getEvents();
 
         Calendar tmpCal = Calendar.getInstance();
-        int thisMonth = arrData.get(7).getDate().getMonth();
+        int thisMonth = arrData.get(7).getDate().getMonth() + 1;
         int thisYear = tmpCal.get(Calendar.YEAR);
         int today = tmpCal.get(Calendar.DAY_OF_MONTH);
 
@@ -71,7 +71,7 @@ public class CalendarAdapter extends BaseAdapter
         int baseBlue = convertView.getResources().getColor(R.color.baseCalendarBlue);
         int baseRed = convertView.getResources().getColor(R.color.baseCalendarRed);
 
-        if (tmpDate.getMonth() != thisMonth) {
+        if (tmpDate.getMonth() + 1 != thisMonth) {
             ViewText.setTextColor(baseGray);
 
             return convertView;
@@ -84,7 +84,7 @@ public class CalendarAdapter extends BaseAdapter
         else
             ViewText.setTextColor(baseColor);
 
-        if (tmpDate.getDate() == today && tmpDate.getMonth() == tmpCal.get(Calendar.MONTH) &&
+        if (tmpDate.getDate() == today && tmpDate.getMonth() + 1 == tmpCal.get(Calendar.MONTH) + 1 &&
                 tmpDate.getYear() + 1900 == thisYear) {
             ViewText.setTextColor(Color.BLACK);
             ViewImage.setVisibility(View.VISIBLE);

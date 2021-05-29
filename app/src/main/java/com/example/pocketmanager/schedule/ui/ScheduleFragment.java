@@ -69,7 +69,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 //데이터 담아서 팝업(액티비티) 호출
                 Intent intent = new Intent(getContext(), addEveryTimeActivity.class);
                 intent.putExtra("data", "Test Popup");
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 2);
             }
         });
 
@@ -198,8 +198,9 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        if(requestCode==1 && data != null){
-            if(resultCode==RESULT_OK){
+        //add schedule
+        if(requestCode==1 && data != null) {
+            if(resultCode==RESULT_OK) {
                 //데이터 받기
                 String result = data.getStringExtra("result");
                 String eventName = data.getStringExtra("event_name");
@@ -216,12 +217,44 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 Event.createEvent(eventName, startTime, endTime, null, false, eventDesc, Event.PRIORITY_MEDIUM);
                 
 
-                monthAdapter = new MyPagerAdapter(this.getContext());
-                weekAdapter = new MyPagerAdapter2(this.getContext());
-                if (tabLayout.getSelectedTabPosition() == 0)
+                //monthAdapter = new MyPagerAdapter(this.getContext());
+                //weekAdapter = new MyPagerAdapter2(this.getContext());
+                if (tabLayout.getSelectedTabPosition() == 0) {
                     mPager.setAdapter(monthAdapter);
-                else
+                }
+                else {
                     mPager.setAdapter(weekAdapter);
+                }
+                mPager.setCurrentItem(currentIndex);
+            }
+        }
+        //everytime
+        else if(requestCode==2 && data != null) {
+            if(resultCode==RESULT_OK) {
+                //데이터 받기
+                String result = data.getStringExtra("result");
+                String eventName = data.getStringExtra("event_name");
+                String eventDesc = data.getStringExtra("event_description");
+                Time startTime, endTime;
+                startTime = (Time) data.getSerializableExtra("start_time");
+                endTime = (Time) data.getSerializableExtra("end_time");
+
+                double latitude = data.getDoubleExtra("latitude", 0);
+                double longitude = data.getDoubleExtra("longitude", 0);
+
+                LocationData ld = LocationData.createLocation("", latitude, longitude);
+
+                Event.createEvent(eventName, startTime, endTime, null, false, eventDesc, Event.PRIORITY_MEDIUM);
+
+
+                //monthAdapter = new MyPagerAdapter(this.getContext());
+                //weekAdapter = new MyPagerAdapter2(this.getContext());
+                if (tabLayout.getSelectedTabPosition() == 0) {
+                    mPager.setAdapter(monthAdapter);
+                }
+                else {
+                    mPager.setAdapter(weekAdapter);
+                }
                 mPager.setCurrentItem(currentIndex);
             }
         }
