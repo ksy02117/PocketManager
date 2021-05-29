@@ -2,20 +2,22 @@ package com.example.pocketmanager.schedule;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class Lecture {
     private String name;
     private String professor;
-    private String time;
+    private ArrayList<String> time;
     private String place;
 
     public Lecture() {
         name = "";
         professor = "";
-        time = "";
+        time = null;
         place = "";
     }
 
-    public Lecture(String name, String professor, String time, String place) {
+    public Lecture(String name, String professor, ArrayList<String> time, String place) {
         this.name = name;
         this.professor = professor;
         this.time = time;
@@ -34,10 +36,10 @@ public class Lecture {
     public void setProfessor(String professor) {
         this.professor = professor;
     }
-    public String getTime() {
+    public ArrayList<String> getTime() {
         return time;
     }
-    public void setTime(String time) {
+    public void setTime(ArrayList<String> time) {
         this.time = time;
     }
     public String getPlace() {
@@ -54,7 +56,7 @@ public class Lecture {
         System.out.println(place);*/
         Log.d("name", name);
         Log.d("professor", professor);
-        Log.d("time", time);
+        for (String s : time) Log.d("time", s);
         Log.d("place", place);
     }
 }
