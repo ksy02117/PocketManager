@@ -58,6 +58,7 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
 
         // 만약 정보를 불러오는데 실패했다면 최단 경로를 출력하지 않음
         if (steps == null) {
+            // 현재 위치로 초기화 하자.
             return view;
         }
 

@@ -41,15 +41,21 @@ public class AlarmReceiver extends BroadcastReceiver {
             builder = new NotificationCompat.Builder(context);
         }
 
-        //알림창 클릭 시 activity 화면 부름
+        // 알림창 클릭 시 activity 화면 부름
         Intent intent2 = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,101,intent2, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //알림창 제목
-        builder.setContentTitle("알람");
-        //알림창 아이콘
+        // 알림 설명 가져오기
+        String d = intent.getStringExtra("describe");
+        String n = intent.getStringExtra("name");
+        // 알림창 아이콘
         builder.setSmallIcon(R.drawable.ic_launcher_background);
-        //알림창 터치시 자동 삭제
+        // 알림창 제목
+        builder.setContentTitle(n);
+        // 알림창 내용
+        builder.setContentText(d);
+
+        // 알림창 터치시 자동 삭제
         builder.setAutoCancel(true);
 
         builder.setContentIntent(pendingIntent);

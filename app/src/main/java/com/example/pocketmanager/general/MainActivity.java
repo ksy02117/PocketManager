@@ -23,8 +23,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.pocketmanager.R;
+import com.example.pocketmanager.schedule.Lecture;
 import com.example.pocketmanager.schedule.LocationData;
+import com.example.pocketmanager.schedule.TimetableManager;
 import com.example.pocketmanager.schedule.alarm.AlarmReceiver;
+import com.example.pocketmanager.schedule.alarm.alarm;
 import com.example.pocketmanager.weather.receiver.AirPollutionReceiver;
 import com.example.pocketmanager.map.GeoCodingReceiver;
 import com.example.pocketmanager.weather.receiver.DailyWeatherReceiver;
@@ -40,6 +43,7 @@ import com.example.pocketmanager.transportation.ShortestPath;
 import com.example.pocketmanager.weather.ui.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -57,12 +61,9 @@ public class MainActivity extends AppCompatActivity {
     private Fragment menu2Fragment;
     private Fragment menu3Fragment;
     private Fragment menu4Fragment;
-    ShortestPath s = new ShortestPath();
-    private AlarmManager alarmManager;
-    private GregorianCalendar mCalender;
 
-    private NotificationManager notificationManager;
-    NotificationCompat.Builder builder;
+    // 최단 경로
+    ShortestPath s = new ShortestPath();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -175,28 +176,26 @@ public class MainActivity extends AppCompatActivity {
 
 
         try {
-            s = p.getShortestPathInfo();
-            ArrayList<IncomingTrain> t = p.getIncomingTrainInfo();
+            s = p.getShortestPathInfo(); // 결과가 없으면 null을 반환함
+            ArrayList<IncomingTrain> t = p.getIncomingTrainInfo(); // 지하철 운행시간이 아니거나, 최단경로에 지하철을 타는 단계가 없으면 빈 ArrayList를 반환함.
             for (IncomingTrain a : t){
                 a.log();
             }
 
-
-
+            TimetableManager asd = new TimetableManager("jjiny3773", "rudgh0607");
+            ArrayList<Lecture> lectures = asd.getTimetable();
+            for (Lecture l : lectures) l.log();
 
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
-        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-
-        mCalender = new GregorianCalendar();
-
-
-        //setContentView(R.layout.activity_main);
+        alarm a = new alarm(this);
+        a.setAlarm("2021-05-29 23:21:30", "일정 이름","날씨 미세먼지 어쩌고");
         //setAlarm();
         //----------------------------
 
@@ -236,31 +235,5 @@ public class MainActivity extends AppCompatActivity {
     public void setMainText(TextView view, String str) {
         view.setText(str);
     }
-
-    public void setAlarm() {
-        //AlarmReceiver에 값 전달
-        Intent receiverIntent = new Intent(MainActivity.this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, receiverIntent, 0);
-
-        String from = "2021-05-28 23:20:20"; //임의로 날짜와 시간을 지정
-
-        //날짜 포맷을 바꿔주는 소스코드
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date datetime = null;
-        try {
-            datetime = dateFormat.parse(from);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(datetime);
-
-        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
-
-
-    }
-
-
 
 }
