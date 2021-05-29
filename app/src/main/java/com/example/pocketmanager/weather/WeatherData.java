@@ -62,14 +62,14 @@ public class WeatherData implements Serializable {
     public void setFeels_like(float feels_like) { this.feels_like = feels_like; }
     public float getMax_temp() {
         for (int i = 0; i < dailyWeatherData.size(); i++) {
-            if (time.getDt() / 86400 == dailyWeatherData.get(i).getDt() / 86400)
+            if (time.getDateID()== dailyWeatherData.get(i).getDateID())
                 return dailyWeatherData.get(i).getMax_temp();
         }
         return 0.0f;
     }
     public float getMin_temp() {
         for (int i = 0; i < dailyWeatherData.size(); i++) {
-            if (time.getDt() / 86400 == dailyWeatherData.get(i).getDt() / 86400)
+            if (time.getDateID() == dailyWeatherData.get(i).getDateID() )
                 return dailyWeatherData.get(i).getMin_temp();
         }
         return 0.0f;
@@ -117,7 +117,7 @@ public class WeatherData implements Serializable {
 
 
     public static WeatherData getCurrentWeather() {
-        int index = (int) (Time.getCurrentDt() / 3600 - Time.getCurrentDt() / 3600 / 24 * 24);
+        int index = (int) (new Time().getHour() + 15) % 24;
         return hourlyWeatherData.get(index);
     }
     public static WeatherData getNextCurrentWeather() {

@@ -5,6 +5,7 @@ import com.example.pocketmanager.general.Time;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -124,7 +125,13 @@ public class SubEvent extends AbstractEvent implements Serializable {
         return flag;
     }
     private static boolean removeEvent(List<SubEvent> list, SubEvent event) {
-        return list.remove(event);
+        Iterator<SubEvent> it = list.iterator();
+        while (it.hasNext()){
+            SubEvent tmp = it.next();
+            if (tmp.getID() == event.getID())
+                return list.remove(tmp);
+        }
+        return false;
     }
 
 

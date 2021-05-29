@@ -7,16 +7,27 @@ import java.util.TimeZone;
 public class Time implements Comparable<Time> , Serializable {
 
     private long dt;
-    private long dateID;
     private int year;
     private int month;
+    private int weekOfMonth;
+    private int dayOfWeek;
     private int day;
     private int hour;
     private int min;
     private int sec;
 
     public Time() {
-        setDt(0);
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
+
+        dt = cal.getTimeInMillis() / 1000L;
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH) + 1;
+        weekOfMonth = cal.get(Calendar.WEEK_OF_MONTH);
+        dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        min = cal.get(Calendar.MINUTE);
+        sec = cal.get(Calendar.SECOND);
     }
     public Time(long dt) { setDt(dt); }
     public Time(int year, int month, int day, int hour, int minute, int second) {
@@ -24,13 +35,15 @@ public class Time implements Comparable<Time> , Serializable {
         cal.set(year, month, day, hour, minute, second);
 
         dt = cal.getTimeInMillis() / 1000L;
-        dateID = dt / 86400;
         this.year = year;
         this.month = month;
         this.day = day;
         this.hour = hour;
         this.min = minute;
         this.sec = second;
+
+        weekOfMonth = cal.get(Calendar.WEEK_OF_MONTH);
+        dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
     }
 
     public long getDt() { return dt; }
@@ -43,18 +56,22 @@ public class Time implements Comparable<Time> , Serializable {
         cal.setTimeInMillis(dt * 1000L);
 
         this.dt = dt;
-        dateID = dt / 86400;
         year = cal.get(Calendar.YEAR);
         month = cal.get(Calendar.MONTH) + 1;
+        weekOfMonth = cal.get(Calendar.WEEK_OF_MONTH);
+        dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
         day = cal.get(Calendar.DAY_OF_MONTH);
         hour = cal.get(Calendar.HOUR_OF_DAY);
         min = cal.get(Calendar.MINUTE);
         sec = cal.get(Calendar.SECOND);
     }
 
-    public long getDateID() { return dateID; }
+    public long getDateID() { return year * 10000 + month * 100 + day; }
+    public long getHourID() { return month * 10000 + day * 100 + hour;}
     public int getYear() { return year; }
     public int getMonth() { return month; }
+    public int getWeekOfMonth() { return weekOfMonth; }
+    public int getDayOfWeek() { return dayOfWeek; }
     public int getDay() { return day; }
     public int getHour() { return hour; }
     public int getMin() { return min; }
