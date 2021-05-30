@@ -153,7 +153,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        addWeather(startHour);
+        if (e.getEndTime().getMin() != 0)
+            endHour += 1;
+
+        addWeather(startHour, endHour);
         eventLayout.addView(test);
         Iterator<Map.Entry<Long,LinkedList<SubEvent>>> it = e.getSubEvents().entrySet().iterator();
         while (it.hasNext()) {
@@ -163,7 +166,6 @@ public class HomeFragment extends Fragment {
                 SubEvent event = it2.next();
 
                 addSubEvent(event);
-                //subevents
             }
         }
     }
@@ -171,12 +173,16 @@ public class HomeFragment extends Fragment {
     private void addSubEvent(SubEvent e) {
         TextView test;
         RelativeLayout.LayoutParams params;
-        int startHour;
+        int startHour, endHour;
         int childColor;
         int leftMargin;
         int duration, untilStart;
 
         startHour = e.getStartTime().getHour();
+        endHour = e.getEndTime().getHour();
+        if (e.getEndTime().getMin() != 0)
+            endHour += 1;
+
         duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
         untilStart = getPixel((int) (e.getStartTime().getDt() - todayStartTime.getDt()) / 60);
         leftMargin = getPixel(10);
@@ -201,11 +207,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        addWeather(startHour);
         eventLayout.addView(test);
     }
 
-    private void addWeather(int startHour) {
+    private void addWeather(int startHour, int endHour) {
         ImageView newIcon;
         RelativeLayout.LayoutParams params;
 
@@ -218,7 +223,14 @@ public class HomeFragment extends Fragment {
         newIcon.setLayoutParams(params);
         newIcon.setImageResource(R.drawable.w_01d);
 
-        weatherLayout.addView(newIcon);
+        for (int i = startHour; i < endHour; i++) {
+            params.setMargins(0, untilStart + i - 1, 0, 0);
+
+            newIcon = new ImageView(this.getContext());
+            newIcon.setLayoutParams(params);
+            newIcon.setImageResource(R.drawable.w_01d);
+            weatherLayout.addView(newIcon);
+        }
     }
 
     private int getPixel(int dp) {
