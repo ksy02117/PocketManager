@@ -1,7 +1,6 @@
 package com.example.pocketmanager.map.ui;
 
 import android.graphics.Color;
-import android.location.Address;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,11 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.MainActivity;
-import com.example.pocketmanager.general.Time;
-import com.example.pocketmanager.map.GeoCodingReceiver;
 import com.example.pocketmanager.map.LocationData;
-import com.example.pocketmanager.schedule.storage.Event;
-import com.example.pocketmanager.transportation.PathInfoManager;
 import com.example.pocketmanager.transportation.ShortestPath;
 import com.example.pocketmanager.transportation.ShortestPathStep;
 
@@ -29,8 +24,6 @@ import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class MapFragment extends Fragment implements MapView.MapViewEventListener {
     private View view;
@@ -55,13 +48,7 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
         initPolyline();
 
         // MainActivity에서 ShortestPath 객체를 전달받음
-        try {
-            getShortestPath();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        getShortestPath();
 
         // map objects 초기화
         mapView.removeAllPOIItems();
@@ -75,8 +62,6 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
             // 현재 위치로 지도 중심 옮기기
             //TODO gps
             mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(LocationData.getCurrentLocation().getLatitude(), LocationData.getCurrentLocation().getLongitude()), false);
-            //Address a = GeoCodingReceiver.getAddressfromName("세종대학교");
-            //mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(a.getLatitude(), a.getLongitude()), false);
             return view;
         }
 
@@ -133,31 +118,10 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
 
     }
 
-    private void getShortestPath() throws ExecutionException, InterruptedException {
-        /*Bundle bundle = getArguments();
+    private void getShortestPath() {
+        Bundle bundle = getArguments();
         path = (ShortestPath) bundle.getSerializable("ShortestPath");
-        steps = path.getSteps();*/
-        // 최신 event 가져옴
-        Time t = new Time();
-        List<Event> list = Event.events.get(t.getDateID());
-        Event event = null;
-        if (list != null) event = list.get(0);
-        else {
-            steps = null; // 오늘 event가 없는 경우 처리
-            return;
-        }
-        // 시작 위치
-        double sLat = LocationData.getCurrentLocation().getLatitude();
-        double sLng = LocationData.getCurrentLocation().getLongitude();
-        // 도착 위치
-        double eLat = event.getLocation().getLatitude();
-        double eLng = event.getLocation().getLongitude();
-        PathInfoManager p = new PathInfoManager();
-        p.setOrigin(sLat + ", " + sLng);
-        p.setDestination(eLat + ", " + eLng);
-        path = p.getShortestPathInfo(); // 최단경로를 받아옴
-        if (path != null) steps = path.getSteps();
-        else steps = null;
+        steps = path.getSteps();
     }
 
 
@@ -172,7 +136,7 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
         return marker;
     }
 
-    private String stepNameToEffectiveName(String stepName) { // 과도하게 긴 경로 설명을 줄입니다.
+    private String stepNameToEffectiveName(String stepName) {
         if (stepName.length() < 4) return stepName; //예외처리
         // 나라이름 제거
         if (stepName.substring(0, 4).equals("대한민국")) stepName = stepName.replaceFirst("대한민국 ", "");
@@ -197,7 +161,7 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
 
     }
 
-    public void getTouchedLocation(MapPoint mapPoint) { // 터치한 위치의 location을 받아옵니다.
+    public void getTouchedLocation(MapPoint mapPoint) {
         selectLatitude = mapPoint.getMapPointGeoCoord().latitude;
         selectLongitude = mapPoint.getMapPointGeoCoord().latitude;
         Log.d("touched_location", selectLatitude.toString() + ", " + selectLongitude.toString());
@@ -224,10 +188,10 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
     }
 
     @Override
-    public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) { // 터치 이벤트
+    public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
         //Log.d("ASD", Double.toString(mapPoint.getMapPointGeoCoord().latitude));
         //mapView.removePOIItem(selectedLocationMarker);
-        getTouchedLocation(mapPoint); // 터치한 곳의 위치 얻기
+        getTouchedLocation(mapPoint);
     }
 
     @Override

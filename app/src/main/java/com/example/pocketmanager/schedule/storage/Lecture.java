@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-public class Lecture { // 대학교 강의를 추상화한 클래스입니다.
+public class Lecture {
     private String name;
     private String professor;
     private ArrayList<String> time;
