@@ -9,6 +9,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.example.pocketmanager.general.DBHelper;
+import com.example.pocketmanager.schedule.storage.EventContract;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -87,6 +88,12 @@ public class LocationDBHelper {
         String[] selectionArgs = {String.valueOf(id)};
 
         db.delete(LocationContract.LocationEntry.TABLE_NAME, selection, selectionArgs);
+    }
+
+    public static synchronized void clear() {
+        SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
+
+        db.delete(LocationContract.LocationEntry.TABLE_NAME, null, null);
     }
 
 
