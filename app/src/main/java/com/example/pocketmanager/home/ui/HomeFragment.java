@@ -154,13 +154,9 @@ public class HomeFragment extends Fragment {
 
         addWeather(e, startHour, endHour);
         eventLayout.addView(test);
-        Iterator<Map.Entry<Long,LinkedList<SubEvent>>> it = e.getSubEvents().entrySet().iterator();
-        while (it.hasNext()) {
-            List<SubEvent> list = it.next().getValue();
-            Iterator<SubEvent> it2 = list.iterator();
-            while (it2.hasNext()){
-                SubEvent event = it2.next();
-
+        for (Map.Entry<Long, LinkedList<SubEvent>> longLinkedListEntry : e.getSubEvents().entrySet()) {
+            List<SubEvent> list = longLinkedListEntry.getValue();
+            for (SubEvent event : list) {
                 addSubEvent(event);
             }
         }
