@@ -74,19 +74,9 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
             holder.dayView.setBackgroundColor(Color.parseColor("#ffc9dc"));
         }
 
-
         holder.dayText.setText(list.get(position).getDate().getDate() + "");
         holder.dayOfMonthText.setText(convertDayOfMonth(dayOfWeek));
-        holder.dayView.getLayoutParams().width = context.getResources().getDisplayMetrics().widthPixels / 3;
-        LinkedList<Event> eventArrayList = list.get(position).getEvents();
-
-
-        // 이벤트 비어있으면
-        if (Event.events.isEmpty() || eventArrayList == null)
-            return;
-
-        for (Event e : eventArrayList)
-            addSchedule(e);
+        holder.dayView.getLayoutParams().width = (context.getResources().getDisplayMetrics().widthPixels - getPixel(40)) / 3;
     }
 
     @Override
@@ -106,33 +96,6 @@ public class CalendarAdapter2 extends RecyclerView.Adapter<CalendarAdapter2.View
             dayOfMonthText = (TextView) itemView.findViewById(R.id.calendar_day_of_month);
             dayText = (TextView) itemView.findViewById(R.id.calendar_week_day);
         }
-    }
-
-    private void addSchedule(Event e) {
-        TextView test;
-        LinearLayout ll = (LinearLayout) view;
-        LinearLayout.LayoutParams params;
-        int duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
-        int bgColor = this.context.getResources().getColor(R.color.parentEventRed);
-        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
-
-        test = new TextView(context);
-        test.setLayoutParams(params);
-        test.setText(e.getEventName());
-        test.setBackgroundColor(bgColor);
-        test.setTextColor(Color.WHITE);
-        test.setGravity(Gravity.CENTER);
-        test.setMaxLines(1);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context , EventDetailsActivity.class);
-                intent.putExtra("event", e);
-                ((Activity) context).startActivityForResult(intent, 1);
-            }
-        });
-
-        ll.addView(test);
     }
 
     private String convertDayOfMonth(int dayOfWeek) {

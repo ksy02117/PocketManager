@@ -181,6 +181,20 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
             closeFABMenu();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        monthAdapter = new MyPagerAdapter(this.getContext());
+        weekAdapter = new MyPagerAdapter2(this.getContext());
+        if (tabLayout.getSelectedTabPosition() == 0) {
+            mPager.setAdapter(monthAdapter);
+        }
+        else {
+            mPager.setAdapter(weekAdapter);
+        }
+        mPager.setCurrentItem(currentIndex);
+    }
+
     private void showFABMenu(){
         isFABOpen=true;
         mPager.setAlpha(0.5f);
