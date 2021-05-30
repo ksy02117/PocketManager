@@ -21,8 +21,6 @@ public abstract class AbstractEvent implements Serializable {
     ArrayList<WeatherData> eventWeather = new ArrayList<>();
 
 
-
-
     //const
     public static final int PRIORITY_HIGH = 0;
     public static final int PRIORITY_MEDIUM = 1;

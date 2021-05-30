@@ -94,18 +94,19 @@ public class MyPagerAdapter2 extends PagerAdapter {
                 long currentID = t.getDateID();
 
                 e = Event.events.get(currentID);
+
+                if (e == null) {
+                    arrData.add(new CalData(mCal.getTime()));
+                    mCal.add(Calendar.DAY_OF_MONTH, 1);
+                    continue;
+                }
+
                 Iterator<Event> list = e.iterator();
                 while (list.hasNext()) {
                     Event event = list.next();
                     if (event.getPriority() == Event.PRIORITY_TRANS)
                         continue;
                     events.add(event);
-                }
-
-                if (e == null) {
-                    arrData.add(new CalData(mCal.getTime()));
-                    mCal.add(Calendar.DAY_OF_MONTH, 1);
-                    continue;
                 }
 
                 arrData.add(new CalData(mCal.getTime(), events));
