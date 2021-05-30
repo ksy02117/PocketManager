@@ -1,9 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/calendar_week_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:overScrollMode="never">
+    android:layout_height="wrap_content">
 
-</androidx.recyclerview.widget.RecyclerView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calendar_date_view"
+        android:layout_marginLeft="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        android:layout_marginStart="40dp"/>
+
+    <ScrollView
+        android:layout_marginTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/calendar_week_time_view"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none"
+                android:overScrollMode="never"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/calendar_schedule_view"
+                android:layout_marginLeft="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none"
+                android:overScrollMode="never"
+                android:layout_marginStart="40dp"/>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -1,7 +1,6 @@
 package com.example.pocketmanager.schedule.ui;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.CalData;
 import com.example.pocketmanager.general.Time;
+import com.example.pocketmanager.home.ui.TimelineAdapter;
 import com.example.pocketmanager.schedule.storage.Event;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,10 +22,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
-import java.util.ListIterator;
 
 public class MyPagerAdapter2 extends PagerAdapter {
-    private RecyclerView mRecyclerView;
+    private RecyclerView dateView, timelineView, scheduleView;
     private Context mContext;
     private CalendarAdapter2 adapter;
     private ArrayList<CalData> arrData;
@@ -53,10 +52,12 @@ public class MyPagerAdapter2 extends PagerAdapter {
         mCal.set(Calendar.YEAR, thisYear);
         mCal.set(Calendar.DAY_OF_YEAR, thisDay + realPos * 3);
 
+        setTimeline();
         setCalendarDate();
-        ((ViewPager) container).addView(mRecyclerView);
+        setDisplaySchedule();
+        ((ViewPager) container).addView(mView);
 
-        return mRecyclerView;
+        return mView;
     }
 
     @Override
@@ -106,7 +107,6 @@ public class MyPagerAdapter2 extends PagerAdapter {
                     continue;
                 }
 
-                Log.d("test", "" + e);
                 arrData.add(new CalData(mCal.getTime(), e));
                 mCal.add(Calendar.DAY_OF_MONTH, 1);
             }
@@ -114,13 +114,40 @@ public class MyPagerAdapter2 extends PagerAdapter {
 
         adapter = new CalendarAdapter2(mView.getContext(), arrData);
 
-        mRecyclerView = (RecyclerView) mView.findViewById(R.id.calendar_week_view);
-        mRecyclerView.setHasFixedSize(true);
+        dateView = (RecyclerView) mView.findViewById(R.id.calendar_date_view);
+        dateView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mView.getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        dateView.setLayoutManager(mLayoutManager);
 
-        mRecyclerView.setId(mCal.get(Calendar.MONTH));
-        mRecyclerView.setAdapter(adapter);
+        dateView.setId(mCal.get(Calendar.MONTH));
+        dateView.setAdapter(adapter);
+    }
+
+    private void setTimeline() {
+        // 3일 중 가장 빠른 이벤트 시작 시간 : startTime
+        int startTime = 9;
+        // 3일 중 가장 느린 이벤트 종료 시간 : endTime
+        int endTime = 22;
+
+        timelineView = (RecyclerView) mView.findViewById(R.id.calendar_week_time_view);
+        timelineView.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mView.getContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL); // 기본값이 VERTICAL
+        timelineView.setLayoutManager(mLayoutManager);
+
+        TimelineAdapter tAdapter = new TimelineAdapter(this.mContext, startTime, endTime);
+        timelineView.setAdapter(tAdapter);
+    }
+
+    private void setDisplaySchedule() {
+        scheduleView = (RecyclerView) mView.findViewById(R.id.calendar_schedule_view);
+        scheduleView.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mView.getContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+        scheduleView.setLayoutManager(mLayoutManager);
+
+        DisplayScheduleAdapter tAdapter = new DisplayScheduleAdapter(this.mContext, arrData);
+        scheduleView.setAdapter(tAdapter);
     }
 }

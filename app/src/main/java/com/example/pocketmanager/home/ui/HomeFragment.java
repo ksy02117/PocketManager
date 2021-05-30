@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,8 +27,10 @@ import com.example.pocketmanager.schedule.storage.SubEvent;
 import com.example.pocketmanager.schedule.ui.EventDetailsActivity;
 
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class HomeFragment extends Fragment {
@@ -61,11 +65,19 @@ public class HomeFragment extends Fragment {
     public void update() {
         int startHour, endHour;
         Time t = new Time();
+        Calendar mCal = Calendar.getInstance();
+        t.setDt(mCal.getTimeInMillis() / 1000);
         long id = t.getDateID();
 
+        eventLayout.removeAllViews();
+        weatherLayout.removeAllViews();
+
         LinkedList<Event> e = Event.events.get(id);
-        if (e == null)
+        if (e == null) {
+            wowSuchEmpty();
             return;
+        }
+
 
         Time s = e.getFirst().getStartTime();
         startHour = e.getFirst().getStartTime().getHour();
@@ -87,6 +99,11 @@ public class HomeFragment extends Fragment {
         timeRecycler.setLayoutManager(mLayoutManager);
         timeAdapter = new TimelineAdapter(getActivity(), startHour, endHour);
         timeRecycler.setAdapter(timeAdapter);
+    }
+
+    private void wowSuchEmpty() {
+        LinearLayout l = (LinearLayout) view.findViewById(R.id.home_view);
+        l.setVisibility(View.GONE);
     }
 
     private void addEvent(Event e) {
@@ -131,6 +148,17 @@ public class HomeFragment extends Fragment {
 
         addWeather(startHour);
         eventLayout.addView(test);
+        Iterator<Map.Entry<Long,LinkedList<SubEvent>>> it = e.getSubEvents().entrySet().iterator();
+        while (it.hasNext()) {
+            List<SubEvent> list = it.next().getValue();
+            Iterator<SubEvent> it2 = list.iterator();
+            while (it2.hasNext()){
+                SubEvent event = it2.next();
+
+                addSubEvent(event);
+                //subevents
+            }
+        }
     }
 
     private void addSubEvent(SubEvent e) {
