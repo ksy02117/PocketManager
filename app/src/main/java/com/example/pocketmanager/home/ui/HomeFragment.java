@@ -201,7 +201,7 @@ public class HomeFragment extends Fragment {
         int duration = getPixel(60);
         int untilStart = getPixel((startHour - todayStartTime.getHour()) * 60);
 
-        if (e.getEventWeather().isEmpty())
+        if (e.getEventWeather() == null)
             return;
 
         for (int i = 0; i < endHour - startHour; i++) {
