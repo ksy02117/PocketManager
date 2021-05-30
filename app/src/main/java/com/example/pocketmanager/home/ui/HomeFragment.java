@@ -71,6 +71,11 @@ public class HomeFragment extends Fragment {
         t.setDt(mCal.getTimeInMillis() / 1000);
         long id = t.getDateID();
 
+        Time currentTime = new Time();
+        List<Event> list = Event.events.get(currentTime.getDateID());
+
+
+
         eventLayout.removeAllViews();
         weatherLayout.removeAllViews();
 
