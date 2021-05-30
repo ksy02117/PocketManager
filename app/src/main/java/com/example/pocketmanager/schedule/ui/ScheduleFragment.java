@@ -83,7 +83,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 closeFABMenu();
                 //데이터 담아서 팝업(액티비티) 호출
                 Intent intent = new Intent(getContext(), addScheduleActivity.class);
-                intent.putExtra("type", "a");
+                intent.putExtra("type", 0);
                 startActivityForResult(intent, 1);
             }
         });

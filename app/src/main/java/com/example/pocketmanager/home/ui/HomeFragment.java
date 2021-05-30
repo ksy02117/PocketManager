@@ -143,6 +143,24 @@ public class HomeFragment extends Fragment {
         test.setMaxLines(1);
         test.setGravity(Gravity.LEFT);
         test.setBackgroundColor(parentColor);
+
+        if (e.getPriority() == Event.PRIORITY_TRANS) {
+            String station = "null"; // 첫 차 역 이름
+            int firstTrainTime = 0;  // 첫 차 시간 (단위: 분)
+            int padding = firstTrainTime - untilStart;
+            int transColor = getResources().getColor(R.color.parentEventTrans);
+
+            test.setPadding(0, padding, 0, 0);
+            test.setText(station);
+            test.setBackgroundColor(transColor);
+
+            params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getPixel(4));
+            params.setMargins(0, getPixel(firstTrainTime), 0, 0);
+            View line = new View(this.getContext());
+            line.setBackgroundResource(R.drawable.line);
+
+            eventLayout.addView(line);
+        }
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,7 +223,7 @@ public class HomeFragment extends Fragment {
         int duration = getPixel(60);
         int untilStart = getPixel((startHour - todayStartTime.getHour()) * 60);
 
-        if (e.getEventWeather().isEmpty())
+        if (e.getEventWeather() == null)
             return;
 
         for (int i = 0; i < endHour - startHour; i++) {
