@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.MainActivity;
+import com.example.pocketmanager.schedule.LocationData;
 import com.example.pocketmanager.transportation.ShortestPath;
 import com.example.pocketmanager.transportation.ShortestPathStep;
 
@@ -58,7 +59,9 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
 
         // 만약 정보를 불러오는데 실패했다면 최단 경로를 출력하지 않음
         if (steps == null) {
-            // 현재 위치로 초기화 하자.
+            // 현재 위치로 지도 중심 옮기기
+            //TODO gps
+            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(LocationData.getCurrentLocation().getLatitude(), LocationData.getCurrentLocation().getLongitude()), false);
             return view;
         }
 

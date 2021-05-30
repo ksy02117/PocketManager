@@ -22,6 +22,9 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.pocketmanager.R;
+import com.example.pocketmanager.schedule.Lecture;
+import com.example.pocketmanager.schedule.LocationData;
+import com.example.pocketmanager.schedule.TimetableManager;
 import com.example.pocketmanager.schedule.TimetableManager;
 import com.example.pocketmanager.map.LocationDBHelper;
 import com.example.pocketmanager.map.LocationData;
@@ -176,12 +179,6 @@ public class MainActivity extends AppCompatActivity {
         curDate = (TextView)findViewById(R.id.current_date);
 
     }
-    @Override
-    protected void onDestroy() {
-        DBHelper.getInstance().close();
-        super.onDestroy();
-
-    }
 
     public void setDate(TextView view) {
         Date today = Calendar.getInstance().getTime();//getting date
@@ -217,7 +214,5 @@ public class MainActivity extends AppCompatActivity {
     public void setMainText(TextView view, String str) {
         view.setText(str);
     }
-
-
 
 }
