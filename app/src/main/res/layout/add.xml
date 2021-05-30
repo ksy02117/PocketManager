@@ -108,6 +108,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/add_separator"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="15dp"
         android:layout_width="match_parent"
@@ -115,20 +116,33 @@
         android:layout_below="@id/time_layout"
         android:background="@drawable/line"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/time_layout"
-        android:orientation="vertical">
+        android:layout_below="@id/add_separator"
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/add_location_text"
             android:paddingHorizontal="20dp"
             android:paddingVertical="25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="위치"
             android:textSize="16sp"/>
-    </LinearLayout>
+
+        <ImageView
+            android:id="@+id/add_location"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/add_location_text"
+            android:layout_alignBottom="@id/add_location_text"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_baseline_add_circle_24"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_marginTop="30dp"
@@ -141,7 +155,7 @@
             android:id="@+id/add_cancel"
             android:text="취소"
             android:textSize="15sp"
-            android:textColor="@color/baseTextColor"
+            android:textColor="@color/black"
             android:gravity="center"
             android:background="#00000000"
             android:layout_width="0dp"
@@ -152,7 +166,7 @@
             android:id="@+id/add_confirm"
             android:text="확인"
             android:textSize="15sp"
-            android:textColor="@color/baseTextColor"
+            android:textColor="@color/black"
             android:gravity="center"
             android:background="#00000000"
             android:layout_width="0dp"

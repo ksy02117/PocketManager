@@ -29,7 +29,7 @@ public class MyPagerAdapter2 extends PagerAdapter {
     private Context mContext;
     private CalendarAdapter2 adapter;
     private ArrayList<CalData> arrData;
-    private Calendar mCal, mToday;
+    private Calendar mCal;
     private View mView;
     private int thisDay, thisWeek, thisMonth, thisYear;
 
@@ -53,7 +53,7 @@ public class MyPagerAdapter2 extends PagerAdapter {
         mCal.set(Calendar.YEAR, thisYear);
         mCal.set(Calendar.DAY_OF_YEAR, thisDay + realPos * 3);
 
-        setTimeline();
+        setTimeline(0, 23);
         setCalendarDate();
         setDisplaySchedule();
         ((ViewPager) container).addView(mView);
@@ -79,14 +79,6 @@ public class MyPagerAdapter2 extends PagerAdapter {
     private void setCalendarDate(){
         arrData = new ArrayList<>();
 
-        /*
-        for (int i = 0; i < 7; i++) {
-            arrData.add(new CalData(mCal.getTime()));
-            mCal.add(Calendar.DAY_OF_MONTH, 1);
-        }
-
-         */
-
         if (Event.events.isEmpty()) {
             for (int i = 0; i < 3; i++) {
                 arrData.add(new CalData(mCal.getTime()));
@@ -95,7 +87,6 @@ public class MyPagerAdapter2 extends PagerAdapter {
         }
         else {
             Time t = new Time();
-
             for (int i = 0; i < 3; i++) {
                 LinkedList<Event> e;
                 LinkedList<Event> events = new LinkedList<>();
@@ -134,12 +125,7 @@ public class MyPagerAdapter2 extends PagerAdapter {
         dateView.setAdapter(adapter);
     }
 
-    private void setTimeline() {
-        // 3일 중 가장 빠른 이벤트 시작 시간 : startTime
-        int startTime = 9;
-        // 3일 중 가장 느린 이벤트 종료 시간 : endTime
-        int endTime = 22;
-
+    private void setTimeline(int startTime, int endTime) {
         timelineView = (RecyclerView) mView.findViewById(R.id.calendar_week_time_view);
         timelineView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mView.getContext());

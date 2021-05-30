@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.CalData;
+import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.schedule.storage.Event;
 
 import org.jetbrains.annotations.NotNull;
@@ -79,9 +80,14 @@ public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplaySchedule
         TextView test;
         LinearLayout ll = (LinearLayout) view.findViewById(R.id.calendar_week_display_schedule);
         LinearLayout.LayoutParams params;
+
+
+        Time startTime = e.getStartTime();
+        int untilStart = getPixel((int) startTime.getHour() * 60 + startTime.getMin());
         int duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
         int bgColor = this.context.getResources().getColor(R.color.parentEventRed);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
+        params.setMargins(0, untilStart, 0, 0);
 
         test = new TextView(context);
         test.setLayoutParams(params);

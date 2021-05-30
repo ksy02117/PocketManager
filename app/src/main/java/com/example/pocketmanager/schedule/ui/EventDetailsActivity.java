@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.schedule.storage.Event;
+import com.example.pocketmanager.schedule.storage.SubEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -164,7 +165,15 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
                 setTexts();
             }
         }
-        if (requestCode == 2) {
+        if (requestCode == 2 && data != null) {
+
+            String dataName = data.getStringExtra("eventName");
+            String dataDescription = data.getStringExtra("eventDescription");
+            Time startTime = (Time) data.getSerializableExtra("startTime");
+            Time endTime = (Time) data.getSerializableExtra("endTime");
+
+            SubEvent.createSubEvent(currentEvent, dataName, startTime, endTime, null, false, dataDescription, Event.PRIORITY_MEDIUM);
+
             setResult(RESULT_OK);
             finish();
         }
