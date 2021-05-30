@@ -28,14 +28,18 @@ public class Event extends AbstractEvent implements Serializable {
         long id = EventDBHelper.insert(null, name, startTime, endTime, location, outdoor, description, priority);
 
         Event event = new Event(id, name, startTime, endTime, location, outdoor, description, priority);
-        addEvent(event);
-        return event;
+        boolean output = addEvent(event);
+        if (output)
+            return event;
+        else {
+            EventDBHelper.delete(id);
+            return null;
+        }
     }
 
     public static Event loadEvent(long id, String name, Time startTime, Time endTime, LocationData location, boolean outdoor, String description, int priority) {
         Event event = new Event(id, name, startTime, endTime, location, outdoor, description, priority);
 
-        addEvent(event);
         return event;
     }
 

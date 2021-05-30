@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.TimeZone;
@@ -91,9 +92,18 @@ public class MyPagerAdapter extends PagerAdapter {
 
             for (int i = 0; i < 42; i++) {
                 LinkedList<Event> e;
+                LinkedList<Event> events = new LinkedList<>();
                 t.setDt(p.getTimeInMillis() / 1000);
                 long currentID = t.getDateID();
+
                 e = Event.events.get(currentID);
+                Iterator<Event> list = e.iterator();
+                while (list.hasNext()) {
+                    Event event = list.next();
+                    if (event.getPriority() == Event.PRIORITY_TRANS)
+                        continue;
+                    events.add(event);
+                }
 
                 if (e == null) {
                     arrData.add(new CalData(p.getTime()));
@@ -101,7 +111,7 @@ public class MyPagerAdapter extends PagerAdapter {
                     continue;
                 }
 
-                arrData.add(new CalData(p.getTime(), e));
+                arrData.add(new CalData(p.getTime(), events));
                 p.add(Calendar.DAY_OF_MONTH, 1);
             }
         }

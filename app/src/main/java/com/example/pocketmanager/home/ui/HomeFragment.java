@@ -22,10 +22,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.map.LocationData;
+import com.example.pocketmanager.schedule.alarm.Alarm;
 import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.schedule.storage.SubEvent;
 import com.example.pocketmanager.schedule.ui.EventDetailsActivity;
+import com.example.pocketmanager.transportation.PathInfoManager;
+import com.example.pocketmanager.transportation.ShortestPath;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -71,10 +75,6 @@ public class HomeFragment extends Fragment {
         t.setDt(mCal.getTimeInMillis() / 1000);
         long id = t.getDateID();
 
-        Time currentTime = new Time();
-        List<Event> list = Event.events.get(currentTime.getDateID());
-
-
 
         eventLayout.removeAllViews();
         weatherLayout.removeAllViews();
@@ -84,6 +84,8 @@ public class HomeFragment extends Fragment {
             wowSuchEmpty();
             return;
         }
+        addTransportationEvent();
+
         l.setVisibility(View.VISIBLE);
 
         Time s = e.getFirst().getStartTime();
@@ -223,5 +225,69 @@ public class HomeFragment extends Fragment {
 
     private int getPixel(int dp) {
         return (int) (dp * scale + 0.5f);
+    }
+
+    private void addTransportationEvent() {
+        Time t = new Time();
+        List<Event> list = Event.events.get(t.getDateID());
+        PathInfoManager pm = new PathInfoManager();
+
+        ArrayList<Double> lats = new ArrayList<Double>();
+        ArrayList<Double> lons = new ArrayList<Double>();
+        ArrayList<Event> events = new ArrayList<>();
+
+        lats.add(LocationData.getCurrentLocation().getLatitude());
+        lons.add(LocationData.getCurrentLocation().getLongitude());
+        events.add(null);
+        for (int i = 0; i < list.size(); i++) {
+            Event event = list.get(i);
+            if (!event.isOutdoor())
+                continue;
+            if (Math.abs(event.getLocation().getLatitude() - lats.get(lats.size() - 1)) < 0.5  && Math.abs(event.getLocation().getLongitude() - lats.get(lats.size() - 1)) < 0.5)
+                continue;
+            lats.add(event.getLocation().getLatitude());
+            lons.add(event.getLocation().getLongitude());
+            events.add(event);
+        }
+
+
+        try {
+            for (int i = 0; i < lats.size() - 1; i++) {
+                double startLat = lats.get(i);
+                double startLon = lons.get(i);
+                double endLat = lats.get(i + 1);
+                double endLon = lons.get(i + 1);
+                Event event = events.get(i + 1);
+
+                String startLoc = startLat + ", " + startLon;
+                String endLoc = endLat + ", " + endLon;
+
+                pm.setOrigin(startLoc);
+                pm.setDestination(endLoc);
+
+                ShortestPath sp = pm.getShortestPathInfo();
+
+                long duration = Long.parseLong(sp.getDurationValue());
+                Time endTime = new Time(event.getStartTime().getDt() - 1);
+                Time startTime = new Time(endTime.getDt() - duration);
+                if (Event.createEvent("교통", startTime, endTime, event.getLocation(), true, "교통", Event.PRIORITY_TRANS) == null) {
+                    startTime = new Time(list.get(list.indexOf(event) - 1).getEndTime().getDt() + 1);
+                    Event.createEvent("교통", startTime, endTime,event.getLocation(),true, "시간이 충분하지 않아요", Event.PRIORITY_TRANS);
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        Iterator<Event> it = list.iterator();
+        while (it.hasNext()){
+            Event event= it.next();
+            if (event.getPriority() == Event.PRIORITY_TRANS)
+                continue;
+            Time departTime = new Time(event.getEndTime().getDt() - 300);
+            String departTimeString = departTime.getYear()+"-"+departTime.getMonth()+"-"+departTime.getDay()+" "+departTime.getHour()+":"+departTime.getMin()+":"+departTime.getSec();
+            Alarm.departAlarm(departTimeString);
+        }
+
     }
 }

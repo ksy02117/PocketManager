@@ -18,15 +18,16 @@ public abstract class AbstractEvent implements Serializable {
     protected int priority;
 
     LocationData location;
-    ArrayList<WeatherData> eventWeather = null;
+    ArrayList<WeatherData> eventWeather = new ArrayList<>();
+
 
 
 
     //const
     public static final int PRIORITY_HIGH = 0;
-    public static final int PRIORITY_MEDIUM = 0;
-    public static final int PRIORITY_LOW = 0;
-    public static final int PRIORITY_TRANS = 0;
+    public static final int PRIORITY_MEDIUM = 1;
+    public static final int PRIORITY_LOW = 2;
+    public static final int PRIORITY_TRANS = 3;
 
 
 

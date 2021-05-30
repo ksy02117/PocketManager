@@ -104,8 +104,10 @@ public class LocationData implements Serializable {
         adr = GeoCodingReceiver.getAddressfromCoord(latitude, longitude);
 
         StringBuilder builder = new StringBuilder();
-        builder.append(adr.getLocality());
-        builder.append(" " + adr.getSubLocality());
+        if (adr.getLocality() != null)
+            builder.append(adr.getLocality());
+        if (adr.getSubLocality() != null)
+            builder.append(" " + adr.getSubLocality());
 
         return builder.toString();
     }
