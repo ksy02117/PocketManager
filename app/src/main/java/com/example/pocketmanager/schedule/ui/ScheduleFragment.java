@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -90,7 +91,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         mScheduleLayout = (RelativeLayout) view.findViewById(R.id.schedule_layout);
         mCalendarLayout = (LinearLayout) view.findViewById(R.id.calendar_view);
         mDayOfWeekLayout = (LinearLayout) view.findViewById(R.id.schedule_day_of_week);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.calendar_progress_bar);
 
         wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
@@ -115,9 +115,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         mCalendar = Calendar.getInstance();
         TextView curDate = (TextView) view.findViewById(R.id.calendar_date);
 
-        // Progress Bar
-        mCalendarLayout.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        //
 
         //  월 달력 어댑터
         monthAdapter = new MyPagerAdapter(this.getContext());
@@ -147,10 +145,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
         mPager.setCurrentItem(100);
         fabMenu.setOnClickListener(this);
-
-        // Progress Bar
-        mCalendarLayout.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
 
         return view;
     }
@@ -216,19 +210,18 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         //add schedule
-        if(requestCode==1) {
-            monthAdapter = new MyPagerAdapter(this.getContext());
-            weekAdapter = new MyPagerAdapter2(this.getContext());
-            if (tabLayout.getSelectedTabPosition() == 0) {
-                mPager.setAdapter(monthAdapter);
-            }
-            else {
-                mPager.setAdapter(weekAdapter);
-            }
-            mPager.setCurrentItem(currentIndex);
+        monthAdapter = new MyPagerAdapter(this.getContext());
+        weekAdapter = new MyPagerAdapter2(this.getContext());
+        if (tabLayout.getSelectedTabPosition() == 0) {
+            mPager.setAdapter(monthAdapter);
         }
+        else {
+            mPager.setAdapter(weekAdapter);
+        }
+        mPager.setCurrentItem(currentIndex);
+
         //everytime
-        else if(requestCode==2 && data != null) {
+        if(requestCode==2 && data != null) {
             if(resultCode==RESULT_OK) {
                 //데이터 받기
                 String result = data.getStringExtra("result");
@@ -292,16 +285,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                 }
-
-                monthAdapter = new MyPagerAdapter(this.getContext());
-                weekAdapter = new MyPagerAdapter2(this.getContext());
-                if (tabLayout.getSelectedTabPosition() == 0) {
-                    mPager.setAdapter(monthAdapter);
-                }
-                else {
-                    mPager.setAdapter(weekAdapter);
-                }
-                mPager.setCurrentItem(currentIndex);
             }
         }
     }

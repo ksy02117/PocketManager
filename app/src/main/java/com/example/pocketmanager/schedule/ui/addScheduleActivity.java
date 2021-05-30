@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
     private Calendar tmpCal;
     private Button confirm, cancel;
     private EditText eventName, eventDesc;
+    private ImageView addLocation;
     private TextView startDate, endDate;
     private String eventNameString, eventDescString;
     private DatePicker startDatePicker, endDatePicker;
@@ -70,10 +72,18 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         endDate = (TextView) findViewById(R.id.end_date);
         startPicker = (TimePicker) findViewById(R.id.start_time_picker);
         endPicker = (TimePicker) findViewById(R.id.end_time_picker);
+        addLocation = (ImageView) findViewById(R.id.add_location);
 
         SimpleDateFormat sd = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
 
-        // 테스트용 Location Data
+        addLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), addLocationActivity.class);
+                intent.putExtra("test", "hello world");
+                startActivityForResult(intent, 1);
+            }
+        });
 
 
         startDateListener = new DatePickerDialog.OnDateSetListener() {
@@ -116,15 +126,13 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
             eventDesc.setText(modifyEvent.getDescription());
             Time st = modifyEvent.getStartTime();
             Time et = modifyEvent.getEndTime();
-            startDateListener.onDateSet(startDatePicker, st.getYear(), st.getMonth(), st.getDay());
-            endDateListener.onDateSet(endDatePicker, et.getYear(), et.getMonth(), et.getDay());
+            startDateListener.onDateSet(startDatePicker, st.getYear(), st.getMonth() - 1, st.getDay());
+            endDateListener.onDateSet(endDatePicker, et.getYear(), et.getMonth() - 1, et.getDay());
             startPicker.setCurrentHour(st.getHour());
             startPicker.setCurrentMinute(st.getMin());
             endPicker.setCurrentHour(et.getHour());
             endPicker.setCurrentMinute(et.getMin());
         }
-
-
     }
 
     private Event modifyEvent() {
