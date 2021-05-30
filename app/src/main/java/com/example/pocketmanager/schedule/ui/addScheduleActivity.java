@@ -3,13 +3,21 @@ package com.example.pocketmanager.schedule.ui;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -21,11 +29,12 @@ import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.schedule.storage.SubEvent;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class addScheduleActivity extends Activity implements View.OnClickListener {
+public class addScheduleActivity extends Activity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private Calendar tmpCal;
     private Button confirm, cancel;
     private EditText eventName, eventDesc;
@@ -37,6 +46,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
     private LocationData location;
     private Time startTime, endTime;
     private Event parentEvent, modifyEvent;
+    private Spinner locationSpinner;
     private DatePickerDialog.OnDateSetListener startDateListener, endDateListener;
     private int eventType;  // 0: Event | 1: SubEvent
     private int type;       // 0: add   | 1: modify
@@ -73,6 +83,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         startPicker = (TimePicker) findViewById(R.id.start_time_picker);
         endPicker = (TimePicker) findViewById(R.id.end_time_picker);
         addLocation = (ImageView) findViewById(R.id.add_location);
+        locationSpinner = (Spinner) findViewById(R.id.location_spinner);
 
         SimpleDateFormat sd = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
 
@@ -133,6 +144,23 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
             endPicker.setCurrentHour(et.getHour());
             endPicker.setCurrentMinute(et.getMin());
         }
+
+        ArrayList<String> locations = new ArrayList<>();
+        for (LocationData location : LocationData.favorites) {
+            locations.add(location.getName());
+        }
+
+        ArrayAdapter<String> locationAdaptor = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                locations
+        );
+
+        locationAdaptor.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        locationSpinner.setAdapter(locationAdaptor);
+        locationSpinner.setOnItemSelectedListener(this);
+
     }
 
     private Event modifyEvent() {
@@ -258,5 +286,16 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         DatePickerDialog dialog = new DatePickerDialog(this, endDateListener,
                 Integer.parseInt(arr[0]), Integer.parseInt(arr[1]) - 1, Integer.parseInt(arr[2]));
         dialog.show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        locationSpinner.setSelection(position);
+        location = LocationData.favorites.get(position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

@@ -35,7 +35,7 @@ public class MyPagerAdapter2 extends PagerAdapter {
 
     public MyPagerAdapter2(Context context) {
         super();
-        mContext = context ;
+        mContext = context;
         mCal = Calendar.getInstance();
         thisDay = mCal.get(Calendar.DAY_OF_YEAR);
         thisWeek = mCal.get(Calendar.WEEK_OF_YEAR);
