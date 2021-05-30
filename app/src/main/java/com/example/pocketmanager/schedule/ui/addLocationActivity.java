@@ -3,6 +3,7 @@ package com.example.pocketmanager.schedule.ui;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.location.Address;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.Time;
+import com.example.pocketmanager.map.GeoCodingReceiver;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.schedule.storage.SubEvent;
@@ -31,7 +33,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class addLocationActivity extends Activity implements MapView.MapViewEventListener {
+public class addLocationActivity extends Activity implements MapView.MapViewEventListener { // 이벤트를 추가할때 위치를 추가하는 activity입니다.
     private View view;
     private MapView mapView;
     private MapPOIItem selectedLocationMarker = null;
@@ -64,7 +66,7 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
 
     }
 
-    private void initMapView() {
+    private void initMapView() { // 지도 초기화 및 위치
         mapView = new MapView(this);
         mapView.setMapTilePersistentCacheEnabled(true);
 
@@ -75,23 +77,30 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
 
     private MapPOIItem addAndDrawMarker(MapView m, String name, MapPoint p, MapPOIItem.MarkerType t) {
         MapPOIItem marker = new MapPOIItem();
-        marker.setItemName(name);
-        marker.setTag(0);
-        marker.setMapPoint(p);
-        marker.setMarkerType(t); // 마커 색
+        marker.setItemName(name); // 마커 설명
+        marker.setTag(0);         // 탭 번호
+        marker.setMapPoint(p);    // 위치
+        marker.setMarkerType(t);  // 마커 색
         m.addPOIItem(marker);
 
         return marker;
     }
 
-    public void getTouchedLocation(MapPoint mapPoint) {
+    public void getLocation(MapPoint mapPoint) { // mapPoint를 받아 위치를 가져옴
         selectLatitude = mapPoint.getMapPointGeoCoord().latitude;
         selectLongitude = mapPoint.getMapPointGeoCoord().latitude;
         Log.d("touched_location", selectLatitude.toString() + ", " + selectLongitude.toString());
 
         if (selectedLocationMarker != null) mapView.removePOIItem(selectedLocationMarker);
         selectedLocationMarker = addAndDrawMarker(mapView, "선택된 위치", mapPoint, MapPOIItem.MarkerType.RedPin);
+        mapView.setMapCenterPoint(mapPoint, false);
     }
+
+    public void locationNameToAddress(String locationName) { // 검색하려하는 문자열을 받아 위치로 변환하여 화면을 전환하고 마커를 찍음
+        Address a = GeoCodingReceiver.getAddressfromName(locationName);
+        getLocation(MapPoint.mapPointWithGeoCoord(a.getLatitude(), a.getLongitude()));
+    }
+
 
     @Override
     public void onMapViewInitialized(MapView mapView) {
@@ -110,7 +119,7 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
-        getTouchedLocation(mapPoint);
+        getLocation(mapPoint);
     }
 
     @Override
