@@ -27,13 +27,22 @@ public class LocationData implements Serializable {
     private String description;
     private boolean favorite = false;
 
-    public static LocationData school = new LocationData(37.549026, 127.075187);
+    public static LocationData school = new LocationData(37.549026, 127.075187, 1);
 
     private LocationData() {
 
     }
     private LocationData(double latitude, double longitude) {
+        this.id = -2;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.name = "현재위치";
+        this.description = "";
+    }
+    private LocationData(double latitude, double longitude, int a) {
         this.id = -1;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.name = "대학교";
         this.description = "세종대학교";
         addFavorite(this);
@@ -92,6 +101,7 @@ public class LocationData implements Serializable {
     public double getLongitude() { return longitude; }
     public String getAddress() {
         Address adr = new Address(new Locale("ko_kr"));
+        adr = GeoCodingReceiver.getAddressfromCoord(latitude, longitude);
 
         StringBuilder builder = new StringBuilder();
         builder.append(adr.getLocality());
