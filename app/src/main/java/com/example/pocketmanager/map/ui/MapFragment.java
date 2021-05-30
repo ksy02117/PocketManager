@@ -24,12 +24,15 @@ import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements MapView.MapViewEventListener {
     private View view;
     private MapView mapView;
     private MapPolyline polyline;
     private ShortestPath path;
     private ArrayList<ShortestPathStep> steps;
+    private MapPOIItem selectedLocationMarker = null;
+    private Double selectLatitude;
+    private Double selectLongitude;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.map, container, false);
@@ -49,6 +52,15 @@ public class MapFragment extends Fragment {
         // map objects 초기화
         mapView.removeAllPOIItems();
         mapView.removeAllPolylines();
+
+        // event 등록
+        mapView.setMapViewEventListener(this);
+
+        // 만약 정보를 불러오는데 실패했다면 최단 경로를 출력하지 않음
+        if (steps == null) {
+            // 현재 위치로 초기화 하자.
+            return view;
+        }
 
         // for-each문으로 steps를 순회하며 목적지의 위치를 추가
         ShortestPathStep firstStep = steps.get(0);
@@ -110,7 +122,7 @@ public class MapFragment extends Fragment {
     }
 
 
-    private void addAndDrawMarker(MapView m, String name, MapPoint p, MapPOIItem.MarkerType t) {
+    private MapPOIItem addAndDrawMarker(MapView m, String name, MapPoint p, MapPOIItem.MarkerType t) {
         MapPOIItem marker = new MapPOIItem();
         marker.setItemName(name);
         marker.setTag(0);
@@ -118,6 +130,7 @@ public class MapFragment extends Fragment {
         marker.setMarkerType(t); // 마커 색
         m.addPOIItem(marker);
 
+        return marker;
     }
 
     private String stepNameToEffectiveName(String stepName) {
@@ -145,5 +158,61 @@ public class MapFragment extends Fragment {
 
     }
 
+    public void getTouchedLocation(MapPoint mapPoint) {
+        selectLatitude = mapPoint.getMapPointGeoCoord().latitude;
+        selectLongitude = mapPoint.getMapPointGeoCoord().latitude;
+        Log.d("touched_location", selectLatitude.toString() + ", " + selectLongitude.toString());
 
+        if (selectedLocationMarker != null) mapView.removePOIItem(selectedLocationMarker);
+        selectedLocationMarker = addAndDrawMarker(mapView, "선택된 위치", mapPoint, MapPOIItem.MarkerType.RedPin);
+    }
+
+
+
+    @Override
+    public void onMapViewInitialized(MapView mapView) {
+        //Log.d("MapViewInitialized", "MapViewInitialized");
+    }
+
+    @Override
+    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewZoomLevelChanged(MapView mapView, int i) {
+
+    }
+
+    @Override
+    public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
+        //Log.d("ASD", Double.toString(mapPoint.getMapPointGeoCoord().latitude));
+        //mapView.removePOIItem(selectedLocationMarker);
+        getTouchedLocation(mapPoint);
+    }
+
+    @Override
+    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
+        //getTouchedLocation(mapPoint);
+    }
+
+    @Override
+    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+
+    }
 }

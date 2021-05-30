@@ -48,6 +48,11 @@ public class PathInfoManager {
         ArrayList<ShortestPathStep> shortestPathSteps = new ArrayList<ShortestPathStep>();
         try {
             jObject = new JSONObject(pathInfo);
+            if (jObject.getString("status").equals("OK")) Log.d("path_status", "OK");
+            else {
+                Log.d("path_status_fail", jObject.getString("status"));
+                return null;
+            }
             jArray = jObject.getJSONArray("routes");
             jObject = jArray.getJSONObject(0);
             jArray = jObject.getJSONArray("legs");

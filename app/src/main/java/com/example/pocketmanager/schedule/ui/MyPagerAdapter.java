@@ -73,7 +73,7 @@ public class MyPagerAdapter extends PagerAdapter {
         arrData = new ArrayList<>();
 
         Calendar p = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
-        p.set(day1.getYear(), day1.getMonth() - 1, day1.getDay());
+        p.set(day1.getYear(), day1.getMonth() - 1, day1.getDay(), 0, 0, 0);
         int startDay = p.get(Calendar.DAY_OF_WEEK);
 
         // move calendar backwards to the beginning of the week

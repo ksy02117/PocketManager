@@ -21,7 +21,8 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.home.ui.HomeFragment;
+import com.example.pocketmanager.schedule.storage.Lecture;
+import com.example.pocketmanager.schedule.TimetableManager;
 import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.general.Time;
@@ -29,9 +30,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TimeZone;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class ScheduleFragment extends Fragment implements View.OnClickListener {
@@ -216,19 +218,66 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
             if(resultCode==RESULT_OK) {
                 //데이터 받기
                 String result = data.getStringExtra("result");
-                String eventName = data.getStringExtra("event_name");
-                String eventDesc = data.getStringExtra("event_description");
-                Time startTime, endTime;
-                startTime = (Time) data.getSerializableExtra("start_time");
-                endTime = (Time) data.getSerializableExtra("end_time");
+                String id = data.getStringExtra("everytimeID");
+                String pw = data.getStringExtra("everytimePW");
 
-                double latitude = data.getDoubleExtra("latitude", 0);
-                double longitude = data.getDoubleExtra("longitude", 0);
+                List<Lecture> list = null;
 
-                LocationData ld = LocationData.createLocation("", latitude, longitude);
+                TimetableManager.setEverytimeID(id);
+                TimetableManager.setEverytimePassword(pw);
+                try {
+                    list = TimetableManager.getTimetable();
+                    Log.d("s", "s");
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                Event.createEvent(eventName, startTime, endTime, null, false, eventDesc, Event.PRIORITY_MEDIUM);
+                String name;
+                Time startTime;
+                Time endTime;
+                LocationData location = LocationData.school;
+                Boolean outdoor;
+                String description;
 
+                int dayOfWeek;
+                int startHour;
+                int endHour;
+                int startMinute;
+                int endMinute;
+
+                Iterator<Lecture> it = list.iterator();
+                while (it.hasNext()) {
+                    Lecture lec = it.next();
+                    name = lec.getName();
+                    description = lec.getName() + "(" + lec.getProfessor() + ") " + lec.getTime();
+
+                    //"월13:30~15:00"
+                    List<String> times = lec.getTime();
+                    for (int i = 0; i < times.size(); i++) {
+                        String time = times.get(i);
+                        dayOfWeek = getDayOfWeek(time.charAt(0));
+                        startHour = Integer.parseInt(time.substring(1, 3));
+                        startMinute = Integer.parseInt(time.substring(4, 6));
+                        endHour = Integer.parseInt(time.substring(7, 9));
+                        endMinute = Integer.parseInt(time.substring(10, 12));
+
+                        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
+                        cal.set(2021, 2, 2);
+                        cal.add(Calendar.DATE, dayOfWeek - cal.get(Calendar.DAY_OF_WEEK));
+                        for (int j = 0; j < 16; j++) {
+                            int year = cal.get(Calendar.YEAR);
+                            int month = cal.get(Calendar.MONTH) + 1;
+                            int day = cal.get(Calendar.DATE);
+
+                            startTime = new Time(year, month, day, startHour, startMinute, 0);
+                            endTime = new Time(year, month, day, endHour, endMinute, 0);
+
+                            Event.createEvent(name, startTime, endTime, location, true, description, Event.PRIORITY_HIGH);
+                            cal.add(Calendar.DATE, 7);
+                        }
+                    }
+                }
 
                 monthAdapter = new MyPagerAdapter(this.getContext());
                 weekAdapter = new MyPagerAdapter2(this.getContext());
@@ -241,5 +290,21 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 mPager.setCurrentItem(currentIndex);
             }
         }
+    }
+
+    private int getDayOfWeek(char c) {
+        switch (c) {
+            case '월':
+                return 2;
+            case '화':
+                return 3;
+            case '수':
+                return 4;
+            case '목':
+                return 5;
+            case '금':
+                return 6;
+        }
+        return 0;
     }
 }
