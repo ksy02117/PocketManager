@@ -22,7 +22,8 @@ public class LocationData implements Serializable {
 
     private long id;
     private String name = "";
-    private Address adr = new Address(new Locale("ko_kr"));
+    //private Address adr = new Address(new Locale("ko_kr"));
+    private double latitude, longitude;
     private String description;
     private boolean favorite = false;
 
@@ -35,7 +36,6 @@ public class LocationData implements Serializable {
         this.id = -1;
         this.name = "대학교";
         this.description = "세종대학교";
-        adr = GeoCodingReceiver.getAddressfromCoord(latitude, longitude);
         addFavorite(this);
     }
     private LocationData(long id, String name, Double latitude, Double longitude, boolean favorite, String description) {
@@ -43,8 +43,6 @@ public class LocationData implements Serializable {
         this.name = name;
         this.favorite = favorite;
         this.description = description;
-
-        adr = GeoCodingReceiver.getAddressfromCoord(latitude, longitude);
     }
 
     public static LocationData createLocation(String name, double latitude, double longitude) {
@@ -90,9 +88,11 @@ public class LocationData implements Serializable {
     }
 
     public long getID() { return id; }
-    public double getLatitude() { return adr.getLatitude(); }
-    public double getLongitude() { return adr.getLongitude(); }
+    public double getLatitude() { return latitude; }
+    public double getLongitude() { return longitude; }
     public String getAddress() {
+        Address adr = new Address(new Locale("ko_kr"));
+
         StringBuilder builder = new StringBuilder();
         builder.append(adr.getLocality());
         builder.append(" " + adr.getSubLocality());
@@ -122,7 +122,7 @@ public class LocationData implements Serializable {
         gpsReady = false;
         GeoCodingReceiver.getCurrentAddress(
                 (result)->{
-                    currentLocation.adr = GeoCodingReceiver.getAddressfromCoord(result.get(0), result.get(1));
+                    currentLocation = new LocationData(result.get(0), result.get(1));
                     gpsReady = true;
                     Iterator<Runnable> it = pendingTreads.iterator();
                     while (it.hasNext()) {
