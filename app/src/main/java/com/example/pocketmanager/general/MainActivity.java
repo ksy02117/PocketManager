@@ -164,6 +164,11 @@ public class MainActivity extends AppCompatActivity {
 
         curDate = (TextView)findViewById(R.id.current_date);
 
+        /*
+        1. 하루치 이벤트 다가지고오기
+
+        * */
+
         // test (유진)-----------------------
         PathInfoManager p = new PathInfoManager();
 
@@ -196,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
 
         alarm a = new alarm(this);
         a.setAlarm("2021-05-29 23:21:30", "일정 이름","날씨 미세먼지 어쩌고");
-        //setAlarm();
         //----------------------------
 
     }
