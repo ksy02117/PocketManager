@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,16 +19,20 @@ import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.CalData;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.schedule.storage.Event;
+import com.example.pocketmanager.schedule.storage.SubEvent;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplayScheduleAdapter.ViewHolder>{
     private ArrayList<CalData> list;
     private Context context;
+    private RelativeLayout ll;
     private float scale;
     View view;
 
@@ -78,7 +83,7 @@ public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplaySchedule
 
     private void addSchedule(Event e) {
         TextView test;
-        LinearLayout ll = (LinearLayout) view.findViewById(R.id.calendar_week_display_schedule);
+        ll = (RelativeLayout) view.findViewById(R.id.calendar_week_display_schedule);
         LinearLayout.LayoutParams params;
 
 
@@ -94,7 +99,7 @@ public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplaySchedule
         test.setText(e.getEventName());
         test.setBackgroundColor(bgColor);
         test.setTextColor(Color.WHITE);
-        test.setGravity(Gravity.CENTER);
+        test.setGravity(Gravity.LEFT);
         test.setMaxLines(1);
         test.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +109,44 @@ public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplaySchedule
                 ((Activity) context).startActivityForResult(intent, 1);
             }
         });
+
+        ll.addView(test);
+        for (Map.Entry<Long, LinkedList<SubEvent>> longLinkedListEntry : e.getSubEvents().entrySet()) {
+            List<SubEvent> list = longLinkedListEntry.getValue();
+            for (SubEvent event : list) {
+                addSubEvent(event);
+            }
+        }
+    }
+
+    private void addSubEvent(SubEvent e) {
+        TextView test;
+        RelativeLayout.LayoutParams params;
+        int startHour, endHour;
+        int childColor;
+        int leftMargin;
+        int duration, untilStart;
+
+        startHour = e.getStartTime().getHour();
+        endHour = e.getEndTime().getHour();
+        if (e.getEndTime().getMin() != 0)
+            endHour += 1;
+
+        duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
+        untilStart = getPixel((int) e.getStartTime().getHour() * 60 + e.getStartTime().getMin());
+        leftMargin = getPixel(10);
+        childColor =  view.getResources().getColor(R.color.childEventGreen);
+        params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
+        params.setMargins(leftMargin, untilStart, 0, 0);
+
+        test = new TextView(view.getContext());
+        test.setLayoutParams(params);
+        test.setText(e.getEventName());
+        test.setTextSize(16);
+        test.setTextColor(Color.WHITE);
+        test.setMaxLines(1);
+        test.setGravity(Gravity.RIGHT);
+        test.setBackgroundColor(childColor);
 
         ll.addView(test);
     }
