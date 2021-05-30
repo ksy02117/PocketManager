@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,7 +38,9 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
     private LocationData location;
     private Time startTime, endTime;
     private Event parentEvent, modifyEvent;
+    private CheckBox outdoorCheck;
     private DatePickerDialog.OnDateSetListener startDateListener, endDateListener;
+    private boolean isOutdoor = false;
     private int eventType;  // 0: Event | 1: SubEvent
     private int type;       // 0: add   | 1: modify
     private int startHour, startMinute, endHour, endMinute;
@@ -73,6 +76,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         startPicker = (TimePicker) findViewById(R.id.start_time_picker);
         endPicker = (TimePicker) findViewById(R.id.end_time_picker);
         addLocation = (ImageView) findViewById(R.id.add_location);
+        outdoorCheck = (CheckBox) findViewById(R.id.add_outdoor_check);
 
         SimpleDateFormat sd = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
 
@@ -141,7 +145,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
     }
 
     private Event addParentEvent() {
-        return Event.createEvent(eventNameString, startTime, endTime, null, false, eventDescString, Event.PRIORITY_MEDIUM);
+        return Event.createEvent(eventNameString, startTime, endTime, null, isOutdoor, eventDescString, Event.PRIORITY_MEDIUM);
     }
 
     private boolean addSubEvent(Event parentEvent) {
@@ -159,7 +163,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
 
         // 서브 이벤트 생성
         parentEvent = Event.findEventByID(parentEvent.getID());
-        SubEvent.createSubEvent(parentEvent, eventNameString, startTime, endTime, null, false, eventDescString, Event.PRIORITY_MEDIUM);
+        SubEvent.createSubEvent(parentEvent, eventNameString, startTime, endTime, null, isOutdoor, eventDescString, Event.PRIORITY_MEDIUM);
         return true;
     }
 
@@ -193,6 +197,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
                 startHour, startMinute, 0);
         endTime = new Time(Integer.parseInt(arrEnd[0]), Integer.parseInt(arrEnd[1]), Integer.parseInt(arrEnd[2]),
                 endHour, endMinute, 0);
+        isOutdoor = outdoorCheck.isChecked();
 
         if (startTime.compareTo(endTime) >= 0) {
             Toast.makeText(this, "종료 시간이 시작 시간보다 빠릅니다.", Toast.LENGTH_SHORT).show();
@@ -211,18 +216,8 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         }
 
         if (eventType == SUB) {
-            addSubEvent(parentEvent);
-            /*
-            Intent intent = new Intent();
-            intent.putExtra("eventName", eventNameString);
-            intent.putExtra("eventDescription", eventDescString);
-            intent.putExtra("startTime", startTime);
-            intent.putExtra("endTime", endTime);
-
-            setResult(RESULT_OK, intent);
-            finish();
-
-             */
+            if (!addSubEvent(parentEvent))
+                return;
         }
         else
             addParentEvent();
