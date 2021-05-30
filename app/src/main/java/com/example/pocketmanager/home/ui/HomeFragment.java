@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment {
     private RelativeLayout eventLayout, weatherLayout;
     private RecyclerView timeRecycler;
     private TimelineAdapter timeAdapter;
+    private LinearLayout l;
     private Time todayStartTime;
     private float scale;
     View view;
@@ -47,6 +48,7 @@ public class HomeFragment extends Fragment {
 
         scale = getResources().getDisplayMetrics().density;
 
+        l = (LinearLayout) view.findViewById(R.id.home_view);
         eventLayout = (RelativeLayout) view.findViewById(R.id.home_event_layout);
         weatherLayout = (RelativeLayout) view.findViewById(R.id.home_weather_layout);
 
@@ -77,7 +79,7 @@ public class HomeFragment extends Fragment {
             wowSuchEmpty();
             return;
         }
-
+        l.setVisibility(View.VISIBLE);
 
         Time s = e.getFirst().getStartTime();
         startHour = e.getFirst().getStartTime().getHour();
@@ -102,7 +104,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void wowSuchEmpty() {
-        LinearLayout l = (LinearLayout) view.findViewById(R.id.home_view);
+        l = (LinearLayout) view.findViewById(R.id.home_view);
         l.setVisibility(View.GONE);
     }
 
