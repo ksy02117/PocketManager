@@ -1,5 +1,7 @@
 package com.example.pocketmanager.weather;
 
+import android.graphics.drawable.Drawable;
+
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.weather.receiver.WeatherReceiver;
 
@@ -141,5 +143,4 @@ public class WeatherData implements Serializable {
     public static boolean isWeatherReady() {
         return WeatherReceiver.isWeatherReady();
     }
-
 }

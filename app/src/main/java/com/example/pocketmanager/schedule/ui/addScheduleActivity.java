@@ -158,6 +158,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         }
 
         // 서브 이벤트 생성
+        parentEvent = Event.findEventByID(parentEvent.getID());
         SubEvent.createSubEvent(parentEvent, eventNameString, startTime, endTime, null, false, eventDescString, Event.PRIORITY_MEDIUM);
         return true;
     }
@@ -210,11 +211,22 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         }
 
         if (eventType == SUB) {
-            if (!addSubEvent(parentEvent))
-                return;
+            addSubEvent(parentEvent);
+            /*
+            Intent intent = new Intent();
+            intent.putExtra("eventName", eventNameString);
+            intent.putExtra("eventDescription", eventDescString);
+            intent.putExtra("startTime", startTime);
+            intent.putExtra("endTime", endTime);
+
+            setResult(RESULT_OK, intent);
+            finish();
+
+             */
         }
         else
             addParentEvent();
+
         setResult(RESULT_OK);
         finish();
 /*

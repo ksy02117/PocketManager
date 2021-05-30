@@ -137,7 +137,7 @@ public class HomeFragment extends Fragment {
         test.setTextSize(16);
         test.setTextColor(Color.WHITE);
         test.setMaxLines(1);
-        test.setGravity(Gravity.CENTER);
+        test.setGravity(Gravity.LEFT);
         test.setBackgroundColor(parentColor);
         test.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +151,8 @@ public class HomeFragment extends Fragment {
         if (e.getEndTime().getMin() != 0)
             endHour += 1;
 
-        addWeather(startHour, endHour);
+
+        addWeather(e, startHour, endHour);
         eventLayout.addView(test);
         Iterator<Map.Entry<Long,LinkedList<SubEvent>>> it = e.getSubEvents().entrySet().iterator();
         while (it.hasNext()) {
@@ -191,39 +192,36 @@ public class HomeFragment extends Fragment {
         test.setTextSize(16);
         test.setTextColor(Color.WHITE);
         test.setMaxLines(1);
-        test.setGravity(Gravity.CENTER);
+        test.setGravity(Gravity.RIGHT);
         test.setBackgroundColor(childColor);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EventDetailsActivity.class);
-                intent.putExtra("event", e);
-                startActivityForResult(intent, 1);
-            }
-        });
 
         eventLayout.addView(test);
     }
 
-    private void addWeather(int startHour, int endHour) {
+    private void addWeather(Event e, int startHour, int endHour) {
         ImageView newIcon;
         RelativeLayout.LayoutParams params;
 
         int duration = getPixel(60);
         int untilStart = getPixel((startHour - todayStartTime.getHour()) * 60);
-        params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
-        params.setMargins(0, untilStart, 0, 0);
 
-        newIcon = new ImageView(this.getContext());
-        newIcon.setLayoutParams(params);
-        newIcon.setImageResource(R.drawable.w_01d);
+        if (e.getEventWeather().isEmpty())
+            return;
 
-        for (int i = startHour; i < endHour; i++) {
-            params.setMargins(0, untilStart + i - 1, 0, 0);
+        for (int i = 0; i < endHour - startHour; i++) {
+            params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
+            params.setMargins(0, untilStart + getPixel(i * 60), 0, 0);
 
             newIcon = new ImageView(this.getContext());
             newIcon.setLayoutParams(params);
-            newIcon.setImageResource(R.drawable.w_01d);
+
+            String icon;
+            int resourceId = R.drawable.w_01d;
+
+            icon = e.getEventWeather().get(i).getIcon();
+            resourceId = getResources().getIdentifier("w_" + icon.replace('n', 'd'), "drawable", getContext().getPackageName());
+
+            newIcon.setImageResource(resourceId);
             weatherLayout.addView(newIcon);
         }
     }
