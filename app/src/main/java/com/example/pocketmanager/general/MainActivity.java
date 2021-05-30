@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -152,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.main_frame,menu4Fragment).commit();
 
         curDate = (TextView)findViewById(R.id.current_date);
+
+
 
     }
 
