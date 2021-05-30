@@ -22,8 +22,6 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.schedule.Lecture;
-import com.example.pocketmanager.schedule.LocationData;
 import com.example.pocketmanager.schedule.TimetableManager;
 import com.example.pocketmanager.schedule.TimetableManager;
 import com.example.pocketmanager.map.LocationDBHelper;

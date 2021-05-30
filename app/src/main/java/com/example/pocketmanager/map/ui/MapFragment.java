@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.MainActivity;
-import com.example.pocketmanager.schedule.LocationData;
+import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.transportation.ShortestPath;
 import com.example.pocketmanager.transportation.ShortestPathStep;
 
