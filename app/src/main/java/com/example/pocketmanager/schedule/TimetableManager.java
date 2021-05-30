@@ -28,12 +28,12 @@ public class TimetableManager {
     }
 
     // setters
-    public void setEverytimeID(String everytimeID) {
-        this.everytimeID = everytimeID;
+    public static void setEverytimeID(String everytimeIDs) {
+        everytimeID = everytimeIDs;
     }
 
-    public void setEverytimePassword(String everytimePassword) {
-        this.everytimePassword = everytimePassword;
+    public static void setEverytimePassword(String everytimePasswords) {
+        everytimePassword = everytimePasswords;
     }
 
     public static ArrayList<Lecture> getTimetable() throws IOException, ExecutionException, InterruptedException {
@@ -58,6 +58,8 @@ public class TimetableManager {
             lecture.setProfessor(professors.get(i).attr("value").toString());  // "변정현"
             String tmp = times.get(i).attr("value").toString();
             ArrayList<String> timeArr = new ArrayList<String>();
+            if (tmp.length() == 0)
+                continue;
             if (tmp.contains(",")) {
                 String[] strArr = tmp.split(",");
                 Collections.addAll(timeArr, strArr);

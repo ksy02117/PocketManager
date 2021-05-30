@@ -26,12 +26,12 @@ public class LocationData implements Serializable {
     private String description;
     private boolean favorite = false;
 
-    public static LocationData school = new LocationData();
+    public static LocationData school = new LocationData(37.549026, 127.075187);
 
     private LocationData() {
 
     }
-    private LocationData(String name, double latitude, double longitude) {
+    private LocationData(double latitude, double longitude) {
         this.id = -1;
         this.name = "대학교";
         this.description = "세종대학교";

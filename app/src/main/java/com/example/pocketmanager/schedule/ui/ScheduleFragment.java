@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -235,13 +236,16 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
             if(resultCode==RESULT_OK) {
                 //데이터 받기
                 String result = data.getStringExtra("result");
-                String id = data.getStringExtra("id");
-                String pw = data.getStringExtra("pw");
+                String id = data.getStringExtra("everytimeID");
+                String pw = data.getStringExtra("everytimePW");
 
                 List<Lecture> list = null;
 
+                TimetableManager.setEverytimeID(id);
+                TimetableManager.setEverytimePassword(pw);
                 try {
                     list = TimetableManager.getTimetable();
+                    Log.d("s", "s");
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -277,7 +281,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                         endMinute = Integer.parseInt(time.substring(10, 12));
 
                         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
-                        cal.set(2021, 3, 2);
+                        cal.set(2021, 2, 2);
                         cal.add(Calendar.DATE, dayOfWeek - cal.get(Calendar.DAY_OF_WEEK));
                         for (int j = 0; j < 16; j++) {
                             int year = cal.get(Calendar.YEAR);
@@ -309,15 +313,15 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
     private int getDayOfWeek(char c) {
         switch (c) {
             case '월':
-                return 0;
-            case '화':
-                return 1;
-            case '수':
                 return 2;
-            case '목':
+            case '화':
                 return 3;
-            case '금':
+            case '수':
                 return 4;
+            case '목':
+                return 5;
+            case '금':
+                return 6;
         }
         return 0;
     }

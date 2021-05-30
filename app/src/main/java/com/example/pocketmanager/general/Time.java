@@ -32,7 +32,7 @@ public class Time implements Comparable<Time> , Serializable {
     public Time(long dt) { setDt(dt); }
     public Time(int year, int month, int day, int hour, int minute, int second) {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+9"));
-        cal.set(year, month, day, hour, minute, second);
+        cal.set(year, month - 1, day, hour, minute, second);
 
         dt = cal.getTimeInMillis() / 1000L;
         this.year = year;
@@ -41,7 +41,7 @@ public class Time implements Comparable<Time> , Serializable {
         this.hour = hour;
         this.min = minute;
         this.sec = second;
-
+        int a = cal.get(Calendar.MONTH);
         weekOfMonth = cal.get(Calendar.WEEK_OF_MONTH);
         dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
     }

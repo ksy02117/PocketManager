@@ -22,8 +22,6 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.schedule.Lecture;
-import com.example.pocketmanager.schedule.LocationData;
 import com.example.pocketmanager.schedule.TimetableManager;
 import com.example.pocketmanager.map.LocationDBHelper;
 import com.example.pocketmanager.map.LocationData;
@@ -34,6 +32,7 @@ import com.example.pocketmanager.schedule.alarm.alarm;
 import com.example.pocketmanager.weather.receiver.AirPollutionReceiver;
 import com.example.pocketmanager.map.GeoCodingReceiver;
 import com.example.pocketmanager.weather.receiver.DailyWeatherReceiver;
+import com.example.pocketmanager.weather.receiver.EventWeatherReceiver;
 import com.example.pocketmanager.weather.receiver.HistoricalWeatherReceiver;
 import com.example.pocketmanager.weather.receiver.WeatherForecastReceiver;
 import com.example.pocketmanager.weather.WeatherData;
@@ -155,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         WeatherForecastReceiver.getInstance(this);
         DailyWeatherReceiver.getInstance(this);
         AirPollutionReceiver.getInstance(this);
+        EventWeatherReceiver.getInstance(this);
         GeoCodingReceiver.getInstance(this);
 
         //DataBases
@@ -175,49 +175,6 @@ public class MainActivity extends AppCompatActivity {
 
         curDate = (TextView)findViewById(R.id.current_date);
 
-        /*
-        // test (유진)-----------------------
-
-        PathInfoManager p = new PathInfoManager();
-
-        p.setDestination("37.550266, 127.073351");
-        //p.setOrigin(LocationData.getCurrentLocation().getLatitude() + ", " + LocationData.getCurrentLocation().getLongitude());
-        //p.setOrigin("37.546988, 127.105476");
-        //p.setOrigin("37.466600, 126.824800");
-        p.setOrigin("37.509593, 126.773195");
-        //p.setSubwayName("광나루(장신대)");
-
-
-        try {
-            s = p.getShortestPathInfo(); // 결과가 없으면 null을 반환함
-            ArrayList<IncomingTrain> t = p.getIncomingTrainInfo(); // 지하철 운행시간이 아니거나, 최단경로에 지하철을 타는 단계가 없으면 빈 ArrayList를 반환함.
-            for (IncomingTrain a : t){
-                a.log();
-            }
-
-            TimetableManager asd = new TimetableManager("jjiny3773", "rudgh0607");
-            ArrayList<Lecture> lectures = asd.getTimetable();
-            for (Lecture l : lectures) l.log();
-
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        mCalender = new GregorianCalendar();
-
-        Log.v("HelloAlarmActivity", mCalender.getTime().toString());
-
-        setAlarm();
-        alarm a = new alarm(this);
-        a.setAlarm("2021-05-29 23:21:30", "일정 이름","날씨 미세먼지 어쩌고");
-        //setAlarm();
-        //----------------------------
-
-         */
     }
     @Override
     protected void onDestroy() {
