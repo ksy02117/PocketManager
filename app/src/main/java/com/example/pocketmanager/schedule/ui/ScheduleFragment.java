@@ -32,6 +32,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -51,12 +52,14 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
     private boolean isFABOpen;
     private RelativeLayout mScheduleLayout;
     private LinearLayout mCalendarLayout, mDayOfWeekLayout;
-    private ProgressBar mProgressBar;
     private TabLayout tabLayout;
     private Point size;
+    private float scale;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.schedule, container, false);
+
+        scale = view.getResources().getDisplayMetrics().density;
 
         fabMenu = (FloatingActionButton) view.findViewById(R.id.add_fab);
         fabEveryTime = (FloatingActionButton) view.findViewById(R.id.add_from_everytime);
@@ -303,5 +306,9 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 return 6;
         }
         return 0;
+    }
+
+    private int getPixel(int dp) {
+        return (int) (dp * scale + 0.5f);
     }
 }

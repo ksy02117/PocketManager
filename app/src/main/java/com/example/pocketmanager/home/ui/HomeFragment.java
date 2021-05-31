@@ -38,7 +38,9 @@ public class HomeFragment extends Fragment {
     private RelativeLayout eventLayout, weatherLayout;
     private RecyclerView timeRecycler;
     private TimelineAdapter timeAdapter;
+    private TextView emptyText;
     private LinearLayout l;
+    private Calendar mCal;
     private Time todayStartTime;
     private float scale;
     View view;
@@ -51,6 +53,7 @@ public class HomeFragment extends Fragment {
         l = (LinearLayout) view.findViewById(R.id.home_view);
         eventLayout = (RelativeLayout) view.findViewById(R.id.home_event_layout);
         weatherLayout = (RelativeLayout) view.findViewById(R.id.home_weather_layout);
+        emptyText = (TextView) view.findViewById(R.id.wow_such_empty);
 
         update();
 
@@ -67,7 +70,7 @@ public class HomeFragment extends Fragment {
     public void update() {
         int startHour, endHour;
         Time t = new Time();
-        Calendar mCal = Calendar.getInstance();
+        mCal = Calendar.getInstance();
         t.setDt(mCal.getTimeInMillis() / 1000);
         long id = t.getDateID();
 
@@ -80,11 +83,15 @@ public class HomeFragment extends Fragment {
             return;
         }
         l.setVisibility(View.VISIBLE);
+        emptyText.setVisibility(View.GONE);
 
-        Time s = e.getFirst().getStartTime();
+
+        Time start = e.getFirst().getStartTime();
+        Time end = e.getLast().getEndTime();
         startHour = e.getFirst().getStartTime().getHour();
-        todayStartTime = new Time(s.getYear(), s.getMonth(), s.getDay(), s.getHour(), 0, s.getSec());
+        todayStartTime = new Time(start.getYear(), start.getMonth(), start.getDay(), start.getHour(), 0, 0);
         endHour = e.getLast().getEndTime().getHour();
+        int duration = (int) (end.getDt() - start.getDt()) / 60 / 60;
 
         if (e.getLast().getEndTime().getMin() != 0)
             endHour++;
@@ -93,51 +100,84 @@ public class HomeFragment extends Fragment {
             addEvent(myEvent);
         }
 
+        if (duration + startHour >= 24)
+            duration = 24 - startHour;
+
         timeRecycler = (RecyclerView) view.findViewById(R.id.home_timeline);
         timeRecycler.setHasFixedSize(true);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         timeRecycler.setLayoutManager(mLayoutManager);
-        timeAdapter = new TimelineAdapter(getActivity(), startHour, endHour);
+        timeAdapter = new TimelineAdapter(getActivity(), startHour, duration);
         timeRecycler.setAdapter(timeAdapter);
     }
 
     private void wowSuchEmpty() {
         l = (LinearLayout) view.findViewById(R.id.home_view);
         l.setVisibility(View.GONE);
+        emptyText.setVisibility(View.VISIBLE);
     }
 
     private void addEvent(Event e) {
         TextView test;
         RelativeLayout.LayoutParams params;
+        Time startTime, endTime;
         int startHour, startMinute;
         int endHour, endMinute;
-        int textColor, parentColor, childColor;
-        int dp, pixel;
+        int parentColor;
         int duration, untilStart;
         String eventName;
+        long startDt, endDt;
 
+        startTime = e.getStartTime();
+        endTime = e.getEndTime();
         startHour = e.getStartTime().getHour();
         startMinute = e.getStartTime().getMin();
         endHour = e.getEndTime().getHour();
         endMinute = e.getEndTime().getMin();
-        duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
-        untilStart = getPixel((int) (e.getStartTime().getDt() - todayStartTime.getDt()) / 60);
+        startDt = e.getStartTime().getDt();
+        endDt = e.getEndTime().getDt();
         eventName = e.getEventName();
-        textColor = getResources().getColor(R.color.baseTextColor);
+
+        duration = (int) (endDt - startDt) / 60;
+        untilStart = (int) (startDt - todayStartTime.getDt()) / 60;
+
+        // 오늘이 startTime
+        if (startTime.getYear() == mCal.get(Calendar.YEAR) &&
+                startTime.getMonth() == mCal.get(Calendar.MONTH) + 1 &&
+                startTime.getDay() == mCal.get(Calendar.DAY_OF_MONTH)) {
+            if (untilStart + duration >= (24 - todayStartTime.getHour()) * 60)
+                duration = (24 - todayStartTime.getHour()) * 60 - untilStart;
+        }
+        // 오늘이 endTime
+        else if (endTime.getYear() == mCal.get(Calendar.YEAR) &&
+                endTime.getMonth() == mCal.get(Calendar.MONTH) + 1 &&
+                endTime.getDay() == mCal.get(Calendar.DAY_OF_MONTH)) {
+            if (untilStart + duration >= (24 - todayStartTime.getHour()) * 60) {
+                todayStartTime = new Time(endTime.getYear(), endTime.getMonth(), endTime.getDay(), 0, 0, 0);
+                untilStart = 0;
+                duration = endHour * 60 + endMinute;
+            }
+
+        }
+        else {
+            untilStart = 0;
+            duration = 24;
+        }
+
         parentColor = getResources().getColor(R.color.parentEventRed);
-        childColor = getResources().getColor(R.color.childEventGreen);
-        params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
-        params.setMargins(0, untilStart, 0, 0);
+        params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getPixel(duration));
+        params.setMargins(0, getPixel(untilStart), 0, 0);
 
         test = new TextView(this.getContext());
         test.setLayoutParams(params);
-        test.setText(e.getEventName());
+        test.setText(eventName);
         test.setTextSize(16);
         test.setTextColor(Color.WHITE);
         test.setMaxLines(1);
         test.setGravity(Gravity.LEFT);
+        test.setPadding(getPixel(10), 0, 0, 0);
         test.setBackgroundColor(parentColor);
 
         if (e.getPriority() == Event.PRIORITY_TRANS) {
@@ -207,6 +247,7 @@ public class HomeFragment extends Fragment {
         test.setTextColor(Color.WHITE);
         test.setMaxLines(1);
         test.setGravity(Gravity.RIGHT);
+        test.setPadding(0, 0, getPixel(10), 0);
         test.setBackgroundColor(childColor);
 
         eventLayout.addView(test);

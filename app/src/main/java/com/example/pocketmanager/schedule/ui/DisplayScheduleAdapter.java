@@ -88,11 +88,15 @@ public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplaySchedule
 
 
         Time startTime = e.getStartTime();
-        int untilStart = getPixel((int) startTime.getHour() * 60 + startTime.getMin());
-        int duration = getPixel((int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60);
+        int untilStart = (int) startTime.getHour() * 60 + startTime.getMin();
+        int duration = (int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60;
+
+        if (untilStart + duration >= 24 * 60)
+            duration = 24 * 60 - untilStart;
+
         int bgColor = this.context.getResources().getColor(R.color.parentEventRed);
-        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, duration);
-        params.setMargins(0, untilStart, 0, 0);
+        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getPixel(duration));
+        params.setMargins(0, getPixel(untilStart), 0, 0);
 
         test = new TextView(context);
         test.setLayoutParams(params);
@@ -100,6 +104,7 @@ public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplaySchedule
         test.setBackgroundColor(bgColor);
         test.setTextColor(Color.WHITE);
         test.setGravity(Gravity.LEFT);
+        test.setPadding(getPixel(10), 0, 0, 0);
         test.setMaxLines(1);
         test.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +151,7 @@ public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplaySchedule
         test.setTextColor(Color.WHITE);
         test.setMaxLines(1);
         test.setGravity(Gravity.RIGHT);
+        test.setPadding(0, 0, getPixel(10), 0);
         test.setBackgroundColor(childColor);
 
         ll.addView(test);

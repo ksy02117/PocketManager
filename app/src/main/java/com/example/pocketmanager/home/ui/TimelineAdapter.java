@@ -14,13 +14,13 @@ import com.example.pocketmanager.R;
 import org.jetbrains.annotations.NotNull;
 
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
-    private int startTime, endTime;
+    private int startTime, duration;
     private Context context;
 
-    public TimelineAdapter(Context context, int startTime, int endTime) {
+    public TimelineAdapter(Context context, int startTime, int duration) {
         this.context = context;
         this.startTime = startTime;
-        this.endTime = endTime;
+        this.duration = duration;
     }
 
     @NonNull
@@ -39,7 +39,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     }
 
     @Override
-    public int getItemCount() { return endTime - startTime + 1; }
+    public int getItemCount() { return duration + 1; }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView timeView;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +31,8 @@ public class MyPagerAdapter2 extends PagerAdapter {
     private ArrayList<CalData> arrData;
     private Calendar mCal;
     private View mView;
+    private float scale;
+    private int scrollPixel = 0;
     private int thisDay, thisWeek, thisMonth, thisYear;
 
     public MyPagerAdapter2(Context context) {
@@ -52,7 +55,7 @@ public class MyPagerAdapter2 extends PagerAdapter {
         mCal.set(Calendar.YEAR, thisYear);
         mCal.set(Calendar.DAY_OF_YEAR, thisDay + realPos * 3);
 
-        setTimeline(0, 23);
+        setTimeline(0, 24);
         setCalendarDate();
         setDisplaySchedule();
         ((ViewPager) container).addView(mView);
@@ -108,14 +111,14 @@ public class MyPagerAdapter2 extends PagerAdapter {
         dateView.setAdapter(adapter);
     }
 
-    private void setTimeline(int startTime, int endTime) {
+    private void setTimeline(int startTime, int duration) {
         timelineView = (RecyclerView) mView.findViewById(R.id.calendar_week_time_view);
         timelineView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mView.getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL); // 기본값이 VERTICAL
         timelineView.setLayoutManager(mLayoutManager);
 
-        TimelineAdapter tAdapter = new TimelineAdapter(this.mContext, startTime, endTime);
+        TimelineAdapter tAdapter = new TimelineAdapter(this.mContext, startTime, duration);
         timelineView.setAdapter(tAdapter);
     }
 
