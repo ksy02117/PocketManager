@@ -68,7 +68,6 @@ public class HomeFragment extends Fragment {
     }
 
     public void update() {
-        int startHour, endHour;
         Time t = new Time();
         mCal = Calendar.getInstance();
         t.setDt(mCal.getTimeInMillis() / 1000);
@@ -82,35 +81,20 @@ public class HomeFragment extends Fragment {
             wowSuchEmpty();
             return;
         }
+
         l.setVisibility(View.VISIBLE);
         emptyText.setVisibility(View.GONE);
 
-
-        Time start = e.getFirst().getStartTime();
-        Time end = e.getLast().getEndTime();
-        startHour = e.getFirst().getStartTime().getHour();
-        todayStartTime = new Time(start.getYear(), start.getMonth(), start.getDay(), start.getHour(), 0, 0);
-        endHour = e.getLast().getEndTime().getHour();
-        int duration = (int) (end.getDt() - start.getDt()) / 60 / 60;
-
-        if (e.getLast().getEndTime().getMin() != 0)
-            endHour++;
-
-        for (Event myEvent : e) {
-            addEvent(myEvent);
-        }
-
-        if (duration + startHour >= 24)
-            duration = 24 - startHour;
-
         timeRecycler = (RecyclerView) view.findViewById(R.id.home_timeline);
         timeRecycler.setHasFixedSize(true);
-
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         timeRecycler.setLayoutManager(mLayoutManager);
-        timeAdapter = new TimelineAdapter(getActivity(), startHour, duration);
-        timeRecycler.setAdapter(timeAdapter);
+
+        setStartDuration(e.getFirst().getStartTime(), e.getLast().getEndTime());
+
+        for (Event myEvent : e)
+            addEvent(myEvent);
     }
 
     private void wowSuchEmpty() {
@@ -154,9 +138,8 @@ public class HomeFragment extends Fragment {
         else if (endTime.getYear() == mCal.get(Calendar.YEAR) &&
                 endTime.getMonth() == mCal.get(Calendar.MONTH) + 1 &&
                 endTime.getDay() == mCal.get(Calendar.DAY_OF_MONTH)) {
+            untilStart = 0;
             if (untilStart + duration >= (24 - todayStartTime.getHour()) * 60) {
-                todayStartTime = new Time(endTime.getYear(), endTime.getMonth(), endTime.getDay(), 0, 0, 0);
-                untilStart = 0;
                 duration = endHour * 60 + endMinute;
             }
 
@@ -279,6 +262,41 @@ public class HomeFragment extends Fragment {
             newIcon.setImageResource(resourceId);
             weatherLayout.addView(newIcon);
         }
+    }
+
+    private void setStartDuration(Time startTime, Time endTime) {
+        int start = startTime.getHour();
+        int duration = (int) (endTime.getDt() - startTime.getDt()) / 60 / 60;
+        if (endTime.getMin() != 0)
+            duration += 1;
+
+        // 오늘이 startTime
+        if (startTime.getYear() == mCal.get(Calendar.YEAR) &&
+                startTime.getMonth() == mCal.get(Calendar.MONTH) + 1 &&
+                startTime.getDay() == mCal.get(Calendar.DAY_OF_MONTH)) {
+            todayStartTime = new Time(startTime.getYear(), startTime.getMonth(), startTime.getDay(), startTime.getHour(), 0, 0);
+            if (start + duration >= 24)
+                duration = 24 - start;
+        }
+        // 오늘이 endTime
+        else if (endTime.getYear() == mCal.get(Calendar.YEAR) &&
+                endTime.getMonth() == mCal.get(Calendar.MONTH) + 1 &&
+                endTime.getDay() == mCal.get(Calendar.DAY_OF_MONTH)) {
+            todayStartTime = new Time(endTime.getYear(), endTime.getMonth(), endTime.getDay(), 0, 0, 0);
+            if (start + duration >= 24) {
+                start = 0;
+                duration = endTime.getHour();
+                if (endTime.getMin() != 0)
+                    duration += 1;
+            }
+        }
+        else {
+            todayStartTime = new Time(mCal.get(Calendar.YEAR), mCal.get(Calendar.MONTH), mCal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+            start = 0;
+            duration = 24;
+        }
+        timeAdapter = new TimelineAdapter(getActivity(), start, duration);
+        timeRecycler.setAdapter(timeAdapter);
     }
 
     private int getPixel(int dp) {

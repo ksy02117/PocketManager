@@ -25,11 +25,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplayScheduleAdapter.ViewHolder>{
+    private Calendar mCal;
     private ArrayList<CalData> list;
     private Context context;
     private RelativeLayout ll;
@@ -49,6 +51,7 @@ public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplaySchedule
                 .inflate(R.layout.calendar_week_display_schedule, parent, false);
 
         scale = this.context.getResources().getDisplayMetrics().density;
+        mCal = Calendar.getInstance();
 
         return new DisplayScheduleAdapter.ViewHolder(view);
     }
@@ -57,6 +60,11 @@ public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplaySchedule
     public void onBindViewHolder(@NonNull @NotNull DisplayScheduleAdapter.ViewHolder holder, int position) {
         holder.dayView.getLayoutParams().width = (context.getResources().getDisplayMetrics().widthPixels - getPixel(40)) / 3;
         LinkedList<Event> eventArrayList = list.get(position).getEvents();
+
+        Date today = list.get(position).getDate();
+        mCal.set(Calendar.YEAR, today.getYear() + 1900);
+        mCal.set(Calendar.MONTH, today.getMonth());
+        mCal.set(Calendar.DAY_OF_MONTH, today.getDate());
 
         // 이벤트 비어있으면
         if (Event.events.isEmpty() || eventArrayList == null)
@@ -88,11 +96,31 @@ public class DisplayScheduleAdapter extends RecyclerView.Adapter<DisplaySchedule
 
 
         Time startTime = e.getStartTime();
+        Time endTime = e.getEndTime();
         int untilStart = (int) startTime.getHour() * 60 + startTime.getMin();
         int duration = (int) (e.getEndTime().getDt() - e.getStartTime().getDt()) / 60;
 
-        if (untilStart + duration >= 24 * 60)
-            duration = 24 * 60 - untilStart;
+        // 오늘이 startTime
+        if (startTime.getYear() == mCal.get(Calendar.YEAR) &&
+                startTime.getMonth() == mCal.get(Calendar.MONTH) + 1 &&
+                startTime.getDay() == mCal.get(Calendar.DAY_OF_MONTH)) {
+            if (untilStart + duration >= 24 * 60)
+                duration = 24 * 60 - untilStart;
+        }
+        // 오늘이 endTime
+        else if (endTime.getYear() == mCal.get(Calendar.YEAR) &&
+                endTime.getMonth() == mCal.get(Calendar.MONTH) + 1 &&
+                endTime.getDay() == mCal.get(Calendar.DAY_OF_MONTH)) {
+            untilStart = 0;
+            if (untilStart + duration >= 24 * 60) {
+                duration = endTime.getHour() * 60 + endTime.getMin();
+            }
+
+        }
+        else {
+            untilStart = 0;
+            duration = 24;
+        }
 
         int bgColor = this.context.getResources().getColor(R.color.parentEventRed);
         params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getPixel(duration));
