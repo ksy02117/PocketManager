@@ -138,7 +138,7 @@ public class PathInfoManager { // 최단경로, 역으로 오는 전철의 리�
         return shortestPath;
     }
 
-    public ArrayList<IncomingTrain> getAllIncomingTrainInfo() throws ExecutionException, InterruptedException {
+    private ArrayList<IncomingTrain> getAllIncomingTrainInfo() throws ExecutionException, InterruptedException {
         String url = "http://swopenAPI.seoul.go.kr/api/subway/" + subwayApiKey + "/json" +
                 "/realtimeStationArrival/0/100/" + subwayName;
 
