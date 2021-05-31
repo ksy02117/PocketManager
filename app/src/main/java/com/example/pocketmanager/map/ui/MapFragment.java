@@ -39,6 +39,7 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
     private ShortestPath path;
     private ArrayList<ShortestPathStep> steps;
     private MapPOIItem selectedLocationMarker = null;
+    ViewGroup mapViewContainer;
     private Double selectLatitude;
     private Double selectLongitude;
 
@@ -121,7 +122,7 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
         mapView = new MapView(getActivity());
         mapView.setMapTilePersistentCacheEnabled(true);
 
-        ViewGroup mapViewContainer = (ViewGroup) view.findViewById(R.id.mapView);
+        mapViewContainer = (ViewGroup) view.findViewById(R.id.mapView);
         mapViewContainer.addView(mapView);
 
     }
@@ -141,11 +142,22 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
         Time t = new Time();
         List<Event> list = Event.events.get(t.getDateID());
         Event event = null;
-        if (list != null) event = list.get(0);
-        else {
+        if (list == null) {
             steps = null; // 오늘 event가 없는 경우 처리
             return;
         }
+        else {
+            for (Event e : list) {
+                if (e.getLocation() != null) {
+                    event = e;
+                }
+            }
+        }
+        if (event == null){
+            steps = null;
+            return;
+        }
+
         // 시작 위치
         double sLat = LocationData.getCurrentLocation().getLatitude();
         double sLng = LocationData.getCurrentLocation().getLongitude();
@@ -206,23 +218,6 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
         selectedLocationMarker = addAndDrawMarker(mapView, "선택된 위치", mapPoint, MapPOIItem.MarkerType.RedPin);
     }
 
-
-
-    @Override
-    public void onMapViewInitialized(MapView mapView) {
-        //Log.d("MapViewInitialized", "MapViewInitialized");
-    }
-
-    @Override
-    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
-
-    }
-
-    @Override
-    public void onMapViewZoomLevelChanged(MapView mapView, int i) {
-
-    }
-
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) { // 터치 이벤트
         //Log.d("ASD", Double.toString(mapPoint.getMapPointGeoCoord().latitude));
@@ -231,27 +226,25 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
     }
 
     @Override
-    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
-        //getTouchedLocation(mapPoint);
+    public void onDestroyView() {
+        //mapViewContainer.removeView(mapView);
+        super.onDestroyView();
     }
 
     @Override
-    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
-
-    }
-
+    public void onMapViewInitialized(MapView mapView) { }
     @Override
-    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
-
-    }
-
+    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) { }
     @Override
-    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
-
-    }
-
+    public void onMapViewZoomLevelChanged(MapView mapView, int i) { }
     @Override
-    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-
-    }
+    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) { }
+    @Override
+    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) { }
+    @Override
+    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) { }
+    @Override
+    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) { }
+    @Override
+    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) { }
 }

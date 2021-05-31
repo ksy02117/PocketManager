@@ -5,191 +5,202 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <!--Edit Text-->
-    <EditText
-        android:id="@+id/event_name"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
+    <ScrollView
+        android:layout_marginBottom="53dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_alignParentTop="true"
-        android:hint="일정 이름" />
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/event_description"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_below="@id/event_name"
-        android:hint="일정 설명" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <!--Time Select-->
-    <LinearLayout
-        android:id="@+id/time_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/event_description"
-        android:orientation="vertical">
-
-        <TextView
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="시작 시간"
-            android:textSize="16sp"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/start_date"
-                android:layout_marginHorizontal="10dp"
-                android:layout_width="wrap_content"
+            <!--Edit Text-->
+            <EditText
+                android:id="@+id/event_name"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="0000.00.00"
-                android:textSize="15sp"
-                android:onClick="onClickStartDialog"/>
-            <TimePicker
-                android:id="@+id/start_time_picker"
-                android:layout_marginLeft="-20dp"
-                android:layout_marginRight="-20dp"
-                android:layout_marginTop="-50dp"
-                android:layout_marginBottom="-50dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                android:timePickerMode="spinner"/>
+                android:layout_alignParentTop="true"
+                android:hint="일정 이름" />
 
-        </LinearLayout>
-
-        <TextView
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="종료 시간"
-            android:textSize="16sp"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/end_date"
-                android:layout_marginHorizontal="10dp"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/event_description"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="0000.00.00"
-                android:textSize="15sp"
-                android:onClick="onClickEndDialog"/>
-            <TimePicker
-                android:id="@+id/end_time_picker"
-                android:layout_marginLeft="-20dp"
-                android:layout_marginRight="-20dp"
-                android:layout_marginTop="-50dp"
-                android:layout_marginBottom="-50dp"
-                android:layout_width="wrap_content"
+                android:layout_below="@id/event_name"
+                android:hint="일정 설명" />
+
+            <!--Time Select-->
+            <LinearLayout
+                android:id="@+id/time_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                android:timePickerMode="spinner"/>
+                android:layout_below="@id/event_description"
+                android:orientation="vertical">
 
-        </LinearLayout>
-    </LinearLayout>
+                <TextView
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시작 시간"
+                    android:textSize="16sp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
 
-    <View
-        android:id="@+id/add_separator"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_below="@id/time_layout"
-        android:background="@drawable/line"/>
+                    <TextView
+                        android:id="@+id/start_date"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="0000.00.00"
+                        android:textSize="15sp"
+                        android:onClick="onClickStartDialog"/>
+                    <TimePicker
+                        android:id="@+id/start_time_picker"
+                        android:layout_marginLeft="-20dp"
+                        android:layout_marginRight="-20dp"
+                        android:layout_marginTop="-50dp"
+                        android:layout_marginBottom="-50dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8"
+                        android:timePickerMode="spinner"/>
 
-    <RelativeLayout
-        android:id="@+id/add_location_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/add_separator"
-        android:orientation="horizontal">
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/add_location_text"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="위치"
-            android:textSize="16sp"/>
+                <TextView
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="종료 시간"
+                    android:textSize="16sp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/end_date"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="0000.00.00"
+                        android:textSize="15sp"
+                        android:onClick="onClickEndDialog"/>
+                    <TimePicker
+                        android:id="@+id/end_time_picker"
+                        android:layout_marginLeft="-20dp"
+                        android:layout_marginRight="-20dp"
+                        android:layout_marginTop="-50dp"
+                        android:layout_marginBottom="-50dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8"
+                        android:timePickerMode="spinner"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/add_separator"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_below="@id/time_layout"
+                android:background="@drawable/line"/>
+
+            <RelativeLayout
+                android:id="@+id/add_location_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/add_separator"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/add_location_text"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="위치"
+                    android:textSize="16sp"/>
 
         <Spinner
             android:id="@+id/location_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/add_location_text"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/add_location_text"
             android:layout_toLeftOf="@id/add_location"
-            android:backgroundTint="@color/baseCalendarBlue"
+            android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"/>
+            android:backgroundTint="@color/pink"/>
 
-        <ImageView
-            android:id="@+id/add_location"
-            android:layout_marginRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/add_location_text"
-            android:layout_alignBottom="@id/add_location_text"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_baseline_add_circle_24"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp" />
-    </RelativeLayout>
+                <ImageView
+                    android:id="@+id/add_location"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/add_location_text"
+                    android:layout_alignBottom="@id/add_location_text"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_baseline_add_circle_24"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp" />
+            </RelativeLayout>
 
-    <View
-        android:id="@+id/add_separator2"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_below="@id/add_location_layout"
-        android:background="@drawable/line"/>
+            <View
+                android:id="@+id/add_separator2"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_below="@id/add_location_layout"
+                android:background="@drawable/line"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/add_separator2"
-        android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/add_separator2"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/add_outdoor_text"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="실외"
-            android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/add_outdoor_text"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="실외"
+                    android:textSize="16sp"/>
 
-        <CheckBox
-            android:id="@+id/add_outdoor_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/add_outdoor_text"
-            android:layout_alignBottom="@id/add_outdoor_text"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
+                <CheckBox
+                    android:id="@+id/add_outdoor_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@id/add_outdoor_text"
+                    android:layout_alignBottom="@id/add_outdoor_text"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_marginTop="30dp"

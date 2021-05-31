@@ -9,6 +9,8 @@ import android.content.Intent;
 import com.example.pocketmanager.general.MainActivity;
 import com.example.pocketmanager.weather.DailyWeatherData;
 import com.example.pocketmanager.weather.WeatherData;
+import com.example.pocketmanager.general.Time;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,7 +20,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
-public class Alarm { // 알람을 생성하기 위한 클래스 입니다.
+public class Alarm {// 알람을 생성하기 위한 클래스 입니다.
     private static AlarmManager alarmManager;
     private GregorianCalendar mCalender;
     private NotificationManager notificationManager;

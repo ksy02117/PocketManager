@@ -89,7 +89,7 @@ public class Event extends AbstractEvent implements Serializable {
 
         while (it.hasNext()) {
             eventNode = it.next();
-            if (eventNode.startTime.getDt() < newEvent.endTime.getDt())
+            if (eventNode.startTime.getDt() <= newEvent.endTime.getDt())
                 break;
         }
 
@@ -100,9 +100,12 @@ public class Event extends AbstractEvent implements Serializable {
         }
 
         //맨끝에 저장되어야 할 경우
-        if (!it.hasNext() && eventNode.endTime.getDt() < newEvent.startTime.getDt()) {
+        if (!it.hasNext() && eventNode.endTime.getDt() <= newEvent.startTime.getDt()) {
             it.add(newEvent);
             return true;
+        }
+        else if(!it.hasNext() && eventNode.endTime.getDt() > newEvent.startTime.getDt()) {
+            return false;
         }
 
         it.previous();
@@ -113,7 +116,7 @@ public class Event extends AbstractEvent implements Serializable {
         }
         //가운데인 경우
         eventNode = it.previous();
-        if (eventNode.endTime.getDt() < newEvent.startTime.getDt()) {
+        if (eventNode.endTime.getDt() <= newEvent.startTime.getDt()) {
             it.add(newEvent);
             return true;
         }

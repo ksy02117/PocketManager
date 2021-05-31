@@ -11,12 +11,15 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -150,21 +153,18 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         }
 
         ArrayList<String> locations = new ArrayList<>();
-        for (LocationData location : LocationData.favorites) {
+        locations.add("지정 안함");
+        for (LocationData location : LocationData.favorites)
             locations.add(location.getName());
-        }
 
-        ArrayAdapter<String> locationAdaptor = new ArrayAdapter<>(
+        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
                 locations
         );
-
-        locationAdaptor.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        locationSpinner.setAdapter(locationAdaptor);
+        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationSpinner.setAdapter(locationAdapter);
         locationSpinner.setOnItemSelectedListener(this);
-
     }
 
     private Event modifyEvent() {
@@ -173,7 +173,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
     }
 
     private Event addParentEvent() {
-        return Event.createEvent(eventNameString, startTime, endTime, null, isOutdoor, eventDescString, Event.PRIORITY_MEDIUM);
+        return Event.createEvent(eventNameString, startTime, endTime, location, isOutdoor, eventDescString, Event.PRIORITY_MEDIUM);
     }
 
     private boolean addSubEvent(Event parentEvent) {
@@ -285,12 +285,27 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        locationSpinner.setSelection(position);
-        location = LocationData.favorites.get(position);
+        if(position == 0)
+            location = null;
+        else
+            location = LocationData.favorites.get(position - 1);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && data != null) {
+            if (resultCode == RESULT_OK) {
+                // 데이터 가져오기
+
+                Double latitude = data.getDoubleExtra("latitude", 0);
+                Double longitude = data.getDoubleExtra("longitude", 0);
+
+            }
+        }
     }
 }

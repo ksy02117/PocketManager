@@ -5,10 +5,16 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -32,10 +38,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class addLocationActivity extends Activity implements MapView.MapViewEventListener { // 이벤트를 추가할때 위치를 추가하는 activity입니다.
+public class addLocationActivity extends Activity implements MapView.MapViewEventListener, TextView.OnEditorActionListener { // 이벤트를 추가할때 위치를 추가하는 activity입니다.
     private View view;
+    ViewGroup mapViewContainer;
     private MapView mapView;
+    private EditText locationSearchBar;
+    private Button cancel, confirm;
     private MapPOIItem selectedLocationMarker = null;
     private Double selectLatitude;
     private Double selectLongitude;
@@ -54,8 +65,35 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.add_location);
 
+        cancel = (Button) findViewById(R.id.add_location_cancel);
+        confirm = (Button) findViewById(R.id.add_location_confirm);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+
+                // 데이터 내보내기
+                intent.putExtra("name", locationSearchBar.getText());
+                intent.putExtra("latitude", selectLatitude);
+                intent.putExtra("longitude", selectLongitude);
+
+
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
         // 지도 초기화 및 생성
         initMapView();
+        locationSearchBar = (EditText) findViewById(R.id.location_search_bar);
 
         // 이벤트 등록
         mapView.setMapViewEventListener(this);
@@ -64,6 +102,8 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
         //TODO gps
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(LocationData.getCurrentLocation().getLatitude(), LocationData.getCurrentLocation().getLongitude()), false);
 
+        locationSearchBar.setOnEditorActionListener(this);
+        locationSearchBar.setFocusable(true);
     }
 
     private void initMapView() { // 지도 초기화 및 위치
@@ -96,54 +136,64 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
         mapView.setMapCenterPoint(mapPoint, false);
     }
 
-    public void locationNameToAddress(String locationName) { // 검색하려하는 문자열을 받아 위치로 변환하여 화면을 전환하고 마커를 찍음
-        Address a = GeoCodingReceiver.getAddressfromName(locationName);
-        getLocation(MapPoint.mapPointWithGeoCoord(a.getLatitude(), a.getLongitude()));
-    }
-
 
     @Override
-    public void onMapViewInitialized(MapView mapView) {
-
-    }
-
-    @Override
-    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
-
-    }
-
-    @Override
-    public void onMapViewZoomLevelChanged(MapView mapView, int i) {
-
-    }
+    public void onMapViewZoomLevelChanged(MapView mapView, int i) { }
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
         getLocation(mapPoint);
     }
 
-    @Override
-    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
-
+    public void locationNameToAddress(String locationName) { // 검색하려하는 문자열을 받아 위치로 변환하여 화면을 전환하고 마커를 찍음
+        Address a = GeoCodingReceiver.getAddressfromName(locationName);
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(a.getLatitude(), a.getLongitude()), true);
+        //getLocation(MapPoint.mapPointWithGeoCoord(a.getLatitude(), a.getLongitude()));
+        mapView.requestFocus();
     }
 
     @Override
-    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == KeyEvent.KEYCODE_ENDCALL) {
+            locationNameToAddress(v.getText().toString());
+            hideKeyboard(this);
+            return true;
+        }
 
+        return false;
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
-    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
-
+    public void finish() {
+        //mapViewContainer.removeView(mapView);
+        super.onDestroy();
     }
+
 
     @Override
-    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
-
-    }
-
+    public void onMapViewInitialized(MapView mapView) { }
     @Override
-    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) { }
+    @Override
+    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) { }
+    @Override
+    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) { }
+    @Override
+    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) { }
+    @Override
+    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) { }
+    @Override
+    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) { }
 
-    }
 }
