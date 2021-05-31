@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class PathInfoManager {
+public class PathInfoManager { // 최단경로, 역으로 오는 전철의 리스트를 얻을 수 있는 클래스입니다.
     // google direction api 호출을 위한 변수들
     private String origin;      // 시작지점 위도, 경도
     private String destination; // 도착지점 위도, 경도
@@ -47,6 +47,7 @@ public class PathInfoManager {
         ShortestPath shortestPath = new ShortestPath();
         ArrayList<ShortestPathStep> shortestPathSteps = new ArrayList<ShortestPathStep>();
         try {
+            if (pathInfo == null) return null;
             jObject = new JSONObject(pathInfo);
             if (jObject.getString("status").equals("OK")) Log.d("path_status", "OK");
             else {
@@ -137,7 +138,7 @@ public class PathInfoManager {
         return shortestPath;
     }
 
-    public ArrayList<IncomingTrain> getAllIncomingTrainInfo() throws ExecutionException, InterruptedException {
+    private ArrayList<IncomingTrain> getAllIncomingTrainInfo() throws ExecutionException, InterruptedException {
         String url = "http://swopenAPI.seoul.go.kr/api/subway/" + subwayApiKey + "/json" +
                 "/realtimeStationArrival/0/100/" + subwayName;
 

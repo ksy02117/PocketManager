@@ -14,13 +14,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class alarm {
+public class Alarm { // 알람을 생성하기 위한 클래스 입니다.
     private AlarmManager alarmManager;
     private GregorianCalendar mCalender;
     private NotificationManager notificationManager;
     private Context context;
 
-    public alarm(Context c) {
+    public Alarm(Context c) { //생성자
         context = c;
         notificationManager = (NotificationManager)context.getSystemService(context.NOTIFICATION_SERVICE);
         alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
@@ -44,7 +44,7 @@ public class alarm {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(datetime);
-
+        // 알람 생성함
         alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
     }
 }

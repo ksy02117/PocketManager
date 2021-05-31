@@ -132,6 +132,17 @@
             android:text="위치"
             android:textSize="16sp"/>
 
+        <Spinner
+            android:id="@+id/location_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/add_location_text"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/add_location"
+            android:backgroundTint="@color/baseCalendarBlue"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
+
         <ImageView
             android:id="@+id/add_location"
             android:layout_marginRight="10dp"

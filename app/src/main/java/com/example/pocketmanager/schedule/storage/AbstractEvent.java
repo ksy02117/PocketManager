@@ -18,8 +18,7 @@ public abstract class AbstractEvent implements Serializable {
     protected int priority;
 
     LocationData location;
-    ArrayList<WeatherData> eventWeather = null;
-
+    ArrayList<WeatherData> eventWeather = new ArrayList<>();
 
 
     //const
