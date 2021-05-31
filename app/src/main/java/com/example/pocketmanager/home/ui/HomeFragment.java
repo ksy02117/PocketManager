@@ -241,6 +241,7 @@ public class HomeFragment extends Fragment {
 
             newIcon.setImageResource(resourceId);
             weatherLayout.addView(newIcon);
+
         }
     }
 

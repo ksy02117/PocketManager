@@ -5,6 +5,7 @@
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView2"
+        android:layout_marginBottom="53dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
