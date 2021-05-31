@@ -3,33 +3,19 @@ package com.example.pocketmanager.general;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.TextView;
 
 import com.example.pocketmanager.R;
-import com.example.pocketmanager.schedule.TimetableManager;
-import com.example.pocketmanager.schedule.TimetableManager;
 import com.example.pocketmanager.map.LocationDBHelper;
 import com.example.pocketmanager.map.LocationData;
-import com.example.pocketmanager.schedule.storage.AbstractEvent;
 import com.example.pocketmanager.schedule.storage.EventDBHelper;
-import com.example.pocketmanager.schedule.alarm.AlarmReceiver;
 import com.example.pocketmanager.weather.receiver.AirPollutionReceiver;
 import com.example.pocketmanager.map.GeoCodingReceiver;
 import com.example.pocketmanager.weather.receiver.DailyWeatherReceiver;
@@ -40,22 +26,13 @@ import com.example.pocketmanager.weather.WeatherData;
 import com.example.pocketmanager.home.ui.HomeFragment;
 import com.example.pocketmanager.schedule.ui.ScheduleFragment;
 import com.example.pocketmanager.map.ui.MapFragment;
-import com.example.pocketmanager.transportation.IncomingTrain;
-import com.example.pocketmanager.transportation.PathInfoManager;
 import com.example.pocketmanager.transportation.ShortestPath;
 import com.example.pocketmanager.weather.ui.WeatherSelection;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private TextView curDate;
