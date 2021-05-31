@@ -36,6 +36,7 @@ import java.util.TimeZone;
 public class addLocationActivity extends Activity implements MapView.MapViewEventListener { // 이벤트를 추가할때 위치를 추가하는 activity입니다.
     private View view;
     private MapView mapView;
+    private Button cancel, confirm;
     private MapPOIItem selectedLocationMarker = null;
     private Double selectLatitude;
     private Double selectLongitude;
@@ -53,6 +54,31 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
         //타이틀바 없애기
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.add_location);
+
+        cancel = (Button) findViewById(R.id.add_location_cancel);
+        confirm = (Button) findViewById(R.id.add_location_confirm);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+
+                // 데이터 내보내기
+                intent.putExtra("latitude", selectLatitude);
+                intent.putExtra("longitude", selectLongitude);
+
+
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
 
         // 지도 초기화 및 생성
         initMapView();

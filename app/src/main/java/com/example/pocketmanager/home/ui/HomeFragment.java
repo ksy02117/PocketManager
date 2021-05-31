@@ -308,7 +308,7 @@ public class HomeFragment extends Fragment {
             Time departTime = new Time(event.getEndTime().getDt() - 300);
             String departTimeString = departTime.getYear()+"-"+departTime.getMonth()+"-"+departTime.getDay()+" "+departTime.getHour()+":"+departTime.getMin()+":"+departTime.getSec();
             new Alarm(this.getContext());
-            Alarm.departAlarm(departTimeString);
+            //Alarm.departAlarm(departTimeString);
         }
 
     }

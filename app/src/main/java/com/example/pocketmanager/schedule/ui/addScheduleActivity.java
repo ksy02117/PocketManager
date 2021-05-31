@@ -293,4 +293,17 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && data != null) {
+            if (resultCode == RESULT_OK) {
+                // 데이터 가져오기
+
+                Double latitude = data.getDoubleExtra("latitude", 0);
+                Double longitude = data.getDoubleExtra("longitude", 0);
+
+            }
+        }
+    }
 }
