@@ -59,11 +59,22 @@ public class WeatherReceiver implements Runnable {
                 e.printStackTrace();
             }
         }
-
-        receiveHistoricalWeatherData();
-        receiveForecastWeatherData();
-        receiveAirPollutionData();
-        receiveDailyWeatherData();
+        Thread t1 = new Thread (() -> {
+            receiveHistoricalWeatherData();
+        });
+        Thread t2 = new Thread (() -> {
+            receiveForecastWeatherData();
+        });
+        Thread t3 = new Thread (() -> {
+            receiveAirPollutionData();
+        });
+        Thread t4 = new Thread (() -> {
+            receiveDailyWeatherData();
+        });
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
     }
 
     private static void receiveHistoricalWeatherData() {

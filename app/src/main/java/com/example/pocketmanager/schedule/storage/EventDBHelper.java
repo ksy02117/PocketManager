@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.pocketmanager.general.DBHelper;
 import com.example.pocketmanager.map.LocationData;
@@ -32,7 +33,7 @@ public class EventDBHelper {
         return newRowId;
     }
 
-    public static synchronized void initEvents() {
+    public static void initEvents() {
         SQLiteDatabase db = DBHelper.getInstance().getReadableDatabase();
 
         //define column
@@ -121,22 +122,23 @@ public class EventDBHelper {
         }
     }
 
-    public static synchronized void delete(long id) {
+    public static void delete(long id) {
+        Log.d("DB", "DBDeletion");
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 
         String selection = EventContract.EventEntry.ID + " = ?";
-        String[] selectionArgs = {String.valueOf(id)};
+        String[] selectionArgs = { String.valueOf(id) };
 
         db.delete(EventContract.EventEntry.TABLE_NAME, selection, selectionArgs);
     }
 
-    public static synchronized void clear() {
+    public static void clear() {
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 
         db.delete(EventContract.EventEntry.TABLE_NAME, null, null);
     }
 
-    public static synchronized void updateStartTime(long id, Time startTime) {
+    public static void updateStartTime(long id, Time startTime) {
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 
         // New value for one column
@@ -153,7 +155,7 @@ public class EventDBHelper {
                 selection,
                 selectionArgs);
     }
-    public static synchronized void updateEndTime(long id, Time endTime) {
+    public static void updateEndTime(long id, Time endTime) {
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 
         // New value for one column
@@ -170,7 +172,7 @@ public class EventDBHelper {
                 selection,
                 selectionArgs);
     }
-    public static synchronized void updateName(long id, String name) {
+    public static void updateName(long id, String name) {
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 
         // New value for one column
@@ -187,7 +189,7 @@ public class EventDBHelper {
                 selection,
                 selectionArgs);
     }
-    public static synchronized void updateDescription(long id, String description) {
+    public static void updateDescription(long id, String description) {
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 
         // New value for one column
@@ -204,7 +206,7 @@ public class EventDBHelper {
                 selection,
                 selectionArgs);
     }
-    public static synchronized void updatePriority(long id, int priority) {
+    public static void updatePriority(long id, int priority) {
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 
         // New value for one column
@@ -221,7 +223,7 @@ public class EventDBHelper {
                 selection,
                 selectionArgs);
     }
-    public static synchronized void updateLocation(long id, LocationData location) {
+    public static void updateLocation(long id, LocationData location) {
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 
         // New value for one column
@@ -238,7 +240,7 @@ public class EventDBHelper {
                 selection,
                 selectionArgs);
     }
-    public static synchronized void updateOutdoor(long id, boolean outdoor) {
+    public static void updateOutdoor(long id, boolean outdoor) {
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 
         // New value for one column

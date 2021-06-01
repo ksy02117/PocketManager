@@ -85,7 +85,6 @@ public class HomeFragment extends Fragment {
         }
         addTransportationEvent();
 
-
         l.setVisibility(View.VISIBLE);
         emptyText.setVisibility(View.GONE);
 

@@ -22,7 +22,7 @@ import com.example.pocketmanager.weather.receiver.WeatherReceiver;
 
 import org.w3c.dom.Text;
 
-public class WeatherFragment extends Fragment implements Runnable{
+public class WeatherFragment extends Fragment{
     private ScrollView mScrollView;
     private LinearLayoutManager mLayoutManager;
     private RecyclerView weather_recycler, rain_recycler;
@@ -67,26 +67,13 @@ public class WeatherFragment extends Fragment implements Runnable{
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
         rain_recycler.setLayoutManager((mLayoutManager));
 
+        if (!WeatherData.isWeatherReady()) {
+            Thread t = new Thread (()->{
 
-        new Thread(this).start();
-
+            });
+        }
 
         return view;
-    }
-
-    @Override
-    public void run() {
-        synchronized (this) {
-            try {
-                if (!WeatherReceiver.isWeatherReady()) {
-                    WeatherReceiver.addPendingThread(this);
-                    this.wait();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        display();
     }
 
     public void display() {

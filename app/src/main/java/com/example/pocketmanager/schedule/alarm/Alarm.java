@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 
 import com.example.pocketmanager.general.MainActivity;
 import com.example.pocketmanager.weather.DailyWeatherData;
@@ -53,7 +54,7 @@ public class Alarm {// 알람을 생성하기 위한 클래스 입니다.
         calendar.setTime(datetime);
 
         Calendar currentTime = Calendar.getInstance();
-        if (calendar.getTimeInMillis() > currentTime.getTimeInMillis())
+        if (calendar.getTimeInMillis() < currentTime.getTimeInMillis())
             return;
 
         // 알람 생성함
@@ -69,6 +70,7 @@ public class Alarm {// 알람을 생성하기 위한 클래스 입니다.
 
         List<WeatherData> list = WeatherData.getTodayWeather();
         Iterator<WeatherData> it = list.iterator();
+
         while (it.hasNext()){
             WeatherData weather = it.next();
             if (weather.getPm2_5() > 35)
@@ -78,6 +80,7 @@ public class Alarm {// 알람을 생성하기 위한 클래스 입니다.
             if (weather.getPop() > 0)
                 rainFlag = true;
         }
+
         DailyWeatherData dw= WeatherData.dailyWeatherData.get(0);
         double tempRange = dw.getMax_temp() - dw.getMin_temp();
 

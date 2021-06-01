@@ -133,6 +133,7 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
         builder.setPositiveButton("예",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        Log.d("DB", "startDeletion");
                         Event.removeEvent(currentEvent);
                         setResult(RESULT_OK);
                         finish();

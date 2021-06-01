@@ -75,6 +75,7 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
                 finish();
             }
         });
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
