@@ -53,7 +53,7 @@ public class Alarm {// 알람을 생성하기 위한 클래스 입니다.
         calendar.setTime(datetime);
 
         Calendar currentTime = Calendar.getInstance();
-        if (calendar.getTimeInMillis() > currentTime.getTimeInMillis())
+        if (calendar.getTimeInMillis() < currentTime.getTimeInMillis())
             return;
 
         // 알람 생성함
