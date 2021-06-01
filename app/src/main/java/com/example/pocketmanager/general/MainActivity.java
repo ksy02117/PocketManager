@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.map.LocationDBHelper;
 import com.example.pocketmanager.map.LocationData;
+import com.example.pocketmanager.schedule.alarm.AlarmReceiver;
 import com.example.pocketmanager.schedule.storage.EventDBHelper;
 import com.example.pocketmanager.weather.receiver.AirPollutionReceiver;
 import com.example.pocketmanager.map.GeoCodingReceiver;
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView curDate;
     private FragmentManager fragmentManager;
     private Fragment menu1Fragment;
-    private Fragment menu2Fragment;
+    private static Fragment menu2Fragment;
     private Fragment menu3Fragment;
     private Fragment menu4Fragment;
 
@@ -75,6 +78,14 @@ public class MainActivity extends AppCompatActivity {
                             if(menu3Fragment != null) fragmentManager.beginTransaction().hide(menu3Fragment).commit();
                             if(menu4Fragment != null) fragmentManager.beginTransaction().hide(menu4Fragment).commit();
                             setMainText(curDate, "일정");
+                           /* if (MapFragment.mapViewContainer != null) {
+                                FragmentManager fm = getSupportFragmentManager();
+                                FragmentTransaction ft = fragmentManager.beginTransaction();
+                                MapFragment.mapViewContainer.removeAllViews();
+                                MapFragment.mapViewContainer = null;
+                                ft.remove(menu2Fragment).commit();
+                                menu2Fragment = null;
+                            }*/
 
                             return true;
                         case R.id.menu_weather:
@@ -105,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                             if(menu3Fragment != null) fragmentManager.beginTransaction().hide(menu3Fragment).commit();
                             if(menu4Fragment != null) fragmentManager.beginTransaction().hide(menu4Fragment).commit();
                             setMainText(curDate, "지도");
+
 
                             return true;
                     }
@@ -155,8 +167,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.main_frame,menu4Fragment).commit();
 
         curDate = (TextView)findViewById(R.id.current_date);
-
-
 
     }
 

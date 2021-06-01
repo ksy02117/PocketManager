@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.Time;
+import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.schedule.storage.SubEvent;
 
@@ -25,11 +26,13 @@ import java.util.Locale;
 
 public class EventDetailsActivity extends Activity implements View.OnClickListener {
     private Event currentEvent;
-    private TextView eventName, eventDesc, eventStartDate, eventEndDate, eventStartTime, eventEndTime;
+    private TextView eventName, eventDesc, eventStartDate, eventEndDate, eventStartTime, eventEndTime, locationText;
     private String name, description;
     private Time startTime, endTime;
+    private LocationData location;
     private SimpleDateFormat s;
     private long startDt, endDt;
+    private boolean isOutdoor;
 
     private ImageView addSub;
     private Button cancel, modify, delete;
@@ -56,10 +59,12 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
         eventEndDate = (TextView) findViewById(R.id.detail_end_date);
         eventStartTime = (TextView) findViewById(R.id.detail_start_time);
         eventEndTime = (TextView) findViewById(R.id.detail_end_time);
+        locationText = (TextView) findViewById(R.id.detail_location);
         addSub = (ImageView) findViewById(R.id.detail_add_sub);
         cancel = (Button) findViewById(R.id.detail_cancel);
         modify = (Button) findViewById(R.id.detail_modify);
         delete = (Button) findViewById(R.id.detail_delete);
+
 
         //데이터 가져오기
         Intent intent = getIntent();
@@ -70,6 +75,7 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
         endDt = currentEvent.getEndTime().getDt();
         startTime = new Time();
         endTime = new Time();
+        location = currentEvent.getLocation();
         s = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
         setTexts();
@@ -103,6 +109,10 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
             eventEndDate.setText(endTime.getMonth() + "월 " + endTime.getDay() + "일");
         eventStartTime.setText(s.format(new Date(startTime.getDt() * 1000)));
         eventEndTime.setText(s.format(new Date(endTime.getDt() * 1000)));
+        if (location == null)
+            locationText.setText("지정 없음");
+        else
+            locationText.setText(location.getName());
     }
 
     @Override
@@ -157,6 +167,7 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
                 description = currentEvent.getDescription();
                 startDt = currentEvent.getStartTime().getDt();
                 endDt = currentEvent.getEndTime().getDt();
+                location = currentEvent.getLocation();
 
                 Log.d("hate_name", "" + name);
                 Log.d("hate_description", "" + description);
@@ -167,6 +178,7 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
             }
         }
         if (requestCode == 2 && data != null) {
+            delete.setActivated(false);
 
             String dataName = data.getStringExtra("eventName");
             String dataDescription = data.getStringExtra("eventDescription");

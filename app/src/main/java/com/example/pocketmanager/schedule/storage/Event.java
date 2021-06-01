@@ -1,7 +1,5 @@
 package com.example.pocketmanager.schedule.storage;
 
-import android.util.Log;
-
 import com.example.pocketmanager.map.LocationDBHelper;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.general.Time;
@@ -131,7 +129,6 @@ public class Event extends AbstractEvent implements Serializable {
 
 
     public static boolean removeEvent(@NotNull Event event) {
-        Log.d("DB", "eventDeletion");
         long startDateID = event.getStartTime().getDateID();
         long endDateID = event.getEndTime().getDateID();
         boolean flag = true;
@@ -144,7 +141,6 @@ public class Event extends AbstractEvent implements Serializable {
             if (list.isEmpty())
                 events.remove(i);
         }
-        Log.d("DB", "actualDeletion");
         EventDBHelper.delete(event.getID());
         return flag;
     }
