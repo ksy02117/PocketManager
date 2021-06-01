@@ -27,6 +27,7 @@ import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.map.GeoCodingReceiver;
 import com.example.pocketmanager.map.LocationData;
+import com.example.pocketmanager.map.ui.MapFragment;
 import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.schedule.storage.SubEvent;
 
@@ -43,7 +44,7 @@ import java.util.TimerTask;
 
 public class addLocationActivity extends Activity implements MapView.MapViewEventListener, TextView.OnEditorActionListener { // 이벤트를 추가할때 위치를 추가하는 activity입니다.
     private View view;
-    ViewGroup mapViewContainer;
+    private ViewGroup mapViewContainer;
     private MapView mapView;
     private EditText locationSearchBar;
     private Button cancel, confirm;
@@ -108,12 +109,13 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
 
     private void initMapView() { // 지도 초기화 및 위치
         mapView = new MapView(this);
-        mapView.setMapTilePersistentCacheEnabled(true);
+        //mapView.setMapTilePersistentCacheEnabled(true);
 
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.mapView2);
         mapViewContainer.addView(mapView);
 
     }
+
 
     private MapPOIItem addAndDrawMarker(MapView m, String name, MapPoint p, MapPOIItem.MarkerType t) {
         MapPOIItem marker = new MapPOIItem();
@@ -163,6 +165,7 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
         return false;
     }
 
+
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -174,10 +177,9 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    @Override
-    public void finish() {
-        //mapViewContainer.removeView(mapView);
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
+        if (mapViewContainer != null) mapViewContainer.removeAllViews();
     }
 
 
@@ -195,5 +197,4 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) { }
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) { }
-
 }

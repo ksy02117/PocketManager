@@ -1,5 +1,6 @@
 package com.example.pocketmanager.map.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.map.GeoCodingReceiver;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.schedule.storage.Event;
+import com.example.pocketmanager.schedule.ui.addLocationActivity;
 import com.example.pocketmanager.transportation.PathInfoManager;
 import com.example.pocketmanager.transportation.ShortestPath;
 import com.example.pocketmanager.transportation.ShortestPathStep;
@@ -28,6 +30,7 @@ import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -39,7 +42,7 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
     private ShortestPath path;
     private ArrayList<ShortestPathStep> steps;
     private MapPOIItem selectedLocationMarker = null;
-    ViewGroup mapViewContainer;
+    private ViewGroup mapViewContainer;
     private Double selectLatitude;
     private Double selectLongitude;
 
@@ -114,6 +117,8 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
         MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
         int padding = 100; // px
         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+
+
 
         return view;
     }
@@ -225,10 +230,16 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
         getTouchedLocation(mapPoint); // 터치한 곳의 위치 얻기
     }
 
+
     @Override
     public void onDestroyView() {
         //mapViewContainer.removeView(mapView);
         super.onDestroyView();
+    }
+
+    public void onPause() {
+        super.onPause();
+        if (mapViewContainer != null) mapViewContainer.removeAllViews();
     }
 
     @Override
