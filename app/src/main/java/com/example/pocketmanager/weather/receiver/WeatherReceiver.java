@@ -102,7 +102,6 @@ public class WeatherReceiver implements Runnable {
                             output.setSnow(input.getSnow());
                         }
                         todayWeatherReady = true;
-                        notifyThread();
                     }
                 });
     }
@@ -132,7 +131,6 @@ public class WeatherReceiver implements Runnable {
                             output.setSnow(input.getSnow());
                         }
                         tomorrowWeatherReady = true;
-                        notifyThread();
                     }
 
                 });
@@ -157,7 +155,6 @@ public class WeatherReceiver implements Runnable {
                             output.setPop(input.getPop());
                         }
                         dailyWeatherReady = true;
-                        notifyThread();
                     }
 
                 });
@@ -181,31 +178,14 @@ public class WeatherReceiver implements Runnable {
                                 j++;
                         }
                         airPollutionReady = true;
-                        notifyThread();
                     }
 
                 });
 
     }
 
-    public static boolean isWeatherReady() {
+    public synchronized static boolean isWeatherReady() {
         return todayWeatherReady && tomorrowWeatherReady && dailyWeatherReady && airPollutionReady;
-    }
-
-    public static void addPendingThread(Runnable t) {
-        pendingThreads.add(t);
-    }
-    public static void notifyThread() {
-        if (!isWeatherReady())
-            return;
-        Iterator<Runnable> it = pendingThreads.iterator();
-        while (it.hasNext()) {
-            Runnable t = it.next();
-            synchronized (t) {
-                t.notify();
-            }
-        }
-        pendingThreads.clear();
     }
 
 }

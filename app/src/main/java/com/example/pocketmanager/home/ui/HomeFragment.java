@@ -21,6 +21,7 @@ import com.example.pocketmanager.R;
 import com.example.pocketmanager.general.Time;
 import com.example.pocketmanager.map.LocationData;
 import com.example.pocketmanager.schedule.alarm.Alarm;
+import com.example.pocketmanager.schedule.storage.AbstractEvent;
 import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.schedule.storage.SubEvent;
 import com.example.pocketmanager.schedule.ui.EventDetailsActivity;
@@ -48,8 +49,10 @@ public class HomeFragment extends Fragment {
     private LinearLayout l;
     private Calendar mCal;
     private Time todayStartTime;
+    private boolean flag = true;
     private float scale;
     View view;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home, container, false);
@@ -61,6 +64,8 @@ public class HomeFragment extends Fragment {
         weatherLayout = (RelativeLayout) view.findViewById(R.id.home_weather_layout);
         emptyText = (TextView) view.findViewById(R.id.wow_such_empty);
 
+        flag = true;
+
         update();
 
         return view;
@@ -70,15 +75,23 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        flag = true;
+
+
         update();
     }
+    @Override
+    public void onPause() {
+        flag = false;
+        super.onPause();
+    }
+
 
     public void update() {
         Time t = new Time();
         mCal = Calendar.getInstance();
         t.setDt(mCal.getTimeInMillis() / 1000);
         long id = t.getDateID();
-
 
         eventLayout.removeAllViews();
         weatherLayout.removeAllViews();
@@ -88,7 +101,9 @@ public class HomeFragment extends Fragment {
             wowSuchEmpty();
             return;
         }
+
         addTransportationEvent();
+
 
         l.setVisibility(View.VISIBLE);
         emptyText.setVisibility(View.GONE);
@@ -101,8 +116,22 @@ public class HomeFragment extends Fragment {
 
         setStartDuration(e.getFirst().getStartTime(), e.getLast().getEndTime());
 
-        for (Event myEvent : e)
-            addEvent(myEvent);
+        Thread thread = new Thread(()->{
+            try {
+                while (flag) {
+                    Thread.sleep(2000);
+                    getActivity().runOnUiThread(()->{
+                        for (Event myEvent : e)
+                            addEvent(myEvent);
+                    });
+                }
+            }
+            catch(InterruptedException error){
+                error.printStackTrace();
+            }
+        });
+        thread.start();
+
     }
 
     private void wowSuchEmpty() {

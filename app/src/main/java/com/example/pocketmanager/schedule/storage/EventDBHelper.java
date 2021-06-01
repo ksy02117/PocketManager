@@ -29,6 +29,8 @@ public class EventDBHelper {
         values.put(EventContract.EventEntry.PARENT_ID, parent == null ? null : parent.getID());
         values.put(EventContract.EventEntry.LOCATION_ID, location == null ? null : location.getID());
 
+        Log.d("DB", "input" + location.getID());
+
         long newRowId = db.insert(EventContract.EventEntry.TABLE_NAME, null, values);
         return newRowId;
     }
@@ -85,7 +87,12 @@ public class EventDBHelper {
             description = cursor.getString(cursor.getColumnIndex(EventContract.EventEntry.DESCRIPTION));
             priority = cursor.getInt(cursor.getColumnIndex(EventContract.EventEntry.PRIORITY));
 
-            location = LocationData.findLocationByID(cursor.getLong(cursor.getColumnIndex(EventContract.EventEntry.LOCATION_ID)));
+            long locationID = cursor.getLong(cursor.getColumnIndex(EventContract.EventEntry.LOCATION_ID));
+            Log.d("DB", "output" + locationID);
+            if (locationID == -1)
+                location = LocationData.school;
+            else
+                location = LocationData.findLocationByID(locationID);
 
             Event.loadEvent(id, name, startTime, endTime, location, outdoor, description, priority);
         }
@@ -135,7 +142,9 @@ public class EventDBHelper {
     public static void clear() {
         SQLiteDatabase db = DBHelper.getInstance().getWritableDatabase();
 
-        db.delete(EventContract.EventEntry.TABLE_NAME, null, null);
+        String selection = EventContract.EventEntry.ID + " >= 0";
+
+        db.delete(EventContract.EventEntry.TABLE_NAME, selection, null);
     }
 
     public static void updateStartTime(long id, Time startTime) {

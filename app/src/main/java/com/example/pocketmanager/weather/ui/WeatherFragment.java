@@ -67,11 +67,18 @@ public class WeatherFragment extends Fragment{
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
         rain_recycler.setLayoutManager((mLayoutManager));
 
-        if (!WeatherData.isWeatherReady()) {
-            Thread t = new Thread (()->{
+        Thread t = new Thread (()->{
+            try {
+                while (!WeatherData.isWeatherReady()) {
+                    Thread.sleep(1000);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            display();
+        });
 
-            });
-        }
+        t.start();
 
         return view;
     }

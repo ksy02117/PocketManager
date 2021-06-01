@@ -118,8 +118,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         mCalendar = Calendar.getInstance();
         TextView curDate = (TextView) view.findViewById(R.id.calendar_date);
 
-        //
-
         //  월 달력 어댑터
         monthAdapter = new MyPagerAdapter(this.getContext());
         weekAdapter = new MyPagerAdapter2(this.getContext());

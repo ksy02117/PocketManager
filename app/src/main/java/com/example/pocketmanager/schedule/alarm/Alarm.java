@@ -62,6 +62,19 @@ public class Alarm {// 알람을 생성하기 위한 클래스 입니다.
     }
 
     public static void departAlarm(String time) {
+        Thread t = new Thread(()->{
+            try{
+                while (!WeatherData.isWeatherReady()){
+                    Thread.sleep(1000);
+                }
+                inDepartAlarm(time);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void inDepartAlarm(String time) {
         String name = "";
         String description = "";
         boolean airPollution = false;
