@@ -32,6 +32,7 @@ public class Alarm {// 알람을 생성하기 위한 클래스 입니다.
         alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         mCalender = new GregorianCalendar();
     }
+
     public static void setAlarm(String time, String name, String describe) {
         //AlarmReceiver에 값 전달
         Intent receiverIntent = new Intent(context, AlarmReceiver.class);
@@ -50,6 +51,11 @@ public class Alarm {// 알람을 생성하기 위한 클래스 입니다.
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(datetime);
+
+        Calendar currentTime = Calendar.getInstance();
+        if (calendar.getTimeInMillis() > currentTime.getTimeInMillis())
+            return;
+
         // 알람 생성함
         alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
     }
@@ -79,7 +85,7 @@ public class Alarm {// 알람을 생성하기 위한 클래스 입니다.
             highTempRange = true;
 
         if (airPollution || highTempRange || rainFlag)
-            name = "날씨 주위!";
+            name = "날씨 주의!";
         else
             name = "출발합시다";
 
@@ -95,4 +101,5 @@ public class Alarm {// 알람을 생성하기 위한 클래스 입니다.
 
         setAlarm(time, name, description);
     }
+
 }

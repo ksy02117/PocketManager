@@ -323,10 +323,12 @@ public class HomeFragment extends Fragment {
         events.add(null);
         for (int i = 0; i < list.size(); i++) {
             Event event = list.get(i);
-            if (!event.isOutdoor())
+            if (!event.isOutdoor() || event.getLocation() == null)
                 continue;
             if (Math.abs(event.getLocation().getLatitude() - lats.get(lats.size() - 1)) < 0.5  && Math.abs(event.getLocation().getLongitude() - lats.get(lats.size() - 1)) < 0.5)
                 continue;
+            if (event.getPriority() == Event.PRIORITY_TRANS)
+                return;
             lats.add(event.getLocation().getLatitude());
             lons.add(event.getLocation().getLongitude());
             events.add(event);
