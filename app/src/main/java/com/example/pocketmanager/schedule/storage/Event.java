@@ -39,7 +39,7 @@ public class Event extends AbstractEvent implements Serializable {
 
     public static Event loadEvent(long id, String name, Time startTime, Time endTime, LocationData location, boolean outdoor, String description, int priority) {
         Event event = new Event(id, name, startTime, endTime, location, outdoor, description, priority);
-
+        addEvent(event);
         return event;
     }
 
@@ -89,7 +89,7 @@ public class Event extends AbstractEvent implements Serializable {
 
         while (it.hasNext()) {
             eventNode = it.next();
-            if (eventNode.startTime.getDt() <= newEvent.endTime.getDt())
+            if (eventNode.startTime.getDt() > newEvent.endTime.getDt())
                 break;
         }
 
@@ -110,10 +110,12 @@ public class Event extends AbstractEvent implements Serializable {
 
         it.previous();
         //맨 앞인 경우
-        if (!it.hasPrevious()) {
+        if (!it.hasPrevious() && eventNode.getStartTime().getDt() >= newEvent.endTime.getDt() ) {
             it.add(newEvent);
             return true;
         }
+        else if (!it.hasPrevious())
+            return false;
         //가운데인 경우
         eventNode = it.previous();
         if (eventNode.endTime.getDt() <= newEvent.startTime.getDt()) {

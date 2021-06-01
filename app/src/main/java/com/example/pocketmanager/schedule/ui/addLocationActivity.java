@@ -177,6 +177,7 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+
     @Override
     public void onMapViewInitialized(MapView mapView) { }
     @Override

@@ -19,6 +19,7 @@ public abstract class AbstractEvent implements Serializable {
 
     LocationData location;
     ArrayList<WeatherData> eventWeather = new ArrayList<>();
+    ArrayList<Runnable> pendingThread = new ArrayList<>();
 
 
     //const
@@ -39,7 +40,7 @@ public abstract class AbstractEvent implements Serializable {
         this.outdoor = outdoor;
         this.priority = priority;
 
-        if (outdoor) {
+        if (outdoor && location != null) {
             //make placeholder for weather data
             eventWeather = new ArrayList<WeatherData>();
             long startTimeID = startTime.getDt() / 3600 * 3600;
@@ -47,9 +48,10 @@ public abstract class AbstractEvent implements Serializable {
                 eventWeather.add(new WeatherData(dt));
             }
 
-            if (endTime.getDt() < new Time().getDt())
+            Time time = new Time();
+            if (endTime.getDt() < new Time(time.getYear(), time.getMonth(), time.getDay(), 0, 0, 0).getDt())
                 return;
-            if (startTime.getDt() > new Time().getDt() + 86400 * 2)
+            if (startTime.getDt() > new Time(time.getYear(), time.getMonth(), time.getDay(), 23, 59, 59).getDt())
                 return;
             if (location == null) {
                 return;

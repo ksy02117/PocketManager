@@ -173,6 +173,7 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
     }
 
     private Event addParentEvent() {
+
         return Event.createEvent(eventNameString, startTime, endTime, location, isOutdoor, eventDescString, Event.PRIORITY_MEDIUM);
     }
 
