@@ -81,8 +81,11 @@ public class addLocationActivity extends Activity implements MapView.MapViewEven
             public void onClick(View v) {
                 Intent intent = new Intent();
 
+                if (selectLatitude == null)
+                    return;
+
                 // 데이터 내보내기
-                intent.putExtra("name", locationSearchBar.getText());
+                intent.putExtra("name", locationSearchBar.getText().toString());
                 intent.putExtra("latitude", selectLatitude);
                 intent.putExtra("longitude", selectLongitude);
 
