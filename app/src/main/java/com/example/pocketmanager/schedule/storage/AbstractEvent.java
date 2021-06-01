@@ -51,6 +51,9 @@ public abstract class AbstractEvent implements Serializable {
                 return;
             if (startTime.getDt() > new Time().getDt() + 86400 * 2)
                 return;
+            if (location == null) {
+                return;
+            }
 
             //receive weather data
             EventWeatherReceiver.getInstance().getEventWeather(location.getLatitude(), location.getLongitude(), (result)-> {

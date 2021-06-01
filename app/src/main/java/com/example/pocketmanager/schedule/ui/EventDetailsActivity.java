@@ -166,6 +166,7 @@ public class EventDetailsActivity extends Activity implements View.OnClickListen
             }
         }
         if (requestCode == 2 && data != null) {
+            delete.setActivated(false);
 
             String dataName = data.getStringExtra("eventName");
             String dataDescription = data.getStringExtra("eventDescription");

@@ -162,9 +162,9 @@ public class HomeFragment extends Fragment {
         test.setText(eventName);
         test.setTextSize(16);
         test.setTextColor(Color.WHITE);
-        test.setMaxLines(1);
+        //test.setMaxLines(1);
         test.setGravity(Gravity.LEFT);
-        test.setPadding(getPixel(10), 0, 0, 0);
+        test.setPadding(getPixel(10), 0, getPixel(10), 0);
         test.setBackgroundColor(parentColor);
 
         if (e.getPriority() == Event.PRIORITY_TRANS) {
@@ -174,12 +174,15 @@ public class HomeFragment extends Fragment {
             int transColor = getResources().getColor(R.color.parentEventTrans);
 
             test.setPadding(0, padding, 0, 0);
+            test.setGravity(Gravity.CENTER);
+            test.setTextSize(12);
             test.setText(station);
             test.setBackgroundColor(transColor);
 
             params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getPixel(4));
             params.setMargins(0, getPixel(firstTrainTime), 0, 0);
             View line = new View(this.getContext());
+            line.setLayoutParams(params);
             line.setBackgroundResource(R.drawable.line);
 
             eventLayout.addView(line);
@@ -232,7 +235,7 @@ public class HomeFragment extends Fragment {
         test.setText(e.getEventName());
         test.setTextSize(16);
         test.setTextColor(Color.WHITE);
-        test.setMaxLines(1);
+        //test.setMaxLines(1);
         test.setGravity(Gravity.RIGHT);
         test.setPadding(0, 0, getPixel(10), 0);
         test.setBackgroundColor(childColor);

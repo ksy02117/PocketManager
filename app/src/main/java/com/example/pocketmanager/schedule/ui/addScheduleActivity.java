@@ -302,9 +302,29 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
             if (resultCode == RESULT_OK) {
                 // 데이터 가져오기
 
+                String name = data.getStringExtra("name");
                 Double latitude = data.getDoubleExtra("latitude", 0);
                 Double longitude = data.getDoubleExtra("longitude", 0);
 
+                LocationData locationData = LocationData.createLocation(name, latitude, longitude);
+                LocationData.addFavorite(locationData);
+
+
+                ArrayList<String> locations = new ArrayList<>();
+                locations.add("지정 안함");
+                for (LocationData location : LocationData.favorites)
+                    locations.add(location.getName());
+
+                ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        locations
+                );
+                locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                locationSpinner.setAdapter(locationAdapter);
+                locationSpinner.setOnItemSelectedListener(this);
+
+                locationSpinner.setSelection(LocationData.favorites.size());
             }
         }
     }
