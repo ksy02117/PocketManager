@@ -24,15 +24,20 @@ import com.example.pocketmanager.schedule.alarm.Alarm;
 import com.example.pocketmanager.schedule.storage.Event;
 import com.example.pocketmanager.schedule.storage.SubEvent;
 import com.example.pocketmanager.schedule.ui.EventDetailsActivity;
+import com.example.pocketmanager.transportation.IncomingTrain;
 import com.example.pocketmanager.transportation.PathInfoManager;
 import com.example.pocketmanager.transportation.ShortestPath;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class HomeFragment extends Fragment {
     private List<Event> todayEvents;
@@ -168,9 +173,27 @@ public class HomeFragment extends Fragment {
         test.setBackgroundColor(parentColor);
 
         if (e.getPriority() == Event.PRIORITY_TRANS) {
-            String station = "null"; // 첫 차 역 이름
-            int firstTrainTime = 0;  // 첫 차 시간 (단위: 분)
-            int padding = firstTrainTime - untilStart;
+            PathInfoManager pm = new PathInfoManager();
+            ArrayList<IncomingTrain> list = null;
+            try {
+                list = pm.getIncomingTrainInfo();
+            } catch (ExecutionException executionException) {
+                executionException.printStackTrace();
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+            String station = "null";                                // 첫 차 역 이름
+            if (list == null || list.isEmpty())
+                return;
+            String firstTrainTime = list.get(0).getArriveTime();    // 첫 차 시간 (단위: 분)
+            SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date datetime = null;
+            try {
+                datetime = sd.parse(firstTrainTime);
+            } catch (ParseException parseException) {
+                parseException.printStackTrace();
+            }
+            int padding = (int) (datetime.getTime() - todayStartTime.getDt());              // 단위: 분
             int transColor = getResources().getColor(R.color.parentEventTrans);
 
             test.setPadding(0, padding, 0, 0);
@@ -180,7 +203,7 @@ public class HomeFragment extends Fragment {
             test.setBackgroundColor(transColor);
 
             params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getPixel(4));
-            params.setMargins(0, getPixel(firstTrainTime), 0, 0);
+            params.setMargins(0, getPixel(padding), 0, 0);
             View line = new View(this.getContext());
             line.setLayoutParams(params);
             line.setBackgroundResource(R.drawable.line);

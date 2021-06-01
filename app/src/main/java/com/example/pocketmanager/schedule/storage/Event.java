@@ -141,7 +141,7 @@ public class Event extends AbstractEvent implements Serializable {
             if (list.isEmpty())
                 events.remove(i);
         }
-        LocationDBHelper.delete(event.getID());
+        EventDBHelper.delete(event.getID());
         return flag;
     }
     private static boolean removeEvent(List<Event> list, Event event) {

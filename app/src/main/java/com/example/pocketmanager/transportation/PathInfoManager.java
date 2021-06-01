@@ -192,6 +192,9 @@ public class PathInfoManager { // 최단경로, 역으로 오는 전철의 리�
         ArrayList<IncomingTrain> result = new ArrayList<IncomingTrain>();
         String direction = null;
 
+        if (incomingTrains.isEmpty())
+            return result;
+
         if (incomingTrains.get(0).getStationId() < headsign) direction = "하행";
         else direction = "상행";
         for (IncomingTrain t : incomingTrains){

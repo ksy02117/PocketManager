@@ -129,6 +129,21 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         eventName.setFocusableInTouchMode(true);
         eventName.requestFocus();
 
+        // Spinner
+        ArrayList<String> locations = new ArrayList<>();
+        locations.add("지정 안함");
+        for (LocationData location : LocationData.favorites)
+            locations.add(location.getName());
+
+        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                locations
+        );
+        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationSpinner.setAdapter(locationAdapter);
+        locationSpinner.setOnItemSelectedListener(this);
+
         //데이터 가져오기
         Intent intent = getIntent();
         eventType = intent.getIntExtra("eventType", 0);
@@ -150,21 +165,20 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
             startPicker.setCurrentMinute(st.getMin());
             endPicker.setCurrentHour(et.getHour());
             endPicker.setCurrentMinute(et.getMin());
+            outdoorCheck.setChecked(modifyEvent.isOutdoor());
+
+            if (modifyEvent.getLocation() == null)
+                locationSpinner.setSelection(0);
+            else {
+                for (int i = 0; i < locations.size(); i++) {
+                    String s = locations.get(i);
+                    if (s.equals(modifyEvent.getLocation().getName())) {
+                        locationSpinner.setSelection(i);
+                        break;
+                    }
+                }
+            }
         }
-
-        ArrayList<String> locations = new ArrayList<>();
-        locations.add("지정 안함");
-        for (LocationData location : LocationData.favorites)
-            locations.add(location.getName());
-
-        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                locations
-        );
-        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        locationSpinner.setAdapter(locationAdapter);
-        locationSpinner.setOnItemSelectedListener(this);
     }
 
     private Event modifyEvent() {
