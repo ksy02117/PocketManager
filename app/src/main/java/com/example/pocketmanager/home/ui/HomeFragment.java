@@ -201,7 +201,25 @@ public class HomeFragment extends Fragment {
         test.setBackgroundColor(parentColor);
 
         if (e.getPriority() == Event.PRIORITY_TRANS) {
+
             PathInfoManager pm = new PathInfoManager();
+
+            double lat1 = LocationData.getCurrentLocation().getLatitude();
+            double long1 = LocationData.getCurrentLocation().getLongitude();
+            pm.setOrigin(lat1 + ", " + long1);
+
+            double lat2 = e.getLocation().getLatitude();
+            double long2 = e.getLocation().getLongitude();
+            pm.setDestination(lat2 + ", " + long2);
+
+            try {
+                pm.getShortestPathInfo();
+            } catch (ExecutionException executionException) {
+                executionException.printStackTrace();
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+
             ArrayList<IncomingTrain> list = null;
             try {
                 list = pm.getIncomingTrainInfo();
@@ -214,17 +232,19 @@ public class HomeFragment extends Fragment {
             if (list == null || list.isEmpty())
                 return;
             String firstTrainTime = list.get(0).getArriveTime();    // 첫 차 시간 (단위: 분)
+            station = list.get(0).getStationName();
             SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            int transColor = getResources().getColor(R.color.parentEventTrans);
             Date datetime = null;
+            int padding = 0;
             try {
                 datetime = sd.parse(firstTrainTime);
+                padding = (int) (datetime.getTime() - todayStartTime.getDt());              // 단위: 분
             } catch (ParseException parseException) {
                 parseException.printStackTrace();
             }
-            int padding = (int) (datetime.getTime() - todayStartTime.getDt());              // 단위: 분
-            int transColor = getResources().getColor(R.color.parentEventTrans);
 
-            test.setPadding(0, padding, 0, 0);
+            test.setPadding(0, getPixel(padding - untilStart), 0, 0);
             test.setGravity(Gravity.CENTER);
             test.setTextSize(12);
             test.setText(station);
