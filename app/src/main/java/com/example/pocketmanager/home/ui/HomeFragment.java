@@ -248,7 +248,8 @@ public class HomeFragment extends Fragment {
             }
 
             station = station + "역 " + sd2.format(datetime) + " - " + sd2.format(dArrivedate);
-            test.setPadding(0, getPixel(padding - untilStart - 5), 0, 0);
+            //test.setPadding(0, getPixel(padding - untilStart), 0, 0);
+            test.setPadding(0, 0, 0, 0);
             test.setGravity(Gravity.CENTER_HORIZONTAL);
             test.setTextSize(10);
             test.setText(station);
