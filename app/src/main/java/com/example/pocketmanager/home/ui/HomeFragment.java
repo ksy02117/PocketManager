@@ -235,6 +235,7 @@ public class HomeFragment extends Fragment {
             String dArriveTime = list.get(0).getDestinationArriveTime();
             station = list.get(0).getStationName();
             SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sd2 = new SimpleDateFormat("HH:mm");
             int transColor = getResources().getColor(R.color.parentEventTrans);
             Date datetime = null, dArrivedate = null;
             int padding = 0;
@@ -246,8 +247,7 @@ public class HomeFragment extends Fragment {
                 parseException.printStackTrace();
             }
 
-            station = station + "역 " + datetime.getHours() + ":" + datetime.getMinutes() + " - "
-                    + dArrivedate.getHours() + ":" + dArrivedate.getMinutes();
+            station = station + "역 " + sd2.format(datetime) + " - " + sd2.format(dArrivedate);
             test.setPadding(0, getPixel(padding - untilStart - 5), 0, 0);
             test.setGravity(Gravity.CENTER_HORIZONTAL);
             test.setTextSize(10);
