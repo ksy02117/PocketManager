@@ -243,7 +243,12 @@ public class addScheduleActivity extends Activity implements View.OnClickListene
         isOutdoor = outdoorCheck.isChecked();
 
         if (startTime.compareTo(endTime) >= 0) {
-            Toast.makeText(this, "종료 시간이 시작 시간보다 빠릅니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "종료 시간이 시작 시간보다 빠릅니다", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (location == null) {
+            Toast.makeText(this, "위치를 설정해주세요", Toast.LENGTH_SHORT).show();
             return;
         }
 
