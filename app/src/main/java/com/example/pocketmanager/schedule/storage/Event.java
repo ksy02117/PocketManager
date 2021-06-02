@@ -104,9 +104,6 @@ public class Event extends AbstractEvent implements Serializable {
             it.add(newEvent);
             return true;
         }
-        else if(!it.hasNext() && eventNode.endTime.getDt() > newEvent.startTime.getDt()) {
-            return false;
-        }
 
         it.previous();
         //맨 앞인 경우

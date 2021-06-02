@@ -426,7 +426,7 @@ public class HomeFragment extends Fragment {
                 Time startTime = new Time(endTime.getDt() - duration);
                 if (Event.createEvent("교통", startTime, endTime, event.getLocation(), true, "교통", Event.PRIORITY_TRANS) == null) {
                     if (list.indexOf(event) != 0)
-                        startTime = new Time(list.get(list.indexOf(event) - 1).getEndTime().getDt() + 1);
+                        startTime = new Time(list.get(list.indexOf(event) - 1).getEndTime().getDt());
                     Event.createEvent("교통", startTime, endTime,event.getLocation(),true, "시간이 충분하지 않아요", Event.PRIORITY_TRANS);
                 }
             }
