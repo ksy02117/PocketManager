@@ -395,7 +395,7 @@ public class HomeFragment extends Fragment {
             Event event = list.get(i);
             if (!event.isOutdoor() || event.getLocation() == null)
                 continue;
-            if (Math.abs(event.getLocation().getLatitude() - lats.get(lats.size() - 1)) < 0.5  && Math.abs(event.getLocation().getLongitude() - lats.get(lats.size() - 1)) < 0.5)
+            if (Math.abs(event.getLocation().getLatitude() - lats.get(lats.size() - 1)) < 0.1  && Math.abs(event.getLocation().getLongitude() - lats.get(lats.size() - 1)) < 0.5)
                 continue;
             if (event.getPriority() == Event.PRIORITY_TRANS)
                 return;
