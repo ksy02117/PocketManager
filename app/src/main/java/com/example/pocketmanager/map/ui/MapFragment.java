@@ -227,7 +227,7 @@ public class MapFragment extends Fragment implements MapView.MapViewEventListene
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) { // 터치 이벤트
         //Log.d("ASD", Double.toString(mapPoint.getMapPointGeoCoord().latitude));
         //mapView.removePOIItem(selectedLocationMarker);
-        getTouchedLocation(mapPoint); // 터치한 곳의 위치 얻기
+        //getTouchedLocation(mapPoint); // 터치한 곳의 위치 얻기
     }
 
 
