@@ -213,7 +213,7 @@ public class HomeFragment extends Fragment {
             pm.setDestination(lat2 + ", " + long2);
 
             try {
-                pm.getShortestPathInfo();
+                ShortestPath sp = pm.getShortestPathInfo();
             } catch (ExecutionException executionException) {
                 executionException.printStackTrace();
             } catch (InterruptedException interruptedException) {
@@ -239,7 +239,7 @@ public class HomeFragment extends Fragment {
             int padding = 0;
             try {
                 datetime = sd.parse(firstTrainTime);
-                padding = (int) (datetime.getTime() - todayStartTime.getDt());              // 단위: 분
+                padding = (int) (datetime.getTime() / 1000 - todayStartTime.getDt()) / 60;              // 단위: 분
             } catch (ParseException parseException) {
                 parseException.printStackTrace();
             }
