@@ -210,17 +210,6 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        //add schedule
-        monthAdapter = new MyPagerAdapter(this.getContext());
-        weekAdapter = new MyPagerAdapter2(this.getContext());
-        if (tabLayout.getSelectedTabPosition() == 0) {
-            mPager.setAdapter(monthAdapter);
-        }
-        else {
-            mPager.setAdapter(weekAdapter);
-        }
-        mPager.setCurrentItem(currentIndex);
-
         //everytime
         if(requestCode==2 && data != null) {
             if(resultCode==RESULT_OK) {
@@ -288,6 +277,16 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
                 }
             }
         }
+        //add schedule
+        monthAdapter = new MyPagerAdapter(this.getContext());
+        weekAdapter = new MyPagerAdapter2(this.getContext());
+        if (tabLayout.getSelectedTabPosition() == 0) {
+            mPager.setAdapter(monthAdapter);
+        }
+        else {
+            mPager.setAdapter(weekAdapter);
+        }
+        mPager.setCurrentItem(currentIndex);
     }
 
     private int getDayOfWeek(char c) {

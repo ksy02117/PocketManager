@@ -232,31 +232,27 @@ public class HomeFragment extends Fragment {
             if (list == null || list.isEmpty())
                 return;
             String firstTrainTime = list.get(0).getArriveTime();    // 첫 차 시간 (단위: 분)
+            String dArriveTime = list.get(0).getDestinationArriveTime();
             station = list.get(0).getStationName();
             SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             int transColor = getResources().getColor(R.color.parentEventTrans);
-            Date datetime = null;
+            Date datetime = null, dArrivedate = null;
             int padding = 0;
             try {
                 datetime = sd.parse(firstTrainTime);
+                dArrivedate = sd.parse(dArriveTime);
                 padding = (int) (datetime.getTime() / 1000 - todayStartTime.getDt()) / 60;              // 단위: 분
             } catch (ParseException parseException) {
                 parseException.printStackTrace();
             }
 
+            station = station + "역 " + datetime.getHours() + ":" + datetime.getMinutes() + " - "
+                    + dArrivedate.getHours() + ":" + dArrivedate.getMinutes();
             test.setPadding(0, getPixel(padding - untilStart), 0, 0);
-            test.setGravity(Gravity.CENTER);
-            test.setTextSize(12);
+            test.setGravity(Gravity.CENTER_HORIZONTAL);
+            test.setTextSize(10);
             test.setText(station);
             test.setBackgroundColor(transColor);
-
-            params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getPixel(4));
-            params.setMargins(0, getPixel(padding), 0, 0);
-            View line = new View(this.getContext());
-            line.setLayoutParams(params);
-            line.setBackgroundResource(R.drawable.line);
-
-            eventLayout.addView(line);
         }
         test.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -429,7 +425,8 @@ public class HomeFragment extends Fragment {
                 Time endTime = new Time(event.getStartTime().getDt() - 1);
                 Time startTime = new Time(endTime.getDt() - duration);
                 if (Event.createEvent("교통", startTime, endTime, event.getLocation(), true, "교통", Event.PRIORITY_TRANS) == null) {
-                    startTime = new Time(list.get(list.indexOf(event) - 1).getEndTime().getDt() + 1);
+                    if (list.indexOf(event) != 0)
+                        startTime = new Time(list.get(list.indexOf(event) - 1).getEndTime().getDt() + 1);
                     Event.createEvent("교통", startTime, endTime,event.getLocation(),true, "시간이 충분하지 않아요", Event.PRIORITY_TRANS);
                 }
             }
